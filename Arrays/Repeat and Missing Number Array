@@ -1,0 +1,15 @@
+vector<int> Solution::repeatedNumber(const vector<int> &A) {
+    vector<int> B=A;
+    int i=0,n=B.size();
+    while(i<n){
+        int ind=B[i]-1;
+        if(B[i]!=B[ind]) swap(B[i],B[ind]);
+        else i++;
+    }
+    for(int i=0;i<n;i++){
+        if(B[i]!=i+1){
+            return {B[i],i+1};
+        }
+    }
+    return {B[i],i+1};
+}
