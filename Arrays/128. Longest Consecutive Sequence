@@ -1,0 +1,24 @@
+int longestConsecutive(vector<int>& nums) {
+        int ans=0;
+        unordered_map<int,bool> mp;
+        for(auto it : nums){
+            mp[it]=true;
+        }
+        for(auto it : nums){
+            if(mp.find(it-1)!=mp.end()){
+                mp[it]=false;
+            }
+        }
+        for(auto it : mp){
+            if(it.second){
+                int curl=1;
+                int n=it.first+1;
+                while(mp.find(n)!=mp.end()){
+                    curl++;
+                    n++;
+                }
+                ans=max(ans,curl);
+            }
+        }
+        return ans;
+    }
