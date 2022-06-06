@@ -1,0 +1,14 @@
+int Solution::solve(vector<int> &A, int B) {
+    unordered_map<int,int> mp;
+    int xorsum=0;
+    int ans=0;
+    for(auto it : A){
+        xorsum^=it;
+        if(xorsum==B) ans++;
+        if(mp.find(xorsum^B)!=mp.end()){
+            ans+=mp[xorsum^B];
+        }
+        mp[xorsum]++;
+    }
+    return ans;
+}
