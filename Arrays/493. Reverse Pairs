@@ -1,0 +1,59 @@
+int merge(vector<int> &a,int p,int q,int r){
+        int  n1=q-p+1;
+        int n2=r-q;
+        int  a1[n1];
+        int  a2[n2];
+        int inv=0;
+        
+        int y=q+1;
+        for(int x=p;x<=q;++x) {
+            while(y<=r && a[x] > 2LL*a[y]) ++y;
+            inv += (y - (q+1));
+        }
+        
+        for(int i=0;i<n1;i++){
+            a1[i]=a[p+i];
+        }
+    
+        for(int j=0;j<n2;j++){
+            a2[j]=a[q+1+j];
+        }
+    
+        int i=0,j=0,k=p;
+        while(i<n1 && j<n2){
+            if(a1[i]<=a2[j]){
+                a[k]=a1[i];
+                k++; i++;
+            }else{
+                a[k]=a2[j];
+                k++; j++;
+            }
+        }
+    
+        while(i<n1){
+            a[k]=a1[i];
+            k++; i++;
+        }
+    
+        while(j<n2){
+            a[k]=a2[j];
+            k++; j++;
+        }
+        return inv;
+    }
+    
+    int mergeSort(vector<int> &a,int f,int l){
+        int inv=0;
+        if(f<l){
+            int m=(f+l)/2;
+            inv+=mergeSort(a,f,m);
+            inv+=mergeSort(a,m+1,l);
+            inv+=merge(a,f,m,l);
+        }
+        return inv;
+    }
+    
+    int reversePairs(vector<int>& nums) {
+        int n=nums.size();
+        return mergeSort(nums,0,n-1);
+    }
