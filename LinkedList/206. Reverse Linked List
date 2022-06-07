@@ -1,0 +1,20 @@
+// Iterative...
+    ListNode* reverseList(ListNode* head) {
+        if(!head) return head;
+        ListNode *prevN=NULL,*currN=head,*nextN=NULL;
+        while(currN){
+            nextN=currN->next;
+            currN->next=prevN;
+            prevN=currN;
+            currN=nextN;
+        }
+        return prevN;
+    }
+    
+// Recursive.....
+    ListNode* reverseList(ListNode* head,ListNode* prev=NULL) {
+        if(!head) return prev;
+        ListNode *temp=head->next;
+        head->next=prev;
+        return reverseList(temp,head);
+    }
