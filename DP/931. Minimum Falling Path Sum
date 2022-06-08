@@ -1,0 +1,69 @@
+// Recursive...
+    int solve(int i,int j,int n,vector<vector<int>> &mat,vector<vector<int>> &dp){
+        if(i==0) return mat[i][j];
+        if(dp[i][j]!=-1) return dp[i][j];
+        int up=mat[i][j]+solve(i-1,j,n,mat,dp);
+        int upleft=mat[i][j];
+        if(j>0) upleft+=solve(i-1,j-1,n,mat,dp);
+        else upleft=1e8;
+        int upright=mat[i][j];
+        if(j<n-1) upright+=solve(i-1,j+1,n,mat,dp);
+        else upright=1e8;
+        return dp[i][j]=min(up,min(upleft,upright));
+    }
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int n=matrix.size();
+        vector<vector<int>> dp(n,vector<int>(n,-1));
+        int ans=INT_MAX;
+        for(int i=0;i<n;i++){
+            ans=min(ans,solve(n-1,i,n,matrix,dp));
+        }
+        return ans;
+    }
+    
+// Tabulation...
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int n=matrix.size();
+        vector<vector<int>> dp(n,vector<int>(n,-1));
+        for(int i=0;i<n;i++) dp[0][i]=matrix[0][i];
+        for(int i=1;i<n;i++){
+            for(int j=0;j<n;j++){
+                int up=matrix[i][j]+dp[i-1][j];
+                int upleft=matrix[i][j];
+                if(j>0) upleft+=dp[i-1][j-1];
+                else upleft=1e8;
+                int upright=matrix[i][j];
+                if(j<n-1) upright+=dp[i-1][j+1];
+                else upright=1e8;
+                dp[i][j]=min(up,min(upleft,upright));
+            }
+        }
+        int ans=INT_MAX;
+        for(int i=0;i<n;i++) ans=min(ans,dp[n-1][i]);
+        return ans;
+    }
+    
+//Space Optimized...
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int n=matrix.size();
+        vector<int> prev(n,0);
+        for(int i=0;i<n;i++) prev[i]=matrix[0][i];
+        for(int i=1;i<n;i++){
+            vector<int> cur(n,0);
+            for(int j=0;j<n;j++){
+                int d=matrix[i][j]+prev[j];
+                int ld=matrix[i][j];
+                if(j-1>=0) ld+=prev[j-1];
+                else ld=1e8;
+                int rd=matrix[i][j];
+                if(j+1<n) rd+=prev[j+1];
+                else rd=1e8;
+                cur[j]=min(ld,min(d,rd));
+            }
+            prev=cur;
+        }
+        
+        int ans=INT_MAX;
+        for(int i=0;i<n;i++) ans=min(ans,prev[i]);
+        return ans;
+    }
