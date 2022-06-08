@@ -1,0 +1,67 @@
+// Memoization...
+int solve(int n,int l,vector<vector<int>> &points,vector<vector<int>> &dp){	
+	if(n==0){
+		int maxp=0;
+		for(int i=0;i<3;i++){
+			if(i!=l)
+				
+				maxp=max(maxp,points[n][i]);
+		}
+		return maxp;
+	}
+	if(dp[n][l]!=-1) return dp[n][l];
+	int maxp=0;
+	for(int i=0;i<3;i++){
+		if(i!=l){
+			int t=points[n][i]+solve(n-1,i,points,dp);
+			maxp=max(maxp,t);
+		}
+	}
+	return dp[n][l]=maxp;
+}
+
+// Tabulation....
+int ninjaTraining(int n, vector<vector<int>> &points){
+	vector<vector<int>> dp(n,vector<int>(4,0));
+	dp[0][0]=max(points[0][1],points[0][2]);
+	dp[0][1]=max(points[0][0],points[0][2]);
+	dp[0][2]=max(points[0][0],points[0][1]);
+	dp[0][3]=max(points[0][0],max(points[0][1],points[0][2]));
+	
+	for(int i=1;i<n;i++){
+		for(int j=0;j<4;j++){
+			int mx=0;
+			for(int k=0;k<3;k++){
+				if(j!=k){
+					mx=max(mx,dp[i-1][k]+points[i][k]);
+				}
+			}
+			dp[i][j]=mx;
+		}
+	}
+	return dp[n-1][3];
+}
+
+// Space Optimized....
+int ninjaTraining(int n, vector<vector<int>> &points){
+	vector<int> prev(4,0);
+	prev[0]=max(points[0][1],points[0][2]);
+	prev[1]=max(points[0][0],points[0][2]);
+	prev[2]=max(points[0][0],points[0][1]);
+	prev[3]=max(points[0][0],max(points[0][1],points[0][2]));
+	
+	for(int i=1;i<n;i++){
+		vector<int> cur(4,0);
+		for(int j=0;j<4;j++){
+			int mx=0;
+			for(int k=0;k<3;k++){
+				if(j!=k){
+					mx=max(mx,prev[k]+points[i][k]);
+				}
+			}
+			cur[j]=mx;
+		}
+		prev=cur;
+	}
+	return prev[3];
+}
