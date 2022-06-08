@@ -1,0 +1,46 @@
+// memprization....O(n) O(n)
+    int solve(int n,vector<int>& nums,vector<int>& dp){
+        if(n==0) return nums[0];
+        if(n<0) return 0;
+        if(dp[n]!=-1) return dp[n];
+        int rob=nums[n] + solve(n-2,nums,dp);
+        int notRob=0 + solve(n-1,nums,dp);
+        return dp[n]=max(rob,notRob);
+    }
+    int rob(vector<int>& nums) {
+        int n=nums.size();
+        vector<int> dp(n,-1);
+        return solve(n-1,nums,dp);
+    }
+    
+// Tabulation....O(n) O(n)
+    int rob(vector<int>& nums) {
+        int n=nums.size();
+        vector<int> dp(n,0);
+        dp[0]=nums[0];
+        for(int i=1;i<n;i++){
+            int rob=nums[i];
+            if(i>1) rob+=dp[i-2];
+            int notRob=dp[i-1];
+            
+            dp[i]=max(rob,notRob);
+        }
+        return dp[n-1];
+    }
+    
+// Space Optimized.... O(n) O(1)
+    int rob(vector<int>& nums) {
+        int n=nums.size();
+        int prev=nums[0],prev2=0;
+        for(int i=1;i<n;i++){
+            int rob=nums[i];
+            if(i>1) rob+=prev2;
+            int notRob=prev;
+            
+            int cur=max(rob,notRob);
+            
+            prev2=prev;
+            prev=cur;
+        }
+        return prev;
+    }
