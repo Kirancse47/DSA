@@ -1,0 +1,21 @@
+int mod=1e9+7;
+int countSubset(int n, int tar, vector<int> &arr){
+    vector<int> prev(tar+1,0),cur(tar+1,0);
+    prev[0]=1;cur[0]=1;
+    for(int i=1;i<n+1;i++){
+        for(int j=0;j<tar+1;j++){
+            if(j-arr[i-1]>=0) cur[j]=(prev[j-arr[i-1]]+prev[j])%mod;
+            else cur[j]=prev[j]%mod;
+        }
+        prev=cur;
+    }
+    return prev[tar]%mod;
+}
+
+int countPartitions(int n, int d, vector<int> &arr) {
+	int sum=0;
+	for(auto it : arr) sum+=it;
+	if(sum-d <0 || (sum-d)%2 ) return 0;
+	int tar=(sum+d)/2;
+	return countSubset(n,tar,arr);
+}
