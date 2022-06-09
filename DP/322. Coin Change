@@ -1,0 +1,70 @@
+// Memorization....
+    int solve(int n,int amt,vector<int> &coins,vector<vector<int>> &dp){
+        if(amt==0) return 0;
+        if(n==0) return 1e9;
+        if(dp[n][amt]!=-1) return dp[n][amt];
+        if(amt>=coins[n-1]) return dp[n][amt]=min(1+solve(n,amt-coins[n-1],coins,dp),solve(n-1,amt,coins,dp));
+        else return dp[n][amt]=solve(n-1,amt,coins,dp);
+    }
+    int coinChange(vector<int>& coins, int amount) {
+        int n=coins.size();
+        vector<vector<int>> dp(n+1,vector<int>(amount+1,-1));
+        int ans= solve(n,amount,coins,dp);
+        if(ans>1e8) return -1;
+        else return ans;
+    }
+    
+//  Tabulation....
+    int coinChange(vector<int>& coins, int amount) {
+        int n=coins.size();
+        vector<vector<int>> dp(n+1,vector<int>(amount+1,0));
+        for(int i=1;i<amount+1;i++) dp[0][i]=1e9;
+        for(int i=0;i<n+1;i++) dp[i][0]=0;
+        
+        for(int i=1;i<n+1;i++){
+            for(int j=1;j<amount+1;j++){
+                if(j>=coins[i-1]) dp[i][j]=min(1+dp[i][j-coins[i-1]],dp[i-1][j]);
+                else dp[i][j]=dp[i-1][j];
+            }
+        }
+        if(dp[n][amount]>=1e9) return -1;
+        else return dp[n][amount];
+    }
+    
+//  Space Option....
+    int coinChange(vector<int>& coins, int amount) {
+        int n=coins.size();
+        vector<int> prev(amount+1,0),cur(amount+1,0);
+        for(int i=1;i<amount+1;i++){
+            prev[i]=1e9;
+        }
+        
+        for(int i=1;i<n+1;i++){
+            for(int j=1;j<amount+1;j++){
+                if(j>=coins[i-1]) cur[j]=min(1+cur[j-coins[i-1]],prev[j]);
+                else cur[j]=prev[j];
+            }
+            prev=cur;
+        }
+        if(prev[amount]>1e8) return -1;
+        else return prev[amount];
+    }
+    
+// More Space Option....
+    int coinChange(vector<int>& coins, int amount) {
+        int n=coins.size();
+        vector<int> prev(amount+1,0),cur(amount+1,0);
+        for(int i=1;i<amount+1;i++){
+            prev[i]=1e9;
+        }
+        
+        for(int i=1;i<n+1;i++){
+            for(int j=1;j<amount+1;j++){
+                if(j>=coins[i-1]) cur[j]=min(1+cur[j-coins[i-1]],prev[j]);
+                else cur[j]=prev[j];
+            }
+            prev=cur;
+        }
+        if(prev[amount]>1e8) return -1;
+        else return prev[amount];
+    }
