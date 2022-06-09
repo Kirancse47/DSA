@@ -15,7 +15,7 @@ int countSubset(int n, int tar, vector<int> &arr){
 int countPartitions(int n, int d, vector<int> &arr) {
 	int sum=0;
 	for(auto it : arr) sum+=it;
-	if(sum-d <0 || (sum-d)%2 ) return 0;
+	if(sum<d || (sum+d)%2 ) return 0;
 	int tar=(sum+d)/2;
 	return countSubset(n,tar,arr);
 }
