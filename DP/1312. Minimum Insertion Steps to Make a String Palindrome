@@ -1,0 +1,16 @@
+   int lps(string s){
+        int n=s.size();
+        vector<int> prev(n+1,0),cur(n+1,0);
+        for(int i=1;i<n+1;i++){
+            for(int j=1;j<n+1;j++){
+                if(s[i-1]==s[n-j]) cur[j]=1+prev[j-1];
+                else cur[j]=max(cur[j-1],prev[j]);
+            }
+            prev=cur;
+        }
+        return prev[n];
+    }
+    
+    int minInsertions(string s) {
+        return s.size()-lps(s);
+    }
