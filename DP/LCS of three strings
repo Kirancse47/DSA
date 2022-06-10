@@ -1,0 +1,25 @@
+// Memoization...
+int solve(string A, string B, string C, int n1, int n2, int n3,vector<vector<vector<int>>> &dp){
+    if(n1==0|| n2==0 || n3==0) return 0;
+    if(dp[n1][n2][n3]!=-1) return dp[n1][n2][n3];
+    if(A[n1-1]==B[n2-1] && B[n2-1]==C[n3-1]) return dp[n1][n2][n3]=1+solve(A,B,C,n1-1,n2-1,n3-1,dp);
+    else return dp[n1][n2][n3]=max(solve(A,B,C,n1-1,n2,n3,dp),max(solve(A,B,C,n1,n2-1,n3,dp),solve(A,B,C,n1,n2,n3-1,dp)));
+}
+int LCSof3 (string A, string B, string C, int n1, int n2, int n3){
+    vector<vector<vector<int>>> dp(n1+1,vector<vector<int>>(n2+1,vector<int>(n3+1,-1)));
+    return solve(A,B,C,n1,n2,n3,dp);
+}
+
+// Tabulation...
+int LCSof3 (string A, string B, string C, int n1, int n2, int n3){
+    vector<vector<vector<int>>> dp(n1+1,vector<vector<int>>(n2+1,vector<int>(n3+1,0)));
+    for(int i=1;i<n1+1;i++){
+        for(int j=1;j<n2+1;j++){
+            for(int k=1;k<n3+1;k++){
+                if(A[i-1]==B[j-1] && B[j-1]==C[k-1]) dp[i][j][k]=1+dp[i-1][j-1][k-1];
+                else dp[i][j][k]=max(dp[i-1][j][k],max(dp[i][j-1][k],dp[i][j][k-1]));
+            }
+        }
+    }
+    return dp[n1][n2][n3];
+}
