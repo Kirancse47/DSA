@@ -1,0 +1,40 @@
+// Memorization.....
+    int solve(int x, int y, string &s1, string &s2,vector<vector<int>> &dp){
+        if(x==0 || y==0) return 0;
+        if(dp[x][y]!=-1) return dp[x][y];
+        if(s1[x-1]==s2[y-1]) return dp[x][y]=1+solve(x-1,y-1,s1,s2,dp);
+        else return dp[x][y]=max(solve(x-1,y,s1,s2,dp),solve(x,y-1,s1,s2,dp));
+    }
+    
+    int longestCommonSubsequence(string text1, string text2) {
+        int x=text1.size(),y=text2.size();
+        vector<vector<int>> dp(x+1,vector<int>(y+1,-1));
+        return solve(x,y,text1,text2,dp);
+    }
+
+//Tabulation......
+    int longestCommonSubsequence(string &s1, string &s2) {
+        int n1=s1.size(),n2=s2.size();
+        vector<vector<int>> dp(n1+1,vector<int>(n2+1,0));
+        for(int i=1;i<n1+1;i++){
+            for(int j=1;j<n2+1;j++){
+                if(s1[i-1]==s2[j-1]) dp[i][j]=1+dp[i-1][j-1];
+                else dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+            }
+        }
+        return dp[n1][n2];
+    }
+    
+// Space optimize....
+    int longestCommonSubsequence(string &s1, string &s2) {
+        int n1=s1.size(),n2=s2.size();
+        vector<int> prev(n2+1,0),cur(n2+1,0);
+        for(int i=1;i<n1+1;i++){
+            for(int j=1;j<n2+1;j++){
+                if(s1[i-1]==s2[j-1]) cur[j]=1+prev[j-1];
+                else cur[j]=max(prev[j],cur[j-1]);
+            }
+            prev=cur;
+        }
+        return prev[n2];
+    }
