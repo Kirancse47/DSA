@@ -1,0 +1,27 @@
+ListNode* solve(ListNode* head, int k){
+        if(!k) return head;
+        ListNode *s=head, *f=head;
+        while(k){
+            k--;
+            f=f->next;
+        }
+        while(f->next){
+            f=f->next;
+            s=s->next;
+        }
+        ListNode *ptr=s->next;
+        f->next=head;
+        s->next=NULL;
+        return ptr;
+    }
+    
+    ListNode* rotateRight(ListNode* head, int k) {
+        if(k==0 || !head || !head->next) return head;
+        ListNode *ptr=head;
+        int n=0;
+        while(ptr){
+            n++;
+            ptr=ptr->next;
+        }
+        return solve(head,k%n);
+    }
