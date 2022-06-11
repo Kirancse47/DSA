@@ -1,0 +1,21 @@
+    ListNode *reverseLL(ListNode *cur,ListNode *prev=NULL){
+        if(!cur) return prev;
+        ListNode *temp=cur->next;
+        cur->next=prev;
+        return reverseLL(temp,cur);
+    }
+    bool isPalindrome(ListNode* head) {
+        ListNode *slow=head, *fast=head;
+        while(fast && fast->next && fast->next->next){
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        slow->next=reverseLL(slow->next);
+        ListNode *lptr=head, *rptr=slow->next;
+        while(rptr){
+            if(lptr->val!=rptr->val) return false;
+            lptr=lptr->next;
+            rptr=rptr->next;
+        }
+        return true;
+    }
