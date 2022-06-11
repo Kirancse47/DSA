@@ -21,5 +21,8 @@ Node* merge(Node* head1, Node* head2){
 
 Node *flatten(Node *root){
    if(!root || !root->next) return root;
-    return merge(root,flatten(root->next));;
+   root->next=flatten(root->next);
+   root=merge(root,root->next);
+   return root;
+   // return merge(root,flatten(root->next));;
 }
