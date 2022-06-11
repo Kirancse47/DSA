@@ -1,0 +1,24 @@
+vector<vector<int>> threeSum(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        int n=nums.size();
+        vector<vector<int>>ans;
+        for(int i=0;i<n;i++){
+            if (nums[i] > 0) break;
+		    if (i > 0 && nums[i] == nums[i - 1]) continue;
+            int l=i+1,h=n-1;
+            while(l<h){
+                int cur=nums[i]+nums[l]+nums[h];
+                if(cur==0){
+                    ans.push_back({nums[i],nums[l],nums[h]});
+                    while(l < h && nums[h] == nums[h - 1])  h--;
+				    while(l < h && nums[l] == nums[l + 1])  l++;
+				    l++, h--;
+                }else if(cur>0){
+                    h--;
+                }else{
+                    l++;
+                }
+            }
+        }
+        return ans;
+    }
