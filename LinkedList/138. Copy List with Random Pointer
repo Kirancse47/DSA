@@ -1,3 +1,21 @@
+// Using HashMap...
+    Node* copyRandomList(Node* head) {
+        unordered_map<Node*,Node*> mp;
+        Node *t=head;
+        while(t){
+            mp[t]=new Node(t->val);
+            t=t->next;
+        }
+        t=head;
+        while(t){
+            mp[t]->next=mp[t->next];
+            if(t->random) mp[t]->random=mp[t->random];
+            t=t->next;
+        }
+        return mp[head];
+    }
+    
+// Modifing the LL...
     Node* copyRandomList(Node* head) {
         Node *t=head;
         while(t){
