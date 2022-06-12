@@ -1,0 +1,25 @@
+    Node* copyRandomList(Node* head) {
+        Node *t=head;
+        while(t){
+            Node *temp=t->next;
+            t->next=new Node(t->val);
+            t->next->next=temp;
+            t=temp;
+        }
+        t=head;
+        while(t){
+            if(t->random){
+                t->next->random=t->random->next;
+            }
+            t=t->next->next;
+        }
+        Node *d=new Node(0), *itr=head, *front=head, *copy=d;
+        while(itr){
+            front=itr->next->next;
+            copy->next=itr->next;
+            itr->next=front;
+            copy=copy->next;
+            itr=itr->next;
+        }
+        return d->next;
+    }
