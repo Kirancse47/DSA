@@ -1,0 +1,21 @@
+void solve(vector<int>& c,int i,int s,vector<int> &ds,vector<vector<int>> &ans){
+        if(s==0){
+            ans.push_back(ds);
+            return;
+        } 
+        if(i==c.size()){
+            return;
+        }
+        if(c[i]<=s){
+            ds.push_back(c[i]);
+            solve(c,i,s-c[i],ds,ans);
+            ds.pop_back();
+        }
+        solve(c,i+1,s,ds,ans);
+    }
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<int> ds;
+        vector<vector<int>> ans;
+        solve(candidates,0,target,ds,ans);
+        return ans;
+    }
