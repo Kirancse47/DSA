@@ -1,0 +1,15 @@
+int mod=1e9+7;
+	int distinctSubsequences(string s){
+	    int n=s.size();
+	    vector<long long> dp(n+1,0);
+	    dp[0]=1;
+	    unordered_map<char,int> mp;
+	    for(int i=1;i<n+1;i++){
+	        dp[i]=2*dp[i-1];
+	        if(mp.find(s[i-1])!=mp.end()){
+	            dp[i]-=dp[mp[s[i-1]]-1];
+	        }
+	        mp[s[i-1]]=i;
+	    }
+	    return dp[n]%mod;
+	}
