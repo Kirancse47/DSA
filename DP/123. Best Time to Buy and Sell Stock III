@@ -1,0 +1,69 @@
+// Without dp...
+    int maxProfit(vector<int>& prices) {
+        int n=prices.size();
+        int profit1=0,minPrice1=INT_MAX;
+        int profit2=0,minPrice2=INT_MAX;
+        for(int i=0;i<n;i++){
+            minPrice1=min(minPrice1,prices[i]);
+            profit1=max(profit1,prices[i]-minPrice1);
+            minPrice2=min(minPrice2,prices[i]-profit1);
+            profit2=max(profit2,prices[i]-minPrice2);
+        }
+        return profit2;
+    }
+    
+// Memoization....
+    int solve(int i,int buy,int cap,vector<int> &p,vector<vector<vector<int>>> &dp){
+        if(cap==0 || i==p.size()) return 0;
+        if(dp[i][buy][cap]!=-1) dp[i][buy][cap];
+        int ans;
+        if(buy){
+            ans=max(-p[i]+solve(i+1,0,cap,p,dp),solve(i+1,1,cap,p,dp));
+        }else{
+            ans=max(p[i]+solve(i+1,1,cap-1,p,dp),solve(i+1,0,cap,p,dp));
+        }
+        return dp[i][buy][cap]=ans;
+    }
+    int maxProfit(vector<int>& prices) {
+        int n=prices.size();
+        vector<vector<vector<int>>> dp(n,vector<vector<int>>(2,vector<int>(3,-1)));
+        return solve(0,1,2,prices,dp);    
+    }
+    
+    
+// Tabulation...
+    int maxProfit(vector<int>& prices) {
+        int n=prices.size();
+        vector<vector<vector<int>>> dp(n+1,vector<vector<int>>(2,vector<int>(3,0)));
+        for(int i=n-1;i>=0;i--){
+            for(int j=0;j<=1;j++){
+                for(int k=1;k<=2;k++){
+                    if(j){
+                        dp[i][j][k]=max(-prices[i]+dp[i+1][0][k],dp[i+1][1][k]);
+                    }else{
+                        dp[i][j][k]=max(prices[i]+dp[i+1][1][k-1],dp[i+1][0][k]);
+                    }
+                }
+            }
+        }
+        return dp[0][1][2];
+    }
+
+// Space Optiized...
+    int maxProfit(vector<int>& prices) {
+        int n=prices.size();
+        vector<vector<int>> after(2,vector<int>(3,0)),cur(2,vector<int>(3,0));
+        for(int i=n-1;i>=0;i--){
+            for(int j=0;j<=1;j++){
+                for(int k=1;k<=2;k++){
+                    if(j){
+                        cur[j][k]=max(-prices[i]+after[0][k],after[1][k]);
+                    }else{
+                        cur[j][k]=max(prices[i]+after[1][k-1],after[0][k]);
+                    }
+                }
+            }
+            after=cur;
+        }
+        return after[1][2];
+    }
