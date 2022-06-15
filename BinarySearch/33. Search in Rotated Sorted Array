@@ -1,0 +1,29 @@
+    int binarySearch(vector<int> &arr, int i,int j, int x){
+        while(i<=j){
+            int m=(i+j)/2;
+            if(arr[m]==x){
+                return m;
+            }else if(x<arr[m]){
+                j=m-1;
+            }else{
+                i=m+1;
+            }
+        }
+        return -1;
+    }
+    
+    int search(vector<int>& nums, int target) {
+        int n=nums.size();
+        int i=0,j=n-1;
+        while(i<j){
+            int m=(i+j)/2;
+            if(nums[m]<nums[j]){
+                j=m;
+            }else{
+                i=m+1;
+            }
+        }
+        int l=binarySearch(nums,0,j-1,target);
+        int r=binarySearch(nums,j,n-1,target);
+        return max(l,r);
+    }
