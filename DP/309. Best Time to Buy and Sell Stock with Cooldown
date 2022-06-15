@@ -1,0 +1,50 @@
+// Memoization...
+    int solve(int n,int b,vector<int> &p,vector<vector<int>> &dp){
+        if(n>=p.size()) return 0;
+        if(dp[n][b]!=-1) return dp[n][b];
+        if(b){
+            return dp[n][b]=max(-p[n]+solve(n+1,0,p,dp),solve(n+1,1,p,dp));
+        }else{
+            return dp[n][b]=max(p[n]+solve(n+2,1,p,dp),solve(n+1,0,p,dp));
+        }
+        
+    }
+    int maxProfit(vector<int>& prices) {
+        int n=prices.size();
+        vector<vector<int>> dp(n+1,vector<int>(2,-1));
+        return solve(0,1,prices,dp);
+    }
+    
+// Tabulation...
+    int maxProfit(vector<int>& prices) {
+        int n=prices.size();
+        vector<vector<int>> dp(n+2,vector<int>(2,0));
+        for(int i=n-1;i>=0;i--){
+            for(int j=0;j<=1;j++){
+                if(j){
+                    dp[i][j]=max(-prices[i]+dp[i+1][0],dp[i+1][1]);
+                }
+                else{
+                    dp[i][j]=max(prices[i]+dp[i+2][1],dp[i+1][0]);
+                }
+            }
+        }
+        return dp[0][1];
+    }
+    
+// Space Optimization...
+    int maxProfit(vector<int>& prices) {
+        int n=prices.size();
+        vector<vector<int>> dp(n+2,vector<int>(2,0));
+        for(int i=n-1;i>=0;i--){
+            for(int j=0;j<=1;j++){
+                if(j){
+                    dp[i][j]=max(-prices[i]+dp[i+1][0],dp[i+1][1]);
+                }
+                else{
+                    dp[i][j]=max(prices[i]+dp[i+2][1],dp[i+1][0]);
+                }
+            }
+        }
+        return dp[0][1];
+    }
