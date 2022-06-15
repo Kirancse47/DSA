@@ -29,7 +29,7 @@
 // Using Binary Search...
     int singleNonDuplicate(vector<int>& nums) {
        if(nums.size()==1) return nums[0];
-        int start=0,end=nums.size()-1;
+        int start=0,end=nums.size()-2;
         while(start<=end){
             int mid = start + ((end-start)/2);
             if(nums[mid]==nums[mid^1]) start=mid+1;
