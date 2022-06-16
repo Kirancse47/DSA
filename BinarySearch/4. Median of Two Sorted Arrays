@@ -1,4 +1,37 @@
-double findMedianSortedArrays(vector<int>& a1, vector<int>& a2) {
+// Using Two Pointer.....
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int n1=nums1.size(),n2=nums2.size();
+        vector<int> a;
+        int i=0,j=0;
+        while(i<n1 && j<n2){
+            if(nums1[i]<nums2[j]){
+                a.push_back(nums1[i]);
+                i++;
+            }else{
+                a.push_back(nums2[j]);
+                j++;
+            }
+        }
+        while(i<n1){
+            a.push_back(nums1[i]);
+            i++;
+        }
+        while(j<n2){
+            a.push_back(nums2[j]);
+            j++;
+        }
+
+        int n=a.size();
+        int m=n/2;
+        if(n%2!=0){
+            return a[m];
+        }else{
+            return (a[m]+a[m-1])/2.0;
+        }
+    }
+
+// Using Binary Search...
+    double findMedianSortedArrays(vector<int>& a1, vector<int>& a2) {
         if(a1.size()>a2.size()){
         return findMedianSortedArrays(a2,a1);
         }
