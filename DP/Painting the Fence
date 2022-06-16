@@ -1,0 +1,15 @@
+long long mod=1e9+7;
+    long long countWays(int n, int k){
+        if(n==1) return k;
+        long long same=k;
+        long long diff=k*(k-1);
+        long long tot=same+diff;
+        for(int i=3;i<=n;i++){
+            same=diff;
+            diff=(tot*(k-1))%mod;
+            tot=(same+diff)%mod;
+        }
+        return tot%mod;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/painting-the-fence3727/1/?page=1&status[]=unsolved&curated[]=7&sortBy=submissions#
