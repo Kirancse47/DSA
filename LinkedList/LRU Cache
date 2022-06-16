@@ -1,0 +1,80 @@
+class LRUCache
+{
+    private:
+
+    public:
+    class node{
+        public:
+            int key;
+            int val;
+            node* next;
+            node* prev;
+            node(int x,int y){
+                key=x;
+                val=y;
+            }
+    };
+    
+    node* head=new node(-1,-1);
+    node* tail=new node(-1,-1);
+    int capacity;
+    unordered_map<int, node*>mp;
+    
+    //Constructor for initializing the cache capacity with the given value.
+    LRUCache(int cap)
+    {
+        // code here
+        capacity=cap;
+        head->next=tail;
+        tail->prev=head;
+    }
+    
+    void addnode(node* newnode) {
+        node* temp = head->next;
+        newnode->next = temp;
+        newnode->prev = head;
+        head->next = newnode;
+        temp->prev = newnode;
+    }
+    
+    void deletenode(node* delnode) {
+        node* delprev = delnode->prev;
+        node* delnext = delnode->next;
+        delprev->next = delnext;
+        delnext->prev = delprev;
+    }
+    
+    //Function to return value corresponding to the key.
+    int get(int key)
+    {
+        // your code here
+        if(mp.find(key)!=mp.end()){
+            node* ansN=mp[key];
+            int v=ansN->val;
+            deletenode(ansN);
+            addnode(ansN);
+            mp[key]=head->next;
+            return v;
+        }
+        return -1;
+    }
+    
+    //Function for storing key-value pair.
+    void set(int key, int value)
+    {
+        // your code here
+        if(mp.find(key)!=mp.end()){
+            node* existN=mp[key];
+            mp.erase(key);
+            deletenode(existN);
+        }
+        if(mp.size()==capacity){
+            mp.erase(tail->prev->key);
+            deletenode(tail->prev);
+        }
+        addnode(new node(key,value));
+        mp[key]=head->next;
+    }
+};
+
+Link - https://github.com/Kirancse47/DSA/new/main/LinkedList
