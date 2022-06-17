@@ -1,0 +1,44 @@
+    priority_queue<int,vector<int>>maxH;
+    priority_queue<int,vector<int>,greater<int>>minH;
+    
+    MedianFinder() {
+        
+    }
+    
+    void addNum(int num) {
+        int maxL=maxH.size();
+        int minL=minH.size();
+        if(maxL==0){
+            maxH.push(num);
+        }
+        else if(maxL==minL){
+            if(num < minH.top()){
+                maxH.push(num);
+            }
+            else{
+                maxH.push(minH.top());
+                minH.pop();
+                minH.push(num);
+            }
+        }
+        else{
+            if(num > maxH.top()){
+                minH.push(num);
+            }
+            else{
+                minH.push(maxH.top());
+                maxH.pop();
+                maxH.push(num);
+            }
+        }
+    }
+    
+    double findMedian() {
+        int maxL=maxH.size();
+        int minL=minH.size();
+        if(maxL>minL){
+            return maxH.top();
+        }else{
+            return (double(maxH.top())+double(minH.top()))/2;
+        }
+    }
