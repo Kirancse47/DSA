@@ -1,0 +1,22 @@
+// 0 - camera, 1 - coverd, -1 - need camera
+    int cam=0;
+    int solve(TreeNode *root){
+        if(!root) return 1;
+        int left=solve(root->left);
+        int right=solve(root->right);
+        if(left==-1 || right==-1){
+            cam++;
+            return 0;
+        }else if(left==0 || right==0){
+            return 1;
+        }
+        else return -1;
+    }
+    
+    int minCameraCover(TreeNode* root) {
+        if(!root) return 0;
+        if(!root->left && !root->right) return 1;
+        int ans=solve(root);
+        if(ans==-1) cam++;
+        return cam;
+    }
