@@ -1,0 +1,20 @@
+    int countSubArrayProductLessThanK(const vector<int>& a, int n, long long k) {
+        long long ans=0;
+        int i=0,j=0;
+        long long pd=1;
+        while(j<n){
+            pd*=a[j];
+            if(pd<k) ans+=j-i+1;
+            else{
+                while(pd>=k){
+                    pd/=a[i];
+                    i++;
+                }
+                if(pd<k) ans+=j-i+1;
+            }
+            j++;
+        }
+        return ans;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/count-the-subarrays-having-product-less-than-k1708/1/?page=1&status[]=unsolved&curated[]=1&curated[]=7&sortBy=submissions#
