@@ -1,0 +1,14 @@
+bool solve(int sum,TreeNode* root, int targetSum){
+        if(!root->left && !root->right){
+            if(sum+root->val==targetSum) return true;
+            else return false;
+        }
+        if(root->left && solve(root->val+sum,root->left,targetSum)) return true;
+        if(root->right && solve(root->val+sum,root->right,targetSum)) return true;
+        return false;
+    }
+    
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        if(!root) return false;
+        return solve(0,root,targetSum);
+    }
