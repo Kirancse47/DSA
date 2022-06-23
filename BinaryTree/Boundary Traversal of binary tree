@@ -1,0 +1,31 @@
+  void leftB(Node* root, vector<int> &res){
+        if(!root || (!root->left && !root->right)) return;
+        res.push_back(root->data);
+        if(root->left) leftB(root->left,res);
+        else leftB(root->right,res);
+    }
+    
+    void leaf(Node* root, vector<int> &res){
+        if(!root) return;
+        if(!root->left && !root->right) res.push_back(root->data);
+        leaf(root->left,res);
+        leaf(root->right,res);
+    }
+    
+    void rightB(Node* root, vector<int> &res){
+        if(!root || (!root->left && !root->right)) return;
+        if(root->right) rightB(root->right,res);
+        else rightB(root->left,res);
+        res.push_back(root->data);
+    }
+    
+    vector<int> boundary(Node *root){
+        vector<int> res;
+        if(!root) return res;
+        res.push_back(root->data);
+        leftB(root->left,res);
+        leaf(root->left,res);
+        leaf(root->right,res);
+        rightB(root->right,res);
+        return res;
+    }
