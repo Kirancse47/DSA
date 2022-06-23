@@ -29,3 +29,5 @@
         rightB(root->right,res);
         return res;
     }
+
+Link - https://practice.geeksforgeeks.org/problems/boundary-traversal-of-binary-tree/1/?page=2&category[]=Tree&curated[]=1&curated[]=7&sortBy=submissions
