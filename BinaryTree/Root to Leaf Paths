@@ -1,0 +1,21 @@
+void help(Node* A,vector<int> &ans,vector<vector<int>> &res){
+    if(!A) return;
+    ans.push_back(A->data);
+    if(!A->left && !A->right){ 
+        res.push_back(ans);
+        ans.pop_back();
+        return;
+    }
+    help(A->left,ans,res);
+    help(A->right,ans,res);
+    ans.pop_back();
+}
+vector<vector<int>> Paths(Node* root){
+    vector<int> ans;
+    vector<vector<int>> res;
+    if(!root) return res;
+    help(root,ans,res);
+    return res;
+}
+
+Link - https://practice.geeksforgeeks.org/problems/root-to-leaf-paths/1#
