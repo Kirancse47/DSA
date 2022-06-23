@@ -1,4 +1,4 @@
-// Brute Force...O(n)
+// Brute Force...O(n^2)
     int Height(TreeNode* root) {
         if(!root) return 0;
         int l=Height(root->left);
