@@ -1,0 +1,16 @@
+bool help(TreeNode* A, int B,vector<int> &ans){
+    if(!A) return false;
+    ans.push_back(A->val);
+    if(A->val==B) return true;
+    if(help(A->left,B,ans) || help(A->right,B,ans)) return true;
+    ans.pop_back();
+    return false;
+}
+vector<int> Solution::solve(TreeNode* A, int B) {
+    vector<int> ans;
+    if(!A) return ans;
+    help(A,B,ans);
+    return ans;
+}
+
+Link - https://www.interviewbit.com/problems/path-to-given-node/
