@@ -1,0 +1,14 @@
+   int pathSum(TreeNode* root,int &ans){
+        if(!root) return 0;
+        int lp=max(0,pathSum(root->left,ans));
+        int rp=max(0,pathSum(root->right,ans));
+        ans=max(ans,root->val+lp+rp);
+        return root->val+max(lp,rp);
+    }
+    
+    int maxPathSum(TreeNode* root) {
+        if(!root) return 0;
+        int ans=INT_MIN;
+        pathSum(root,ans);
+        return ans;
+    }
