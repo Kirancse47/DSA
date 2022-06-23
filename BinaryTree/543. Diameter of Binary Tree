@@ -1,0 +1,32 @@
+//BROUTE FORCE...O(n^2)
+    int height(TreeNode* root){
+        if(!root) return 0;
+        int l=height(root->left); 
+        int r=height(root->right);
+        return 1+max(l,r);
+    }
+    int ans=0;
+    int diameterOfBinaryTree(TreeNode* root) {
+        if(!root) return 0;
+        int l=height(root->left); 
+        int r=height(root->right);
+        ans=max(ans,l+r);
+        diameterOfBinaryTree(root->left);
+        diameterOfBinaryTree(root->right);
+        return ans;
+    }
+    
+//OPTIMIZE...O(n)
+    int height(TreeNode* root,int &ans){
+        if(!root) return 0;
+        int l=height(root->left,ans); 
+        int r=height(root->right,ans);
+        ans=max(ans,l+r);
+        return 1+max(l,r);
+    }
+    
+    int diameterOfBinaryTree(TreeNode* root) {
+        int ans=0;
+        height(root,ans);
+        return ans;
+    }
