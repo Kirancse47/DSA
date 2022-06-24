@@ -1,0 +1,18 @@
+  bool isPossible(vector<int>& target) {
+        priority_queue<long long int> pq;
+        long long int sum=0;
+        for(auto it : target){
+            pq.push(it);
+            sum+=it;
+        }
+        while(pq.top()!=1){
+            long long int mx=pq.top();pq.pop();
+            sum-=mx;
+            if(sum<=0 || sum>=mx) return false;
+            mx=mx%sum;
+            sum+=mx;
+            pq.push(mx>0?mx:sum);
+            
+        }
+        return true;
+    }
