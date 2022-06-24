@@ -1,0 +1,7 @@
+    bool hasPathSum(Node *root, int S) {
+        if(!root) return 0;
+        if(!root->left && !root->right) return (S==root->data);
+        return(hasPathSum(root->left, S-root->data) || hasPathSum(root->right,S-root->data));
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/root-to-leaf-path-sum/1#
