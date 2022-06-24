@@ -1,18 +1,11 @@
-    Node* search(Node* root,int tar){
+    Node* makeParent(Node* root,unordered_map<Node*,Node*> &parent,int tar){
         if(!root) return root;
-        if(root->data==tar) return root;
-        Node* l=search(root->left,tar);
-        if(l) return l;
-        Node* r=search(root->right,tar);
-        return r;
-    }
-    
-    void makeParent(Node* root,unordered_map<Node*,Node*> &parent){
-        if(!root) return;
+        Node* node=NULL;
         queue<Node*> q;
         q.push(root);
         while(!q.empty()){
             Node* it=q.front();q.pop();
+            if(it->data==tar) node=it;
             if(it->left){
                 parent[it->left]=it;
                 q.push(it->left);
@@ -22,16 +15,15 @@
                 q.push(it->right);
             }
         }
+        return node;
     }
     
     vector <int> KDistanceNodes(Node* root, int target , int k){
         vector<int> ans;
         if(!root) return ans;
-        Node* node=search(root,target);
-        if(!node) return ans;
-        
         unordered_map<Node*,Node*> parent;
-        makeParent(root,parent);
+        Node* node=makeParent(root,parent,target);
+        if(!node) return ans;
         
         unordered_map<Node*,bool> vis;
         queue<Node*> q;
