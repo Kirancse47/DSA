@@ -1,0 +1,49 @@
+    Node* makeParent(Node* root,unordered_map<Node*,Node*> &parent,int target){
+        Node* tar=NULL;
+        queue<Node*> q;
+        q.push(root);
+        while(!q.empty()){
+            Node *t=q.front();q.pop();
+            if(t->data==target) tar=t;
+            if(t->left){
+                q.push(t->left);
+                parent[t->left]=t;
+            }
+            if(t->right){
+                q.push(t->right);
+                parent[t->right]=t;
+            }
+        }
+        return tar;
+    }
+    
+    int minTime(Node* root, int target){
+        if(!root) return 0;
+        unordered_map<Node*,Node*> parent;
+        Node* targetNode=makeParent(root,parent,target);
+        
+        unordered_map<Node*,bool> vis;
+        queue<Node*> q;
+        q.push(targetNode);
+        int dis=0;
+        while(!q.empty()){
+            int size=q.size();
+            for(int i=0;i<size;i++){
+                Node* t=q.front();q.pop();
+                vis[t]=true;
+                if(t->left && !vis[t->left]){
+                    q.push(t->left);
+                }
+                if(t->right && !vis[t->right]){
+                    q.push(t->right);
+                }
+                if(parent[t] && !vis[parent[t]]){
+                    q.push(parent[t]);
+                }
+            }
+            dis++;
+        }
+        return dis-1;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/burning-tree/1
