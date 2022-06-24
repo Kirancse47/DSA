@@ -1,0 +1,42 @@
+// Recursive... T=O(N) C=O(N)
+    TreeNode* prev=NULL;
+    void flatten(TreeNode* root) {
+        if(!root) return;
+        flatten(root->right);
+        flatten(root->left);
+        root->right=prev;
+        root->left=NULL;
+        prev=root;
+    }
+    
+//Itarative.....  T=O(N) C=O(N)
+    void flatten(TreeNode* root) {
+        if(!root) return;
+        stack<TreeNode*> st;
+        st.push(root);
+        while(!st.empty()){
+            TreeNode* cur=st.top();st.pop();
+            if(cur->right) st.push(cur->right);
+            if(cur->left) st.push(cur->left);
+            if(!st.empty()){
+                cur->right=st.top();
+                cur->left=NULL;
+            }
+        }
+    }
+    
+//Using Morist Traversal.....  T=O(N) C=O(1)
+    void flatten(TreeNode* root) {
+        if(!root) return;
+        TreeNode* cur=root;
+        while(cur){
+            if(cur->left){
+                TreeNode* prev=cur->left;
+                while(prev->right) prev=prev->right;
+                prev->right=cur->right;
+                cur->right=cur->left;
+                cur->left=NULL;
+            }
+            cur=cur->right;
+        }
+    }
