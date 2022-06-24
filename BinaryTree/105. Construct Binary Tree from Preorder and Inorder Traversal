@@ -1,0 +1,16 @@
+    TreeNode* build(vector<int> &in,int is,int ie,vector<int> &pre,int ps,int pe,unordered_map<int,int> &mp){
+        if(is>ie || ps>pe) return NULL;
+        TreeNode* ne=new TreeNode(pre[ps]);
+        int pos=mp[pre[ps]];
+        int numsLeft=pos-is;
+        ne->left=build(in,is,pos-1,pre,ps+1,ps+numsLeft,mp);
+        ne->right=build(in,pos+1,ie,pre,ps+numsLeft+1,pe,mp);
+        return ne;
+    }
+    
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        int n=inorder.size();
+        unordered_map<int,int> mp;
+        for(int i=0;i<n;i++) mp[inorder[i]]=i;
+        return build(inorder,0,n-1,preorder,0,n-1,mp);
+    }
