@@ -1,0 +1,15 @@
+int findCeil(Node* root, int input) {
+    if (root == NULL) return -1;
+    int ans=-1;
+    Node* cur=root;
+    while(cur){
+        if(input==cur->data) return input;
+        else if(input<cur->data){
+            ans=cur->data;
+            cur=cur->left;
+        }else cur=cur->right;
+    }
+    return ans;
+}
+
+Link - https://practice.geeksforgeeks.org/problems/implementing-ceil-in-bst/0/?category[]=Binary%20Search%20Tree&page=1&sortBy=accuracy&query=category[]Binary%20Search%20Treepage1sortByaccuracy#
