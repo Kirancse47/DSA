@@ -1,0 +1,13 @@
+    Node * inOrderSuccessor(Node *root, Node *x){
+        Node *cur=root,*succ=NULL;
+        while(cur){
+            if(cur->data > x->data){
+                succ=cur;
+                cur=cur->left;
+            }
+            else cur=cur->right;
+        }
+        return succ;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/inorder-successor-in-bst/1#
