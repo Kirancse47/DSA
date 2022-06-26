@@ -1,0 +1,22 @@
+    stack<TreeNode*> st;
+    
+    void pushA(TreeNode* node){
+        while(node){
+            st.push(node);
+            node=node->left;
+        }
+    }
+    
+    BSTIterator(TreeNode* root) {
+        pushA(root);
+    }
+    
+    int next() {
+        TreeNode *t=st.top();st.pop();
+        pushA(t->right);
+        return t->val;
+    }
+    
+    bool hasNext() {
+        return !st.empty();
+    }
