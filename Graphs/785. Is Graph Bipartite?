@@ -1,0 +1,47 @@
+// Using BFS...
+    bool Bipartite(vector<vector<int>>& graph, vector<int>&col, int s){
+        queue<int>q;
+        col[s]=1;
+        q.push(s);
+        while(!q.empty()){
+            int node=q.front();q.pop();
+            for(auto it : graph[node]){
+                if(col[it]==-1){
+                    col[it]=1-col[node];
+                    q.push(it);
+                }else if(col[it]==col[node]) return false;
+            }
+        }
+        return true;
+    }
+    bool isBipartite(vector<vector<int>>& graph) {
+        int n=graph.size();
+        vector<int> col(n,-1);
+        for(int i=0;i<n;i++){
+            if(col[i]==-1){
+                if(!Bipartite(graph,col,i)) return false;
+            }
+        }
+        return true;
+    }
+    
+// Using DFS...
+    bool Bipartite(vector<vector<int>>& graph, vector<int>&col, int s,int c){
+        col[s]=c;
+        for(auto it : graph[s]){
+            if(col[it]==-1){
+                if(!Bipartite(graph,col,it,1-col[s])) return false; 
+            }else if(col[it]==col[s]) return false;
+        }
+        return true;
+    }
+    bool isBipartite(vector<vector<int>>& graph) {
+        int n=graph.size();
+        vector<int> col(n,-1);
+        for(int i=0;i<n;i++){
+            if(col[i]==-1){
+                if(!Bipartite(graph,col,i,1)) return false;
+            }
+        }
+        return true;
+    }
