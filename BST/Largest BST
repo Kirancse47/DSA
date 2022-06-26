@@ -1,0 +1,23 @@
+struct nodeVal{
+    int maxNode,minNode,maxSize;
+};
+
+class Solution{
+    public:
+    nodeVal solve(Node* root){
+        if(!root) return {INT_MIN,INT_MAX,0};
+        auto left=solve(root->left);
+        auto right=solve(root->right);
+        if(left.maxNode<root->data && root->data<right.minNode){
+            return {max(root->data,right.maxNode),min(root->data,left.minNode),1+left.maxSize+right.maxSize};
+        }
+        else{
+            return {INT_MAX,INT_MIN,max(left.maxSize,right.maxSize)};
+        }
+    }
+    int largestBst(Node *root){
+        return solve(root).maxSize;
+    }
+};
+
+Link - https://practice.geeksforgeeks.org/problems/largest-bst/1/
