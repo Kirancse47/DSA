@@ -1,0 +1,14 @@
+    TreeNode* buildTree(vector<int>& preorder,int  &idx,int ub){
+        if(idx==preorder.size() || ub<preorder[idx]) return NULL;
+        TreeNode* node=new TreeNode(preorder[idx++]);
+        node->left=buildTree(preorder,idx,node->val);
+        node->right=buildTree(preorder,idx,ub);
+        return node;
+    }
+    
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        int n=preorder.size();
+        if(n==0) return NULL;
+        int idx=0;
+        return buildTree(preorder,idx,INT_MAX);
+    }
