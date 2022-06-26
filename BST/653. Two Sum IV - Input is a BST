@@ -1,0 +1,19 @@
+    void inorder(TreeNode* root,vector<int> &a){
+        if(!root) return;
+        inorder(root->left,a);
+        a.push_back(root->val);
+        inorder(root->right,a);
+    }
+    
+    bool findTarget(TreeNode* root, int k) {
+        vector<int> a;
+        inorder(root,a);
+        int i=0,j=a.size()-1;
+        while(i<j){
+            int s=a[i]+a[j];
+            if(s==k) return true;
+            else if(s>k) j--;
+            else i++;
+        }
+        return false;
+    }
