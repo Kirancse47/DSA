@@ -10,7 +10,11 @@
     vector<int> dfsOfGraph(int V, vector<int> adj[]) {
         vector<int> ans;
         vector<bool> vis(V,false);
-        dfs(0,adj,vis,ans);
+        for(int i=0;i<V;i++){
+            if(!vis[i]){
+                dfs(i,adj,vis,ans);
+            }
+        }
         return ans;
     }
     
