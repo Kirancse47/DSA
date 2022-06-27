@@ -1,0 +1,25 @@
+// Using BFS...
+	vector<int> topoSort(int V, vector<int> adj[]) {
+	    vector<int> ans;
+	    vector<int> inDeg(V,0);
+	    for(int i=0;i<V;i++){
+	        for(auto it : adj[i]){
+	            inDeg[it]++;
+	        }
+	    }
+	    
+	    queue<int> q;
+	    for(int i=0;i<V;i++){
+	        if(inDeg[i]==0) q.push(i);
+	    }
+	    
+	    while(!q.empty()){
+	        int node=q.front();q.pop();
+	        ans.push_back(node);
+	        for(auto it : adj[node]){
+	            inDeg[it]--;
+	            if(inDeg[it]==0) q.push(it);
+	        }
+	    }
+	    return ans;
+	}
