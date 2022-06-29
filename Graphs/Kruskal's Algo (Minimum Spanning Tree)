@@ -1,0 +1,41 @@
+//Kruskal's Algo...
+    int findParent(int node,vector<int> &parent){
+        if(node==parent[node]) return node;
+        return parent[node]=findParent(parent[node],parent);
+    }
+    void Union(int x,int y,vector<int> &parent,vector<int> &rank){
+        x=findParent(x,parent);
+        y=findParent(y,parent);
+        if(rank[x]>rank[y]){
+            parent[y]=x;
+        }else if(rank[x]<rank[y]){
+            parent[x]=y;
+        }else{
+            parent[y]=x;
+            rank[x]++;
+        }
+    }
+    int spanningTree(int V, vector<vector<int>> adj[]){
+        vector<int> parent(V),rank(V,0);
+        for(int i=0;i<V;i++){
+            parent[i]=i;
+        }
+        
+        vector<vector<int>> edges;
+        for(int i=0;i<V;i++){
+           for(auto it : adj[i]){
+               edges.push_back({it[1],i,it[0]});
+           }
+        }
+        sort(edges.begin(),edges.end());
+        int ans=0;
+        for(auto it : edges){
+            if(findParent(it[1],parent)!=findParent(it[2],parent)){
+                ans+=it[0];
+                Union(it[1],it[2],parent,rank);
+            }
+        }
+        return ans;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/minimum-spanning-tree/1/#
