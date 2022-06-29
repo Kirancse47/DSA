@@ -1,0 +1,32 @@
+int isNegativeWeightCycle(int N, vector<vector<int>>adj){
+	    // Code here
+	    int inf = 1e8; 
+        vector<int> dist(N, inf); 
+        dist[0] = 0; 
+        for(int i = 1;i<=N-1;i++) {
+            for(auto it: adj) {
+                if(dist[it[0]] + it[2] < dist[it[1]]) {
+                    dist[it[1]] = dist[it[0]] + it[2]; 
+                }
+            }
+        }
+    
+        int fl = 0; 
+        for(auto it: adj) {
+            if(dist[it[0]] + it[2] < dist[it[1]]) {
+                // cout << -1; 
+                fl = 1; 
+                break; 
+            }
+        }
+        
+        if(!fl) {
+            // for(int i = 0;i<N;i++) {
+            //     cout << dist[i]<<" ";
+            // }
+            return false;
+        }
+        return true;
+	}
+  
+  Link - https://practice.geeksforgeeks.org/problems/negative-weight-cycle3504/1#
