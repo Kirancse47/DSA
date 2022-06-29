@@ -1,0 +1,43 @@
+// It gives Minimum weight and parent also...
+    int spanningTree(int V, vector<vector<int>> adj[]){
+        vector<int> key(V,1e9),mst(V,0),parent(V,-1);
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> minh;
+        minh.push({0,0});
+        key[0]=0;
+        while(!minh.empty()){
+            int node=minh.top().second;minh.pop();
+            mst[node]=1;
+            for(auto it : adj[node]){
+                int next=it[0];
+                int val=it[1];
+                if(!mst[next] && val<key[next]){
+                    parent[next]=node;
+                    key[next]=val;
+                    minh.push({val,next});
+                }
+            }
+        }
+        return accumulate(key.begin(),key.end(),0);
+    }
+    
+// Only Minimum weight...
+    int spanningTree(int V, vector<vector<int>> adj[]){
+        vector<int> vis(V,0);
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> minh;
+        minh.push({0,0});
+        int ans=0;
+        while(!minh.empty()){
+            int wt=minh.top().first;
+            int node=minh.top().second;
+            minh.pop();
+            if(vis[node]) continue;
+            vis[node]=1;
+            ans+=wt;
+            for(auto it : adj[node]){
+                if(!vis[it[0]]) minh.push({it[1],it[0]});
+            }
+        }
+        return ans;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/minimum-spanning-tree/1/
