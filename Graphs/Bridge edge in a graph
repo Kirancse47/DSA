@@ -1,0 +1,28 @@
+    int dfs(int node,int parent,vector<int>&vis,vector<int>&tin,vector<int>&l,int time,vector<int>adj[],int c,int d){
+        vis[node]=1;
+        tin[node]=l[node]=time;
+        time++;
+        for(auto &i:adj[node]){
+            if(i==parent) continue;
+            if(!vis[i]){
+                if(dfs(i,node,vis,tin,l,time,adj,c,d)) return 1;
+                l[node]=min(l[node],l[i]);
+                if(l[i]>tin[node]){
+                    if((node==c and i==d) or(node==d and i==c)) return 1; 
+                }
+            }
+            else{
+                l[node]=min(l[node],l[i]);
+            }
+        }
+        return 0;
+    }
+    int isBridge(int V, vector<int> adj[], int c, int d) {
+        vector<int>vis(V,0),tin(V,0),l(V,0);
+        for(int i=0;i<V;i++){
+            if(dfs(i,-1,vis,tin,l,1,adj,c,d)) return 1;
+        }
+       return 0;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/bridge-edge-in-graph/1/
