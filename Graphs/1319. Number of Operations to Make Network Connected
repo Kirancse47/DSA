@@ -1,0 +1,37 @@
+    int findParent(int node,vector<int> &parent){
+        if(node==parent[node]) return node;
+        return parent[node]=findParent(parent[node],parent);
+    }
+    void Union(int x,int y,vector<int> &parent,vector<int> &rank){
+        x=findParent(x,parent);
+        y=findParent(y,parent);
+        if(rank[x]>rank[y]){
+            parent[y]=x;
+        }else if(rank[x]<rank[y]){
+            parent[x]=y;
+        }else{
+            parent[y]=x;
+            rank[x]++;
+        }
+    }
+    
+    int makeConnected(int n, vector<vector<int>>& con) {
+        if(n-1>con.size()) return -1;
+        vector<int> parent(n),rank(n,0);
+        for(int i=0;i<n;i++){
+            parent[i]=i;
+        }
+        int disEdg=0;
+        for(auto it : con){
+            if(findParent(it[0],parent)!=findParent(it[1],parent)){
+                Union(it[0],it[1],parent,rank);
+            }else disEdg++;
+        }
+        int comp=0;
+        for(int i=0;i<n;i++){
+            if(parent[i]==i) comp++;
+        }
+        int reqEdg=comp-1;
+        if(reqEdg>disEdg) return -1;
+        return reqEdg;
+    }
