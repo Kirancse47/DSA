@@ -19,7 +19,7 @@
                 if(inDeg[it]==0) q.push(it);
             }
         }
-        return !(cnt==V);
+        return cnt==V;
     }
     
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
@@ -27,5 +27,5 @@
         for(auto it : prerequisites){
             mp[it[1]].push_back(it[0]);
         }
-        return !isCyclic(numCourses,mp);
+        return isCyclic(numCourses,mp);
     }
