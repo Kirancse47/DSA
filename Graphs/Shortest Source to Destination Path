@@ -1,0 +1,29 @@
+    int shortestDistance(int N, int M, vector<vector<int>> A, int X, int Y) {
+        if(A[0][0]==0) return -1;
+        queue<pair<int,int>> q;
+        q.push({0,0});
+        int dx[]={0,1,0,-1};
+        int dy[]={1,0,-1,0};
+        int ans=0;
+        while(!q.empty()){
+            int len=q.size();
+            for(int i=0;i<len;i++){
+                int r=q.front().first;
+                int c=q.front().second;
+                q.pop();
+                if(r==X && c==Y) return ans;
+                for(int k=0;k<4;k++){
+                    int x=r+dx[k];
+                    int y=c+dy[k];
+                    if(x>=0 && y>=0 && x<N && y<M && A[x][y]){
+                        q.push({x,y});
+                        A[x][y]=0;
+                    }
+                }
+            }
+            ans++;
+        }
+        return -1;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/shortest-source-to-destination-path3544/1/
