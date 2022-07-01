@@ -1,0 +1,42 @@
+// With space...
+    int trap(vector<int>& a) {
+        int n=a.size();
+        vector<int> l(n),r(n);
+
+        l[0]=a[0];
+        for(int i=1;i<n;i++){
+            l[i]=max(a[i],l[i-1]);
+        }
+
+        r[n-1]=a[n-1];
+        for(int i=n-2;i>=0;i--){
+            r[i]=max(a[i],r[i+1]);
+        }
+
+        int w=0;
+        for(int j=1;j<n-1;j++){
+            w+=(min(l[j],r[j])-a[j]);
+        }
+        return w;
+    }
+    
+// Without Space...
+    int trap(vector<int>& a) {
+        int n=a.size();
+        int ans=0;
+        int l=0,r=n-1;
+        int lmax=a[l],rmax=a[r];
+        while(l<=r){
+            if(a[l]<=a[r]){
+                if(a[l]>=lmax) lmax=a[l];
+                else ans+=lmax-a[l];
+                l++;
+            }
+            else{
+                if(a[r]>=rmax) rmax=a[r];
+                else ans+=rmax-a[r]; 
+                r--;
+            }
+        }
+        return ans;
+    }
