@@ -1,0 +1,32 @@
+vector<vector<int>>nearest(vector<vector<int>>grid){
+	    int n=grid.size(),m=grid[0].size();
+	    vector<vector<int>> ans(n,vector<int>(m,1e9));
+	    queue<pair<int,int>> q;
+	    for(int i=0;i<n;i++){
+	        for(int j=0;j<m;j++){
+	            if(grid[i][j]==1){ 
+	                ans[i][j]=0;
+	                q.push({i,j});
+	            }
+	        }
+	    }
+	    int dx[]={0,1,0,-1};
+      int dy[]={1,0,-1,0};
+	    while(!q.empty()){
+	        int r=q.front().first;
+	        int c=q.front().second;
+	        q.pop();
+	        
+	        for(int k=0;k<4;k++){
+	            int x=r+dx[k];
+	            int y=c+dy[k];
+	            if(x>=0 && y>=0 && x<n && y<m && ans[x][y]>1+ans[r][c]){
+	                ans[x][y]=1+ans[r][c];
+	                q.push({x,y});
+	            }
+	        }
+	    }
+	    return ans;
+	}
+  
+  Link - https://practice.geeksforgeeks.org/problems/distance-of-nearest-cell-having-1-1587115620/1
