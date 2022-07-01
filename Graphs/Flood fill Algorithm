@@ -1,0 +1,21 @@
+    int X[4]={1,-1,0,0};
+    int Y[4]={0,0,-1,1};
+    void flood_helper(vector<vector<int>>& image,int i, int j, int newColor, int ic,int n, int m,vector<vector<bool>>& vis){
+        if(i<0 || i>=n || j<0 || j>=m || image[i][j]!=ic || vis[i][j]) return;
+        image[i][j]=newColor;
+        vis[i][j]=true;
+        for(int k=0;k<4;k++){
+            flood_helper(image,i+X[k],j+Y[k],newColor,ic,n,m,vis);
+        }
+    }
+    
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+        int n=image.size();
+        int m=image[0].size();
+        int ic=image[sr][sc];
+        vector<vector<bool>> vis(n,vector<bool>(m,false));
+        flood_helper(image,sr,sc,newColor,ic,n,m,vis);
+        return image;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/flood-fill-algorithm1856/1/
