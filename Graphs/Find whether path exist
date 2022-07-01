@@ -1,0 +1,26 @@
+    int dx[4]={0,1,0,-1};
+    int dy[4]={1,0,-1,0};
+    bool solve(int i,int j,int n,vector<vector<int>> &grid){
+        grid[i][j]=0;
+        for(int k=0;k<4;k++){
+            int x=i+dx[k];
+            int y=j+dy[k];
+            if(x<0 || y<0 || x>=n || y>=n || grid[x][y]==0) continue;
+            if(grid[x][y]==2) return true;
+            if(solve(x,y,n,grid)) return true;
+        }
+        return false;
+    }
+    bool is_Possible(vector<vector<int>>& grid) {
+        int n=grid.size();
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==1){
+                    if(solve(i,j,n,grid)) return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/find-whether-path-exist5238/1/
