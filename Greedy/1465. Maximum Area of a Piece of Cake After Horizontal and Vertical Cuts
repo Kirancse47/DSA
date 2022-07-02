@@ -1,0 +1,18 @@
+    int maxArea(int h, int w, vector<int>& horizontalCuts, vector<int>& verticalCuts) {
+        int nh=horizontalCuts.size(),nv=verticalCuts.size();
+        sort(horizontalCuts.begin(),horizontalCuts.end());
+        sort(verticalCuts.begin(),verticalCuts.end());
+        int mh=max(horizontalCuts[0],(h-horizontalCuts[nh-1]));
+        int mv=max(verticalCuts[0],(w-verticalCuts[nv-1]));
+        for(int i=1;i<nh;i++){
+            mh=max(mh,(horizontalCuts[i]-horizontalCuts[i-1]));
+        }
+        
+        for(int i=1;i<nv;i++){
+            mv=max(mv,(verticalCuts[i]-verticalCuts[i-1]));
+        }
+        
+        int mod = 1e9+7;
+        
+        return (((long long)mv%mod)*((long long)mh%mod))%mod;
+    }
