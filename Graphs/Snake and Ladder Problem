@@ -1,0 +1,29 @@
+    int minThrow(int N, int arr[]){
+        unordered_map<int,int> mp;
+        for(int i=0;i<2*N-1;i+=2) mp[arr[i]]=arr[i+1];
+        vector<bool> vis(31,false);
+        queue<int> q;
+        q.push(1);
+        vis[1]=true;
+        int ans=0;
+        while(!q.empty()){
+            int len=q.size();
+            for(int i=0;i<len;i++){
+                int node=q.front();q.pop();
+                if(node==30) return ans;
+                for(int j=1;j<7;j++){
+                    int next=node+j;
+                    if(next>30) break;
+                    if(mp.find(next)!=mp.end()) next=mp[next];
+                    if(!vis[next]){
+                        vis[next]=true;
+                        q.push(next);
+                    }
+                }
+            }
+            ans++;
+        }
+        return -1;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/snake-and-ladder-problem4816/1/
