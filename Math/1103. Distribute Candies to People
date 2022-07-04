@@ -1,0 +1,17 @@
+    vector<int> distributeCandies(int c, int n) {
+        vector<int> ans(n,0);
+        int candy=1;
+        int i=0;
+        while(candy<=c){
+            if(i==n) i=0;
+            ans[i]+=candy;
+            c-=candy;
+            candy++;
+            i++;
+        }
+        if(c>0){
+            if(i==n) i=0;
+            ans[i]+=c;
+        }
+        return ans;
+    }
