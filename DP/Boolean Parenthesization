@@ -1,0 +1,39 @@
+    int solve(int i,int j,bool isT,string &s,unordered_map<string,int> &dp){
+      if(i>j) return 0;
+    	if(i==j){
+    		if(isT==true) return s[i]=='T';
+    		else return s[i]=='F';
+    	}
+    	string temp=to_string(i);
+    	temp.push_back(' ');
+    	temp.append(to_string(j));
+    	temp.push_back(' ');
+    	temp.append(to_string(isT));
+    	if(dp.find(temp)!=dp.end()) return dp[temp];
+    	int ans=0;
+    	for(int k=i+1;k<j;k=k+2){
+    		int lt=solve(i,k-1,true,s,dp);
+    		int lf=solve(i,k-1,false,s,dp);
+    		int rt=solve(k+1,j,true,s,dp);
+    		int rf=solve(k+1,j,false,s,dp);
+    		
+    		if(s[k]=='|'){
+    			if(isT==true) ans+=lt*rt+lt*rf+lf*rt;
+    			else ans+=lf*rf;
+    		}else if(s[k]=='&'){
+    			if(isT==true) ans+=lt*rt;
+    			else ans+=lf*rf+lt*rf+lf*rt;
+    		}else{
+    			if(isT==true) ans+=lt*rf+lf*rt;
+    			else ans+=lt*rt+lf*rf;
+    		}
+    	}
+    	return dp[temp]=ans%1003;
+    }
+    
+    int countWays(int N, string S){
+        unordered_map<string,int> dp;
+        return solve(0,N-1,true,S,dp);
+    }
+    
+  Link - https://practice.geeksforgeeks.org/problems/boolean-parenthesization5610/1
