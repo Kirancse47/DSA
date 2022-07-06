@@ -1,0 +1,23 @@
+    unordered_map<string,bool> dp;
+    int wordBreak(string A, vector<string> &B) {
+        //code here
+        int n=A.size();
+        if(n==0) return 1;
+        if(dp[A]!=0) return dp[A];
+        for(int i=1;i<=n;i++){
+            int f=0;
+            string t=A.substr(0,i);
+            for(auto e : B){
+                if(e==t){
+                    f=1;
+                    break;
+                }
+            }
+            if(f && wordBreak(A.substr(i,n-i),B)){
+                return dp[A]=1;
+            }
+        }
+        return 0;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/word-break1352/1
