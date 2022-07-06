@@ -1,0 +1,37 @@
+// Memoization...
+    int solve(int i,int j,vector<int> &a,vector<vector<int>> &dp){
+    	if(i>j) return 0;
+    	if(dp[i][j]!=-1) return dp[i][j];
+    	int ans=INT_MAX;
+    	for(int k=i;k<=j;k++){
+    		ans=min(ans,solve(i,k-1,a,dp)+solve(k+1,j,a,dp)+(a[j+1]-a[i-1]));
+    	}
+    	return dp[i][j]=ans;
+    }
+    int minCost(int n, vector<int>& cuts) {
+        int len=cuts.size();
+        cuts.insert(cuts.begin(),0);
+        cuts.push_back(n);
+        sort(cuts.begin(),cuts.end());
+        vector<vector<int>> dp(len+1,vector<int>(len+1,-1));
+        return solve(1,len,cuts,dp);
+    }
+    
+// Tabulation...
+    int minCost(int n, vector<int>& cuts) {
+        int len=cuts.size();
+        cuts.insert(cuts.begin(),0);
+        cuts.push_back(n);
+        sort(cuts.begin(),cuts.end());
+        vector<vector<int>> dp(len+2,vector<int>(len+2,0));
+        for(int i=len;i>=1;i--){
+            for(int j=i;j<=len;j++){
+                int ans=INT_MAX;
+                for(int k=i;k<=j;k++){
+                    ans=min(ans,dp[i][k-1]+dp[k+1][j]+(cuts[j+1]-cuts[i-1]));
+                }
+                dp[i][j]=ans;
+            }
+        }
+        return dp[1][len];
+    }
