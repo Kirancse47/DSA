@@ -1,0 +1,36 @@
+// Memoization...
+    int solve(int i,int n,vector<int> &a,int k,vector<int> &dp){
+        if(i==n) return 0;
+        if(dp[i]!=-1) return dp[i];
+        int ans=INT_MIN;
+        int l=0,mxe=INT_MIN;
+        for(int j=i;j<min(n,i+k);j++){
+            l++;
+            mxe=max(mxe,a[j]);
+            ans=max(ans,l*mxe+solve(j+1,n,a,k,dp));
+        }
+        return dp[i]=ans;
+    }
+    
+    int maxSumAfterPartitioning(vector<int>& arr, int k) {
+        int n=arr.size();
+        vector<int> dp(n,-1);
+        return solve(0,n,arr,k,dp);
+    }
+    
+// Tabulation...
+     int maxSumAfterPartitioning(vector<int>& arr, int k) {
+        int n=arr.size();
+        vector<int> dp(n+1,0);
+        for(int i=n-1;i>=0;i--){
+            int ans=INT_MIN;
+            int l=0,mxe=INT_MIN;
+            for(int j=i;j<min(n,i+k);j++){
+                l++;
+                mxe=max(mxe,arr[j]);
+                ans=max(ans,l*mxe+dp[j+1]);
+            }
+            dp[i]=ans;
+        }
+         return dp[0];
+    }
