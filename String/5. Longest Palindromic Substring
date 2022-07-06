@@ -1,0 +1,31 @@
+    string longestPalindrome(string s) {
+        int n=s.size();
+        
+        int start=0,len=1;
+        int l,h;
+        for(int i=1;i<n;i++){
+            
+            // For even length palindrome...
+            l=i-1;
+            h=i;
+            while(l>=0 && h<n && s[l]==s[h]){
+                if(h-l+1>len){
+                    start=l;
+                    len=h-l+1;
+                }
+                l--;h++;
+            }
+            
+            // For odd length palindrom...
+            l=i-1;
+            h=i+1;
+            while(l>=0 && h<n && s[l]==s[h]){
+                if(h-l+1>len){
+                    start=l;
+                    len=h-l+1;
+                }
+                l--;h++;
+            }
+        }
+        return s.substr(start,len);
+    }
