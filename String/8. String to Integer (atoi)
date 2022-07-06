@@ -1,0 +1,31 @@
+    int myAtoi(string s) {
+        int n = s.length();
+        int idx = 0;
+        if(n == 0){
+            return 0;
+        } 
+        while(idx < n && s[idx] == ' '){
+            idx++;
+        }
+        if(idx == n){
+            return 0;
+        } 
+        bool isNegative = false;
+        if(s[idx] == '-'){
+            isNegative = true;
+            idx++;
+        }else if(s[idx] == '+'){
+            idx++;
+        }
+        int result = 0;
+        while(idx < n && isdigit(s[idx])){
+            int digit = s[idx] - '0';
+            if(result > INT_MAX / 10 || (result == INT_MAX /10 && digit > 7) ){
+                return isNegative ? INT_MIN : INT_MAX;
+            }
+            result = result*10 + digit;
+            idx++;
+        }
+
+        return isNegative ? -result : result;
+    }
