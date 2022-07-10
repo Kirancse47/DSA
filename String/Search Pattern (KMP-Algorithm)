@@ -1,0 +1,39 @@
+    vector<int> lps(string &s){
+        int n=s.size();
+        vector<int> ps(n,0);
+        int i=0,j=1;
+        while(j<n){
+            if(s[i]==s[j]){
+                ps[j]=i+1;
+                i++;j++;
+            }else{
+                if(i!=0) i=ps[i-1];
+                else{
+                    ps[j]=0;
+                    j++;
+                }
+            }
+        }
+        return ps;
+    }
+
+    vector <int> search(string pat, string txt){
+        vector<int> ans,ps=lps(pat);
+        int pl=pat.size(),tl=txt.size();
+        int i=0,j=0;
+        while(i<pl && j<tl){
+            if(pat[i]==txt[j]){
+                i++;j++;
+            }else{
+                if(i!=0) i=ps[i-1];
+                else j++;
+            }
+            if(i==pl){
+                ans.push_back(j-pl+1);
+                i=ps[i-1];
+            }
+        }
+        return ans;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/search-pattern0205/1#
