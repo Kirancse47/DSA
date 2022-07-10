@@ -1,0 +1,46 @@
+// BruteForce...
+     int strStr(string haystack, string needle) {
+       int n=haystack.size(),m=needle.size();
+       for(int i=0;i<=n-m;i++){
+           if(haystack[i]==needle[0]){
+               if(haystack.substr(i,m)==needle) return i;
+           }
+       }
+       return -1;
+    }
+    
+// Using KMP...
+    vector<int> lps(string &s){
+        int n=s.size();
+        vector<int> ps(n,0);
+        int i=0,j=1;
+        while(j<n){
+            if(s[i]==s[j]){
+                ps[j]=i+1;
+                i++;j++;
+            }else{
+                if(i!=0) i=ps[i-1];
+                else{
+                    ps[j]=0;
+                    j++;
+                }
+            }
+        }
+        return ps;
+    }
+    
+    int strStr(string txt, string pat) {
+        int tl=txt.size(),pl=pat.size();
+        vector<int> ps=lps(pat);
+        int i=0,j=0;
+        while(i<tl && j<pl){
+            if(txt[i]==pat[j]){
+                i++;j++;
+            }else{
+                if(j!=0) j=ps[j-1];
+                else i++;
+            }
+            if(j==pl) return i-pl;
+        }
+        return -1;
+    }
