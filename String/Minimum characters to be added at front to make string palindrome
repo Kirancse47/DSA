@@ -1,0 +1,54 @@
+// BrutForce...
+    bool isP(string &s){
+        int i=0,j=s.size()-1;
+        while(i<j){
+            if(s[i]!=s[j]) return false;
+            i++;j--;
+        }
+        return true;
+    }
+    int minChar(string str){
+        int n=str.size();
+        int ans=0;
+        while(str.size()>1){
+            if(isP(str)){
+                return ans;
+            }else{
+                str.erase(str.end()-1);
+                ans++;
+            }
+        }
+        return ans;
+    }
+    
+// Using KMP...
+    vector<int> lps(string &s){
+        int n=s.size();
+        vector<int> ps(n,0);
+        int i=0,j=1;
+        while(j<n){
+            if(s[i]==s[j]){
+                ps[j]=i+1;
+                i++;j++;
+            }else{
+                if(i!=0) i=ps[i-1];
+                else{
+                    ps[j]=0;
+                    j++;
+                }
+            }
+        }
+        return ps;
+    }
+        
+    int minChar(string str){
+        string s="";
+        s.append(str);
+        s.push_back('*');
+        reverse(str.begin(),str.end());
+        s.append(str);
+        vector<int> ps=lps(s);
+        return str.size()-ps[s.size()-1];
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/minimum-characters-to-be-added-at-front-to-make-string-palindrome/1/#
