@@ -1,0 +1,26 @@
+    vector<string> possibleWords(int a[], int N){
+        vector<string> prev;
+        string key[]={"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+        for(auto it : key[a[0]]){
+            string t="";
+            t.push_back(it);
+            prev.push_back(t);
+        }
+        if(N==1) return prev;
+        for(int i=1;i<N;i++){
+            vector<string> cur;
+            for(auto it : key[a[i]]){
+                for(auto it2 : prev){
+                    string t=it2;
+                    t.push_back(it);
+                    cur.push_back(t);
+                }
+            }
+            prev=cur;
+            
+        }
+        sort(prev.begin(),prev.end());
+        return prev;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/possible-words-from-phone-digits-1587115620/1/
