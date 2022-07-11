@@ -1,0 +1,17 @@
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        map<map<char, int>, vector<string>> bmap;
+        vector<vector<string>> ans;
+        for(auto str:strs){
+            map<char, int> tmap;
+            for(auto it : str){
+                tmap[it]++;
+            }
+            bmap[tmap].push_back(str);
+        }
+
+        for(auto it:bmap){
+            ans.push_back(it.second);
+        }
+
+        return ans;
+    }
