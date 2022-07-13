@@ -1,0 +1,1 @@
+select e1.salary from employee e1 join employee e2 where e1.salary<=e2.salary group by e1.salary having count(distinct e2.salary)=N
