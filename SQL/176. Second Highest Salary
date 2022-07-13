@@ -1,0 +1,5 @@
+select (select e1.salary from employee e1 join employee e2 where e1.salary<=e2.salary group by e1.salary having count(distinct e2.salary)=2) as SecondHighestSalary;
+  
+  # or 
+  
+select (select distinct salary from employee order by salary desc limit 1 offset 1) as SecondHighestSalary;
