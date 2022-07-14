@@ -1,0 +1,32 @@
+    void solve(int col,vector<string> &board,vector<vector<string>> &ans,vector<int> &leftRow,vector<int> &lowDia,vector<int> &upDia,int n){
+        if(col==n){
+            ans.push_back(board);
+            return;
+        }
+        
+        for(int row=0;row<n;row++){
+            if(!leftRow[row] && !lowDia[row+col] && !upDia[n-1+col-row]){
+                board[row][col]='Q';
+                leftRow[row]=1;
+                lowDia[row+col]=1;
+                upDia[n-1+col-row]=1;
+                solve(col+1,board,ans,leftRow,lowDia,upDia,n);
+                board[row][col]='.';
+                leftRow[row]=0;
+                lowDia[row+col]=0;
+                upDia[n-1+col-row]=0;
+            }
+        }
+    }
+    
+    vector<vector<string>> solveNQueens(int n) {
+        string s(n,'.');
+        vector<vector<string>> ans;
+        vector<string> board(n);
+        for(auto &it : board){
+            it=s;
+        }
+        vector<int> leftRow(n,0),lowDia(2*n-1,0),upDia(2*n-1,0);
+        solve(0,board,ans,leftRow,lowDia,upDia,n);
+        return ans;
+    }
