@@ -1,0 +1,20 @@
+    bool check(int m,int s1,int s2,int n){
+        if((m/s1+m/s2)<n) return false;
+        return true;
+    }
+    int minTime(int S1, int S2, int N){
+        int s1=min(S1,S2);
+        int s2=max(S1,S2);
+        int low=0, high=s1*N;
+        int ans;
+        while(low<=high){
+            int mid=low+(high-low)/2;
+            if(check(mid,s1,s2,N)){
+                ans=mid;
+                high=mid-1;
+            }else low=mid+1;
+        }
+        return ans;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/find-the-minimum-time0253/1/#
