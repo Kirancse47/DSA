@@ -1,0 +1,22 @@
+    void solve(int idx,int k,vector<int>&a,int &ans){
+        int size=a.size();
+        if(size==1){
+            ans=a[0];
+            return;
+        }
+        idx=(idx+k-1)%size;
+        a.erase(a.begin()+idx);
+        solve(idx,k,a,ans);
+    }
+    
+    int josephus(int n, int k){
+       vector<int> a;
+       for(int i=1;i<=n;i++)
+        a.push_back(i); 
+        int ans=-1;
+        solve(0,k,a,ans);
+        return ans;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/josephus-problem/1#
+           https://leetcode.com/problems/find-the-winner-of-the-circular-game/
