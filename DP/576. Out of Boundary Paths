@@ -1,0 +1,29 @@
+// Recurssive....
+    int findPaths(int m, int n, int N, int i, int j) {
+        if (i == m || j == n || i < 0 || j < 0) return 1;
+        if (N == 0) return 0;
+        return findPaths(m, n, N - 1, i - 1, j)
+            + findPaths(m, n, N - 1, i + 1, j)
+            + findPaths(m, n, N - 1, i, j - 1)
+            + findPaths(m, n, N - 1, i, j + 1);
+    }
+    
+// Memoization...
+    int mod=1e9+7;
+    int solve(int i,int j,int mv,int m,int n,vector<vector<vector<int>>> &dp){
+        if(i==m || j==n || i<0 || j<0) return 1;
+        if(mv==0)  return 0;
+        if(dp[i][j][mv]!=-1 ) return dp[i][j][mv];
+        int dx[] = {-1, 0, 1, 0};
+        int dy[] = {0, 1, 0, -1};
+        int ans=0;
+        for(int k=0;k<4;k++){
+            ans=(ans+solve(i+dx[k],j+dy[k],mv-1,m,n,dp))%mod;
+        }
+        return dp[i][j][mv]=ans;
+    }
+    
+    int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
+        vector<vector<vector<int>>> dp(m,vector<vector<int>>(n,vector<int>(maxMove+1,-1)));
+        return solve(startRow,startColumn,maxMove,m,n,dp);
+    }
