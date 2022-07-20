@@ -1,0 +1,42 @@
+// Brute Force...(TLE)
+    bool isS(string &s,string &t){
+        int ss=s.size(),ts=t.size();
+        int i=0,j=0;
+        while(i<ss && j<ts){
+            if(s[i]==t[j]) j++;
+            i++;
+        }
+        if(j==ts) return true;
+        return false;
+    }
+    int numMatchingSubseq(string s, vector<string>& words) {
+        int ans=0;
+        for(auto it : words){
+            if(isS(s,it)) ans++;
+        }
+        return ans;
+    }
+    
+// Using Hashing...
+    bool isS(string &s,string &t,unordered_map<string,bool> &mp){
+        int ss=s.size(),ts=t.size();
+        int i=0,j=0;
+        while(i<ss && j<ts){
+            if(s[i]==t[j]) j++;
+            i++;
+        }
+        mp[t]=(j==ts);
+        return j==ts;
+    }
+    int numMatchingSubseq(string s, vector<string>& words) {
+        int ans=0;
+        unordered_map<string,bool> mp;
+        for(auto it : words){
+            if(mp.find(it)==mp.end()){
+                if(isS(s,it,mp)) ans++;
+            }else{
+                if(mp[it]) ans++;
+            }
+        }
+        return ans;
+    }
