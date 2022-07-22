@@ -1,0 +1,17 @@
+    ListNode* partition(ListNode* head, int x) {
+        if(!head || !head->next) return head;
+        ListNode *ptr=head, *b_list=new ListNode(0), *before=b_list, *a_list=new ListNode(0), *after=a_list;
+        while(ptr){
+            if(ptr->val < x){
+                before->next=ptr;
+                before=before->next;
+            }else{
+                after->next=ptr;
+                after=after->next;
+            }
+            ptr=ptr->next;
+        }
+        before->next=a_list->next;
+        after->next=NULL;
+        return b_list->next;
+    }
