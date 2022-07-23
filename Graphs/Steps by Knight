@@ -1,0 +1,32 @@
+	int minStepToReachTarget(vector<int>&KnightPos,vector<int>&TargetPos,int n){
+	    int kx=KnightPos[0],ky=KnightPos[1];
+	    int tx=TargetPos[0],ty=TargetPos[1];
+	    if(kx==tx && ky==ty) return 0;
+        vector<vector<bool>> vis(n+1,vector<bool>(n+1,false));
+        queue<pair<int,int>> q;
+        q.push({kx,ky});
+        vis[kx][ky]=true;
+        int step=0;
+        while(!q.empty()){
+            int sz=q.size();
+            for(int s=0;s<sz;s++){
+                auto it=q.front();q.pop();
+                int i=it.first,j=it.second;
+                if(i==tx && j==ty) return step;
+                int dx[]={-1,-1,1,1,-2,-2,2,2};
+                int dy[]={-2,2,-2,2,-1,1,-1,1};
+                for(int k=0;k<8;k++){
+                    int x=i+dx[k];
+                    int y=j+dy[k];
+                    if(x>0 && y>0 && x<=n && y<=n && vis[x][y]==false){
+                        vis[x][y]=true;
+                        q.push({x,y});
+                    }
+                }
+            }
+            step++;
+        }
+        return -1;
+	}
+  
+  Link - https://practice.geeksforgeeks.org/problems/steps-by-knight5927/1
