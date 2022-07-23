@@ -1,0 +1,53 @@
+// Broute Force...(TLE)
+    vector<int> countSmaller(vector<int>& nums) {
+        int n=nums.size();
+        vector<int> ans(n,0);
+        for(int i=n-2;i>=0;i--){
+            int count=0;
+            for(int j=i+1;j<n;j++){
+                if(nums[i]>nums[j]) count++;
+            }
+            ans[i]=count;
+        }
+        return ans;
+    }
+    
+// Using MergeSort...
+    void merge(int l,int mid,int r,vector<pair<int,int>> &vp,vector<int> &ans){
+        vector<pair<int,int>> temp(r-l+1);
+        int i=l,j=mid+1,k=0;
+        while(i<=mid && j<=r){
+            if(vp[i].first<=vp[j].first){
+                temp[k++]=vp[j++];
+            }else{
+                ans[vp[i].second]+=r-j+1;
+                temp[k++]=vp[i++];
+            }
+        }
+        while(i<=mid){
+            temp[k++]=vp[i++];
+        }
+        while(j<=r){
+            temp[k++]=vp[j++];
+        }
+        for(int it=l;it<=r;it++){
+            vp[it]=temp[it-l];
+        }
+    }
+    
+    void mergeSort(int l,int r,vector<pair<int,int>> &vp,vector<int> &ans){
+        if(l>=r) return;
+        int mid=l+(r-l)/2;
+        mergeSort(l,mid,vp,ans);
+        mergeSort(mid+1,r,vp,ans);
+        merge(l,mid,r,vp,ans);
+    }
+    
+    vector<int> countSmaller(vector<int>& nums) {
+        int n=nums.size();
+        vector<int> ans(n,0);
+        vector<pair<int,int>> vp;
+        for(int i=0;i<n;i++) vp.push_back({nums[i],i});
+        mergeSort(0,n-1,vp,ans);
+        return ans;
+    }
