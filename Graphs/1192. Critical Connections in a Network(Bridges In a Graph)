@@ -1,0 +1,32 @@
+    void dfs(int node,int parent,vector<int> con[],vector<int> &vis,vector<int> &tin,vector<int> &low,int &timer,vector<vector<int>> &ans){
+        vis[node]=1;
+        tin[node]=low[node]=timer++;
+        
+        for(auto it : con[node]){
+            if(it==parent) continue;
+            if(!vis[it]){
+                dfs(it,node,con,vis,tin,low,timer,ans);
+                low[node]=min(low[node],low[it]);
+                if(low[it]>tin[node]) ans.push_back({node,it});
+            }else{
+                low[node]=min(low[node],tin[it]);
+            }
+        }
+    }
+    
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+        vector<int> con[n];
+        for(auto it : connections){
+            con[it[0]].push_back(it[1]);
+            con[it[1]].push_back(it[0]);
+        }
+        vector<vector<int>> ans;
+        vector<int> vis(n,0),tin(n),low(n);
+        int timer=0;
+        for(int i=0;i<n;i++){
+            if(!vis[i]){
+                dfs(i,-1,con,vis,tin,low,timer,ans);
+            }
+        }
+        return ans;
+    }
