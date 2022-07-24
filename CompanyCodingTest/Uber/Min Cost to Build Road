@@ -1,0 +1,62 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int calCost(vector<vector<int>> &loc,int i,int j){
+    int dx=abs(loc[i][0]-loc[j][0]);
+    int dy=abs(loc[i][1]-loc[j][1]);
+    int dz=abs(loc[i][2]-loc[j][2]);
+    return min({dx,dy,dz});
+}
+
+int findParent(int node,vector<int> &parent){
+    if(node==parent[node]) return node;
+    return parent[node]=findParent(parent[node],parent);
+}
+
+void Union(int x,int y,vector<int> &parent,vector<int> &rank){
+    x=findParent(x,parent);
+    y=findParent(y,parent);
+    if(rank[x]>rank[y]){
+        parent[y]=x;
+    }else if(rank[y]>rank[x]){
+        parent[x]=y;
+    }else{
+        parent[y]=x;
+        rank[x]++;
+    }
+}
+
+long long solution(int n, vector<vector<int>> locations) {
+    vector<vector<int>> edges;
+    for(int i=0;i<n;i++){
+        for(int j=i+1;j<n;j++){
+            int cost=calCost(locations,i,j);
+            edges.push_back({cost,i,j});
+        }
+    }
+    
+    vector<int> parent(n),rank(n,0);
+    for(int i=0;i<n;i++) parent[i]=i;
+
+    sort(edges.begin(),edges.end());
+    long long ans=0;
+    for(auto it : edges){
+        if(findParent(it[1],parent)!=findParent(it[2],parent)){
+            ans+=it[0];
+            Union(it[1],it[2],parent,rank);
+        }
+    }        
+    return ans;
+}
+
+int main(){
+    int n;cin>>n;
+    vector<vector<int>> con;
+    for(int i=0;i<n;i++){
+        vector<int> temp(3);
+        cin>>temp[0]>>temp[1]>>temp[2];
+        con.push_back(temp);
+    }
+    cout<<solution(n,con)<<endl;
+    return 0;
+}
