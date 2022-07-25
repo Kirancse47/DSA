@@ -1,0 +1,36 @@
+    vector<int> searchRange(vector<int>& nums, int target) {
+        vector<int> ans;
+        int n=nums.size();
+        //for first occurance...
+        int i=0,j=n-1;
+        int first=-1;
+        while(i<=j){
+            int m=i+(j-i)/2;
+            if(nums[m]==target){
+                first=m;
+                j=m-1;
+            }else if(nums[m]>target){
+                j=m-1;
+            }else{
+                i=m+1;
+            }
+        }
+        //for last occurance....
+        i=0,j=n-1;
+        int last=-1;
+        while(i<=j){
+            int m=i+(j-i)/2;
+            if(nums[m]==target){
+                last=m;
+                i=m+1;
+            }else if(nums[m]>target){
+                j=m-1;
+            }else{
+                i=m+1;
+            }
+        }
+
+        ans.push_back(first);
+        ans.push_back(last);
+        return ans;
+    }
