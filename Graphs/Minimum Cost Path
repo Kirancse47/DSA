@@ -1,0 +1,28 @@
+    int row[4] = {0, -1, 0, 1}, col[4] = {-1, 0, 1, 0};
+    int minimumCostPath(vector<vector<int>>& grid){
+        int n=grid.size();
+        priority_queue<pair<int,pair<int,int>>,vector<pair<int,pair<int,int>>>, greater<pair<int,pair<int,int>>>> pq;
+        vector<vector<int>> cost(n,vector<int>(n, INT_MAX));
+        vector<vector<bool>> vis(n,vector<bool>(n,false));
+        cost[0][0] = grid[0][0];
+        pq.push({grid[0][0], {0,0}});
+        while(!pq.empty()){
+             int val = pq.top().first;
+             pair<int,int> it = pq.top().second;
+             int x = it.first, y = it.second;
+             pq.pop();
+             vis[x][y] = true;
+             for(int k=0;k<4;k++){
+                 int r = x+row[k], c = y+col[k];
+                 if(r>=0 && c>=0 && r<n && c<n && !vis[r][c]){
+                    if(cost[r][c] > val+grid[r][c]){
+                        cost[r][c] = val+grid[r][c];
+                        pq.push({cost[r][c], {r,c}});
+                    }
+                }
+            }
+        }
+        return cost[n-1][n-1];
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/minimum-cost-path3833/1
