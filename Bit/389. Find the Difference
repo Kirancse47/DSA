@@ -1,0 +1,6 @@
+    char findTheDifference(string s, string t) {
+        int xors=0;
+        for(auto it : t) xors^=(it);
+        for(auto it : s) xors^=(it);
+        return xors;
+    }
