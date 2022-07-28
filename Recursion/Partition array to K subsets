@@ -1,0 +1,22 @@
+    bool solve(int i,int n,int k,int curs,int tar,int a[],vector<bool> &vis){
+        if(k==0) return true;
+        if(curs==tar) return solve(0,n,k-1,0,tar,a,vis);
+        for(int j=i;j<n;j++){
+            if(curs+a[j]>tar || vis[j]) continue;
+            vis[j]=true;
+            if(solve(j+1,n,k,curs+a[j],tar,a,vis)) return true;
+            vis[j]=false;
+        }
+        return false;
+    }
+    bool isKPartitionPossible(int a[], int n, int k){
+        if(k==1) true;
+        if(k>n) return false;
+        int sum=0;
+        for(int i=0;i<n;i++) sum+=a[i];
+        if(sum%k!=0) return false;
+        vector<bool> vis(n,false);
+        return solve(0,n,k,0,sum/k,a,vis);
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/partition-array-to-k-subsets/1
