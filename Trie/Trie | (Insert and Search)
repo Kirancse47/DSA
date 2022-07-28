@@ -1,0 +1,27 @@
+void insert(struct TrieNode *root, string key)
+{
+    // code here
+    TrieNode* node=root;
+    for(auto it : key){
+        if(node->children[it-'a']==NULL){
+            node->children[it-'a']=getNode();
+        }
+        node=node->children[it-'a'];
+    }
+    node->isLeaf=true;
+}
+
+//Function to use TRIE data structure and search the given string.
+bool search(struct TrieNode *root, string key) {
+    // code here
+    TrieNode* node=root;
+    for(auto it : key){
+        if(node->children[it-'a']==NULL){
+            return false;
+        }
+        node=node->children[it-'a'];
+    }
+    return node->isLeaf;
+}
+
+Link - https://practice.geeksforgeeks.org/problems/trie-insert-and-search0651/1
