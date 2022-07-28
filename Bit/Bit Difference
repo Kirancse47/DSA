@@ -1,0 +1,12 @@
+    int countBitsFlip(int a, int b){
+        // Your logic here
+        int xors=a^b;
+        int c=0;
+        while(xors){
+            c++;
+            xors=(xors & xors-1);
+        }
+        return c;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/bit-difference-1587115620/1
