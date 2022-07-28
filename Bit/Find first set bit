@@ -1,0 +1,16 @@
+    unsigned int getFirstSetBit(int n){
+        // Your code here
+        
+        // int ans=1;
+        // while((n&1)!=1){
+        //     ans++;
+        //     n=n>>1;
+        // }
+        // return ans;
+        
+        int mask=(n & -n);
+        return 1+log2(mask);
+        
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/find-first-set-bit-1587115620/1
