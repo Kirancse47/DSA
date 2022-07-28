@@ -1,0 +1,13 @@
+    int countSetBits(int n){
+        int ans=0;
+        for(int i=1;i<n+1;i++){
+            int t=i;
+            while(t){
+                ans++;
+                t=(t & t-1);
+            }
+        }
+        return ans;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/count-total-set-bits-1587115620/1
