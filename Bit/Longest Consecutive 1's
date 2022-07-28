@@ -1,0 +1,17 @@
+    int maxConsecutiveOnes(int N){
+        int ans=0;
+        int cnt=0;
+        while(N){
+            if(N&1){
+                cnt++;
+                ans=max(ans,cnt);
+            }
+            else{
+                cnt=0;
+            }
+            N=N>>1;
+        }
+        return ans;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/longest-consecutive-1s-1587115620/1
