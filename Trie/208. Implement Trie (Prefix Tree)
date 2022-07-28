@@ -1,0 +1,66 @@
+struct Node{
+    Node* links[26];
+    bool flag;
+    Node(){
+        for(int i=0;i<26;i++) links[i]=NULL;
+        flag=false;
+    }
+    bool isContain(char c){
+        return links[c-'a']!=NULL;
+    }
+    void put(char c,Node* n){
+        links[c-'a']=n;
+    }
+    Node* get(char c){
+        return links[c-'a'];
+    }
+    void setEnd(){
+        flag=true;
+    }
+    bool isEnd(){
+        return flag;
+    }
+};
+
+class Trie {
+    
+private:
+    Node* root;
+public:    
+    Trie() {
+        root=new Node();
+    }
+    
+    void insert(string word) {
+        Node* temp=root;
+        for(auto it : word){
+            if(!temp->isContain(it)){
+                temp->put(it,new Node());
+            }
+            temp=temp->get(it);
+        }
+        temp->setEnd();
+    }
+    
+    bool search(string word) {
+        Node* temp=root;
+        for(auto it : word){
+            if(!temp->isContain(it)){
+                return false;
+            }
+            temp=temp->get(it);
+        }
+        return temp->flag;
+    }
+    
+    bool startsWith(string prefix) {
+        Node* temp=root;
+        for(auto it : prefix){
+            if(!temp->isContain(it)){
+                return false;
+            }
+            temp=temp->get(it);
+        }
+        return true;
+    }
+};
