@@ -1,0 +1,14 @@
+  int MissingNumber(vector<int>& array, int n) {
+        // int s=n*(n+1)/2;
+        // for(auto e : array){
+        //     s-=e;
+        // }
+        // return s;
+        
+        int xorsn=0;
+        for(int i=1;i<=n;i++) xorsn^=i;
+        for(auto it : array) xorsn^=it;
+        return xorsn;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/missing-number-in-array1416/1
