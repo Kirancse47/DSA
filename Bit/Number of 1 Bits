@@ -1,0 +1,10 @@
+    int setBits(int N) {
+        int c=0;
+        while(N){
+            c++;
+            N=(N & N-1);
+        }
+        return c;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/set-bits0143/1
