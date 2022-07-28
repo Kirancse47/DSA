@@ -1,0 +1,8 @@
+    int posOfRightMostDiffBit(int m, int n){
+        // Your code here
+        int temp=m^n;
+        if(temp==0) return -1;
+        return 1+log2(temp & -temp);
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/rightmost-different-bit-1587115621/1
