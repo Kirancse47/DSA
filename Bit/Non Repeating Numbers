@@ -5,22 +5,16 @@
         for(auto i : nums){
             xors=xors^i;
         }
-        int txors=xors;
-    
-        int pos=0;
-        while(!(txors&1)){
-            pos++;
-            txors=txors>>1;
-        }
-    
-        int nxors=0;
-        for(auto j : nums){
-            if((j&(1<<pos))){
-                nxors=nxors^j;
+        int rms=xors & -xors;
+        int n1=0;
+        for(auto it : nums){
+            if(it & rms){
+                n1=n1^it;
             }
         }
-        ans.push_back(nxors);
-        ans.push_back(nxors^xors);
+        ans.push_back(n1);
+        ans.push_back(xors^n1);
+        
         if(ans[0]>ans[1]){
             swap(ans[0],ans[1]);
         }
