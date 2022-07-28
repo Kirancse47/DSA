@@ -1,0 +1,9 @@
+    unsigned int swapBits(unsigned int n){
+    	unsigned int evenb = n & 0xAAAAAAAA;
+    	unsigned int oddb = n & 0x55555555;
+    	evenb=evenb>>1;
+    	oddb=oddb<<1;
+    	return(evenb | oddb);
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/swap-all-odd-and-even-bits-1587115621/1
