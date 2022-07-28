@@ -1,0 +1,62 @@
+    class TrieNode{
+        public:
+            TrieNode *left;
+            TrieNode *right;
+            TrieNode(){
+                left=NULL;
+                right=NULL;
+            }
+    };
+    
+    void insert(TrieNode *head,int n){
+        TrieNode *cur=head;
+        for(int i=31;i>=0;i--){
+            int b=(n>>i & 1);
+            if(b){
+                if(!cur->right){
+                    cur->right=new TrieNode();
+                }
+                cur=cur->right;
+            }else{
+                if(!cur->left){
+                    cur->left=new TrieNode();
+                }
+                cur=cur->left;
+            }
+        }
+    }
+    
+    int max_xor(int arr[] , int n){
+        TrieNode *head=new TrieNode();
+        for(int i=0;i<n;i++){
+            insert(head,arr[i]);
+        }
+        int ans=INT_MIN;
+        for(int i=0;i<n;i++){
+            int val=arr[i];
+            int xors=0;
+            TrieNode *cur=head;
+            for(int j=31;j>=0;j--){
+                int b=(val>>j & 1);
+                if(b){
+                    if(cur->left){
+                        xors+=pow(2,j);
+                        cur=cur->left;
+                    }else{
+                        cur=cur->right;
+                    }
+                }else{
+                    if(cur->right){
+                        xors+=pow(2,j);
+                        cur=cur->right;
+                    }else{
+                        cur=cur->left;
+                    }
+                }
+            }
+            ans=max(ans,xors);
+        }
+        return ans;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/maximum-xor-of-two-numbers-in-an-array/0
