@@ -1,0 +1,65 @@
+struct Node{
+    Node *a[26];
+    int ew,cp;
+    Node(){
+        for(int i=0;i<26;i++){
+            a[i]=NULL;
+        }
+        ew=0;
+        cp=0;
+    }
+};
+class Trie{
+    Node *root;
+    public:
+    Trie(){
+        // Write your code here.
+        root=new Node();
+    }
+
+    void insert(string &word){
+        // Write your code here.
+        Node *cur=root;
+        for(auto it : word){
+            if(!cur->a[it-'a']){
+                cur->a[it-'a']=new Node();
+            }
+            cur=cur->a[it-'a'];
+            cur->cp++;
+        }
+        cur->ew++;
+    }
+
+    int countWordsEqualTo(string &word){
+        // Write your code here.
+        Node *cur=root;
+        for(auto it : word){
+            if(!cur->a[it-'a']) return 0;
+            cur=cur->a[it-'a'];
+        }
+        return cur->ew;
+    }
+
+    int countWordsStartingWith(string &word){
+        // Write your code here.
+        Node *cur=root;
+        for(auto it : word){
+            if(!cur->a[it-'a']) return 0;
+            cur=cur->a[it-'a'];
+        }
+        return cur->cp;
+    }
+
+    void erase(string &word){
+        // Write your code here.
+        Node *cur=root;
+        for(auto it : word){
+            if(!cur->a[it-'a']) return;
+            cur=cur->a[it-'a'];
+            cur->cp--;
+        }
+        cur->ew--;
+    }
+};
+
+Link - https://www.codingninjas.com/codestudio/problems/implement-trie_1387095
