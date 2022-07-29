@@ -1,0 +1,8 @@
+	bool commonSubseq (string a, string b){
+	    unordered_map<char,int> mp;
+	    for(auto it : a) mp[it]++;
+	    for(auto it : b) if(mp.find(it)!=mp.end()) return 1;
+	    return 0;
+	}
+  
+  Link - https://practice.geeksforgeeks.org/problems/common-subsequence4049/1
