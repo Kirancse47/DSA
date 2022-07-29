@@ -1,0 +1,19 @@
+    bool match(string &w,string &p){
+        int n=p.size();
+        unordered_map<char,char> mw,mp;
+        for(int i=0;i<n;i++){
+            if(mw.find(w[i])==mw.end()) mw[w[i]]=p[i];
+            if(mp.find(p[i])==mp.end()) mp[p[i]]=w[i];
+            if(mw[w[i]]!=p[i] || mp[p[i]]!=w[i]) return 0;
+        }
+        return 1;
+    }
+    vector<string> findAndReplacePattern(vector<string>& words, string pattern) {
+        vector<string> ans;
+        for(auto word : words){
+            if(match(word,pattern)){
+                ans.push_back(word);
+            }
+        }
+        return ans;
+    }
