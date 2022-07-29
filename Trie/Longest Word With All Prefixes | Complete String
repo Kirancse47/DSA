@@ -1,0 +1,56 @@
+struct Node{
+    Node *a[26];
+    bool flag;
+    Node(){
+        for(int i=0;i<26;i++){
+            a[i]=NULL;
+        }
+        flag=false;
+    }
+};
+class Trie{
+    Node *root;
+    public:
+    Trie(){
+        root=new Node();
+    }
+    void insert(string &word){
+        Node *cur=root;
+        for(auto it : word){
+            if(!cur->a[it-'a']){
+                cur->a[it-'a']=new Node();
+            }
+            cur=cur->a[it-'a'];
+        }
+        cur->flag=true;
+    }
+    bool checkPrefixExist(string &word){
+        Node *cur=root;
+        for(auto it : word){
+            if(cur->a[it-'a']){
+                cur=cur->a[it-'a'];
+                if(!cur->flag) return false;
+            }
+            else return false;
+        }
+        return true;
+    }
+};
+string completeString(int n, vector<string> &a){
+    // Write your code here.
+    Trie *trie=new Trie();
+    for(auto it : a){
+        trie->insert(it);
+    }
+    string ans="";
+    for(auto it : a){
+        if(trie->checkPrefixExist(it)){
+            if(it.size()>ans.size()) ans=it;
+            else if(it.size()==ans.size() && it<ans) ans=it;
+        }
+    }
+    if(ans.size()==0) return "None";
+    return ans;
+}
+
+Link - https://www.codingninjas.com/codestudio/problems/complete-string_2687860
