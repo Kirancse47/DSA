@@ -1,0 +1,79 @@
+    class TrieNode{
+        public:
+            TrieNode *left;
+            TrieNode *right;
+            TrieNode(){
+                left=NULL;
+                right=NULL;
+            }
+    };
+    
+    void insert(TrieNode *head,int n){
+        TrieNode *cur=head;
+        for(int i=31;i>=0;i--){
+            int b=(n>>i & 1);
+            if(b){
+                if(!cur->right){
+                    cur->right=new TrieNode();
+                }
+                cur=cur->right;
+            }else{
+                if(!cur->left){
+                    cur->left=new TrieNode();
+                }
+                cur=cur->left;
+            }
+        }
+    }
+    
+    int max_xor(TrieNode *root, int val){        
+        int xors=0;
+        TrieNode *cur=root;
+        for(int j=31;j>=0;j--){
+            int b=(val>>j & 1);
+            if(b){
+                if(cur->left){
+                    xors+=pow(2,j);
+                    cur=cur->left;
+                }else{
+                    cur=cur->right;
+                }
+            }else{
+                if(cur->right){
+                    xors+=pow(2,j);
+                    cur=cur->right;
+                }else{
+                    cur=cur->left;
+                }
+            }
+        }
+        return xors;
+    }
+    
+    vector<int> maximizeXor(vector<int>& nums, vector<vector<int>>& queries) {
+        int n=queries.size();
+        vector<vector<int>> que;
+        for(int i=0;i<n;i++){            
+            que.push_back({queries[i][0],queries[i][1],i});
+        }
+        sort(que.begin(),que.end(),[](vector<int> &q1,vector<int> &q2){
+           return q1[1]<q2[1]; 
+        });
+        
+        vector<int> ans(n);
+        TrieNode *root=new TrieNode();
+        sort(nums.begin(),nums.end());
+        int m=nums.size();
+        int j=0;
+        int count=0;
+        for(int i=0;i<n;i++){
+            while(j<m && nums[j]<=que[i][1]){
+                insert(root,nums[j]);
+                j++;
+                count++;
+            }
+            if(count==0) ans[que[i][2]]=-1;
+            else ans[que[i][2]]=max_xor(root,que[i][0]);
+        }
+        return ans;
+    }
