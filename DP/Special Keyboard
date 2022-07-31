@@ -1,0 +1,27 @@
+// Recursive...
+    long long int optimalKeys(int N){
+        if(N<=6) return N;
+        long long int ans=N;
+        for(int i=7;i<=N;i++){
+            for(int j=i-3;j>=1;j--){
+                long long int temp=optimalKeys(j)*(i-j-1);
+                ans=max(ans,temp);
+            }
+        }
+        return ans;
+    }
+    
+// Tabulation DP...
+    long long int optimalKeys(int N){
+        if(N<=6) return N;
+        vector<int> dp(N+1,0);
+        for(int i=1;i<=N;i++) dp[i]=i;
+        for(int i=7;i<=N;i++){
+            for(int j=i-3;j>=1;j--){
+                dp[i]=max(dp[i],dp[j]*(i-j-1));
+            }
+        }
+        return dp[N];
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/special-keyboard3018/1
