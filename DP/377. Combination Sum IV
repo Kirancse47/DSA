@@ -1,0 +1,36 @@
+// Recursive...
+    int combinationSum4(vector<int>& nums, int target) {
+        if(target == 0) return 1;
+        int ans = 0;
+        for(auto& num : nums)
+            if(num <= target) ans += combinationSum4(nums, target - num);
+        return ans;  
+    }
+// Memoization...  
+    int solve(int tar,vector<int> &nums,vector<int> &dp){
+        if(tar==0) return 1;
+        if(dp[tar]!=-1) return dp[tar];
+        dp[tar]=0;
+        for(auto it : nums){
+            if(it<=tar) dp[tar]+=solve(tar-it,nums,dp);
+        }
+        return dp[tar];
+    }
+    
+    int combinationSum4(vector<int>& nums, int target) {
+        if(target == 0) return 1;
+        vector<int> dp(target+1,-1);
+        return solve(target,nums,dp);
+    }
+
+// Tabulation...
+    int combinationSum4(vector<int>& nums, int target) {
+        vector<uint> dp(target+1,0);
+        dp[0]=1;
+        for(int i=1;i<=target;i++){
+            for(auto &it : nums){
+                if(it<=i) dp[i]+=dp[i-it];
+            }
+        }
+        return dp[target];
+    }
