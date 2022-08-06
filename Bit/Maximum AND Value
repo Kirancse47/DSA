@@ -1,0 +1,31 @@
+// Brute Force...
+    int maxAND (int arr[], int N){
+        int ans=0;
+        for(int i=0;i<N;i++){
+            for(int j=i+1;j<N;j++){
+                ans=max(ans,arr[i]&arr[j]);
+            }
+        }
+        return ans;
+    }
+    
+// Optimized...
+    int countP(int p,int arr[],int n){
+        int c=0;
+        for(int i=0;i<n;i++){
+            if((p&arr[i])==p) c++;
+        }
+        return c;
+    }
+    int maxAND (int arr[], int N){
+        int ans=0;
+        for(int i=31;i>=0;i--){
+            int count=countP(ans|(1<<i),arr,N);
+            if(count>1){
+                ans=ans|(1<<i);
+            }
+        }
+        return ans;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/maximum-and-value-1587115620/1
