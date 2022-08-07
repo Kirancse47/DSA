@@ -1,0 +1,19 @@
+    int countOfSubstrings(string S, int K) {
+        // code here
+        int n=S.size();
+        unordered_map<char,int> mp;
+        int i=0,j=0,ans=0;
+        while(j<n){
+            mp[S[j]]++;
+            if(j-i+1<K) j++;
+            else if(j-i+1==K){
+                if(mp.size()==K-1) ans++;
+                mp[S[i]]--;
+                if(mp[S[i]]==0) mp.erase(S[i]);
+                i++;j++;
+            }
+        }
+        return ans;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/substrings-of-length-k-with-k-1-distinct-elements/1
