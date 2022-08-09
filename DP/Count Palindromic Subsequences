@@ -1,0 +1,22 @@
+    long long int mod = 1e9 + 7;
+    int dp[1005][1005];
+    
+    long long int helper(string &str, int i, int j){
+        if(i > j) return 0;
+        if(i == j) return 1;
+        if(dp[i][j] != -1) return dp[i][j];
+        if(str[i] == str[j]){
+            return dp[i][j] = (1 + helper(str, i + 1, j) % mod + helper(str, i, j - 1) % mod) % mod;
+        }else{
+            return dp[i][j] = (helper(str, i + 1, j) % mod + helper(str, i, j - 1) % mod - helper(str, i + 1, j - 1) % mod) % mod;
+        }
+    }
+    
+    long long int  countPS(string str){
+        int n = str.size();
+        memset(dp, -1, sizeof(dp));
+        long long ans = helper(str, 0, n - 1);
+        if(ans < 0) return ans + mod;
+        return ans;
+    }
+    Link - https://practice.geeksforgeeks.org/problems/count-palindromic-subsequences/1
