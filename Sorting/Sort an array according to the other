@@ -1,0 +1,21 @@
+    vector<int> sortA1ByA2(vector<int> A1, int N, vector<int> A2, int M) {
+        //Your code here
+        vector<int> ans;
+        map<int,int> mp;
+        for(auto it : A1) mp[it]++;
+        for(auto it : A2){
+            while(mp[it]>0){
+                ans.push_back(it);
+                mp[it]--;
+            }
+        }
+        for(auto it : mp){
+            while(it.second>0){
+                ans.push_back(it.first);
+                it.second--;
+            }
+        }
+        return ans;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/relative-sorting4323/1
