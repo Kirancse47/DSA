@@ -1,0 +1,29 @@
+    string rearrangeString(string str){
+        //code here
+        int n=str.size();
+        unordered_map<char,int> mp;
+        int mx=0;
+        for(auto it : str){
+            mp[it]++;
+            mx=max(mx,mp[it]);
+        }
+        
+        if(mx>ceil((float)n/2)) return "-1";
+        
+        priority_queue<pair<int,char>> pq;
+        for(auto it : mp){
+            pq.push({it.second,it.first});
+        }
+        string ans="";
+        pair<int,char> prev={-1,'$'};
+        while(!pq.empty()){
+            auto cur=pq.top();pq.pop();
+            ans.push_back(cur.second);
+            if(prev.first>0) pq.push({prev.first,prev.second});
+            cur.first--;
+            prev=cur;
+        }
+        return ans;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/rearrange-characters4649/1
