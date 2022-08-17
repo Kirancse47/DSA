@@ -1,0 +1,11 @@
+    int getCount(int N) {
+        // code here
+        int ans=0;
+        for(int l=1;l*(l+1)<N*2;l++){
+            double a=((double)N-(l*(l+1)/2))/(l+1);
+            if(a-(int)a == 0.0) ans++;
+        }
+        return ans;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/count-of-sum-of-consecutives3741/1
