@@ -1,0 +1,12 @@
+    int partitionArray(vector<int>& nums, int k) {
+        sort(nums.begin(),nums.end());
+        int ans=0,minVal=nums[0];
+        for(int i=1;i<nums.size();i++){
+            if(nums[i]>minVal+k){
+                ans++;
+                minVal=nums[i];
+            }
+        }
+        return ans+1;
+    }
+    
