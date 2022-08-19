@@ -1,0 +1,66 @@
+    int dx[8]={-1,-1,-1,0,0,1,1,1};
+    int dy[8]={-1,0,1,-1,1,-1,0,1};
+
+// BFS...
+    void bfs(int i,int j,int n,int m,vector<vector<int>> &grid,int &ans){
+        int res=0;
+        grid[i][j]=0;
+        queue<pair<int,int>> q;
+        q.push({i,j});
+        while(!q.empty()){
+            auto it=q.front();q.pop();
+            res++;
+            int r=it.first, c=it.second;
+            for(int k=0;k<8;k++){
+                int x=r+dx[k];
+                int y=c+dy[k];
+                if(x<n && x>=0 && y<m && y>=0 && grid[x][y]){
+                    grid[x][y]=0;
+                    q.push({x,y});
+                }
+            }
+        }
+        ans=max(ans,res);
+    }
+    
+    int findMaxArea(vector<vector<int>>& grid) {
+        // Code here
+        int n=grid.size(),m=grid[0].size();
+        int ans=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j]) bfs(i,j,n,m,grid,ans);
+            }
+        }
+        return ans;
+    }
+    
+    
+// DFS...
+    int dfs(int i,int j,int n,int m,vector<vector<int>> &grid){
+        grid[i][j]=0;
+        int area=1;
+        for(int k=0;k<8;k++){
+            int x=i+dx[k];
+            int y=j+dy[k];
+            if(x<n && x>=0 && y<m && y>=0 && grid[x][y]){
+                grid[x][y]=0;
+                area+=dfs(x,y,n,m,grid);
+            }
+        }
+        return area;
+    }
+    
+    int findMaxArea(vector<vector<int>>& grid) {
+        // Code here
+        int n=grid.size(),m=grid[0].size();
+        int ans=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j]) ans=max(ans,dfs(i,j,n,m,grid));
+            }
+        }
+        return ans;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/length-of-largest-region-of-1s-1587115620/1
