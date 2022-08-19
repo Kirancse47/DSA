@@ -1,0 +1,15 @@
+    int canRepresentBST(int arr[], int N) {
+        // code here
+        stack<int> s;
+        int root=INT_MIN;
+        for(int i=0;i<N;i++){
+            if(arr[i]<root) return 0;
+            while(!s.empty() && s.top()<arr[i]){
+                root=s.top();s.pop();
+            }
+            s.push(arr[i]);
+        }
+        return 1;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/preorder-traversal-and-bst4006/1
