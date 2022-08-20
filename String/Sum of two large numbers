@@ -1,0 +1,27 @@
+    string findSum(string X, string Y) {
+        // Your code goes here
+        int n=X.size(),m=Y.size();
+        int i=n-1,j=m-1;
+        int k=0,l=0;
+        while(k<n && X[k]=='0') k++;
+        while(l<m && Y[l]=='0') l++;
+        if(k==n && l==m) return "0";
+        int carry=0;
+        string ans="";
+        while(i>=k || j>=l){
+            int d1= i>=k ? X[i]-'0' : 0;
+            int d2= j>=l ? Y[j]-'0' : 0;
+            int sum=d1+d2+carry;
+            int res=sum%10;
+            carry=sum/10;
+            i--;j--;
+            ans.push_back('0'+res);
+        }
+        if(carry){
+            ans.push_back('0'+carry);
+        }
+        reverse(ans.begin(),ans.end());
+        return ans;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/sum-of-numbers-or-number1219/1
