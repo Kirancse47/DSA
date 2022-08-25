@@ -1,0 +1,31 @@
+	long long getCount(int N){
+		vector<vector<long long>> prev(4,vector<long long>(3,1)),cur(4,vector<long long>(3,1));
+		prev[3][0]=cur[3][0]=0;
+		prev[3][2]=cur[3][2]=0;
+		int dx[]={0,1,0,-1};
+		int dy[]={1,0,-1,0};
+    
+		for(int k=2;k<=N;k++){
+		    for(int i=0;i<4;i++){
+		        for(int j=0;j<3;j++){
+		            if(prev[i][j]==0) continue;
+		            for(int d=0;d<4;d++){
+		                int x=i+dx[d];
+		                int y=j+dy[d];
+		                if(x>=0 && x<4 && y>=0 && y<3) cur[i][j]+=prev[x][y];
+		            }
+		        }
+		    }
+		    prev=cur;
+		}
+    
+		long long ans=0;
+		for(int i=0;i<4;i++){
+	      for(int j=0;j<3;j++){
+	          ans+=prev[i][j];
+	      }
+	  }
+		return ans;
+	}
+  
+  Link - https://practice.geeksforgeeks.org/problems/mobile-numeric-keypad5456/1
