@@ -1,0 +1,40 @@
+// Broute Force ....(TLE)
+    int solve(int s,vector<int>& gas, vector<int>& cost){
+        int n=gas.size();
+        int curP=0;
+        for(int i=0;i<n;i++){
+            int idx=(s+i)%n;
+            curP+=gas[idx];
+            if(curP>=cost[idx]) curP-=cost[idx];
+            else return false;
+        }
+        return true;
+    }
+    
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int n=gas.size();
+        for(int i=0;i<n;i++){
+            if(gas[i]>=cost[i] && solve(i,gas,cost)) return i;
+        }
+        return -1;
+    }
+    
+// Optimized...
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int n=gas.size();
+        int tgas=0,tcost=0;
+        for(int i=0;i<n;i++){
+            tgas+=gas[i];
+            tcost+=cost[i];
+        }
+        if(tcost>tgas) return -1;
+        int curG=0,start=0;
+        for(int i=0;i<n;i++){
+            if(curG<0){
+                start=i;
+                curG=0;
+            }
+            curG+=(gas[i]-cost[i]);
+        }
+        return start;
+    }
