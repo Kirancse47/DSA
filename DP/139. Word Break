@@ -1,8 +1,10 @@
-    bool solve(int pos,string &s,unordered_map<string,bool>&dict,unordered_map<int,bool>&dp){
+    bool solve(int pos,string &s,unordered_set<string>&dict,vector<int>&dp){
         if(pos==s.size()) return true;
-        if(dp.find(pos)!=dp.end()) return dp[pos];
+        if(dp[pos]!=-1) return dp[pos];
+        string t="";
         for(int i=pos;i<s.size();i++){
-            if(dict.find(s.substr(pos,i-pos+1))!=dict.end() && solve(i+1,s,dict,dp)){
+            t.push_back(s[i]);
+            if(dict.find(t)!=dict.end() && solve(i+1,s,dict,dp)){
                 return dp[i]=true;
             }
         }
@@ -10,9 +12,9 @@
     }
     
     bool wordBreak(string s, vector<string>& wordDict) {
-        unordered_map<string,bool> dict;
-        for(auto it : wordDict) dict[it]=true;
+        unordered_set<string> dict;
+        for(auto it : wordDict) dict.insert(it);
         if(dict.find(s)!=dict.end()) return true;
-        unordered_map<int,bool> dp;
+        vector<int> dp(s.size(),-1);
         return solve(0,s,dict,dp);
     }
