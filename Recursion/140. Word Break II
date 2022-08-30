@@ -1,0 +1,28 @@
+     void solve(int pos,string res,string &s,unordered_set<string>&dict,vector<string> &ans){
+        if(pos==s.size()){
+            ans.push_back(res);
+        }
+        res.push_back(' ');
+        string t="";
+        for(int i=pos;i<s.size();i++){
+            t.push_back(s[i]);
+            if(dict.find(t)!=dict.end()){
+                solve(i+1,res+t,s,dict,ans);
+            }
+        }
+    }
+    
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        vector<string> ans;
+        unordered_set<string> dict;
+        for(auto it : wordDict) dict.insert(it);
+        
+        string t="";
+        for(int i=0;i<s.size();i++){
+            t.push_back(s[i]);
+            if(dict.find(t)!=dict.end()){
+                solve(i+1,t,s,dict,ans);
+            }
+        }
+        return ans;
+    }
