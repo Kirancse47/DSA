@@ -1,23 +1,20 @@
-    unordered_map<string,bool> dp;
-    int wordBreak(string A, vector<string> &B) {
-        //code here
-        int n=A.size();
-        if(n==0) return 1;
-        if(dp[A]!=0) return dp[A];
-        for(int i=1;i<=n;i++){
-            int f=0;
-            string t=A.substr(0,i);
-            for(auto e : B){
-                if(e==t){
-                    f=1;
-                    break;
-                }
-            }
-            if(f && wordBreak(A.substr(i,n-i),B)){
-                return dp[A]=1;
+    bool solve(int pos,string &s,unordered_map<string,bool> &dict,unordered_map<int,bool>&dp){
+        if(pos==s.size()) return true;
+        if(dp.find(pos)!=dp.end()) return dp[pos];
+        for(int i=pos;i<s.size();i++){
+            if(dict.find(s.substr(pos,i-pos+1))!=dict.end() && solve(i+1,s,dict,dp)){
+                return dp[i]=true;
             }
         }
-        return 0;
+        return dp[pos]=false;
+    }
+
+    int wordBreak(string A, vector<string> &B) {
+        unordered_map<string,bool> dict;
+        for(auto it : B) dict[it]=true;
+        if(dict.find(A)!=dict.end()) return true;
+        unordered_map<int,bool> dp;
+        return solve(0,A,dict,dp);
     }
     
     Link - https://practice.geeksforgeeks.org/problems/word-break1352/1
