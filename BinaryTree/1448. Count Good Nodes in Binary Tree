@@ -1,0 +1,15 @@
+    void solve(TreeNode *root,int maxv,int &gn){
+        if(!root) return;
+        if(root->val>=maxv){
+            maxv=root->val;
+            gn++;
+        }
+        solve(root->left,maxv,gn);
+        solve(root->right,maxv,gn);
+    }
+    
+    int goodNodes(TreeNode* root) {
+        int gn=0;
+        solve(root,root->val,gn);
+        return gn;
+    }
