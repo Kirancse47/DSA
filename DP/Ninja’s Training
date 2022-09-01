@@ -1,23 +1,26 @@
 // Memoization...
-int solve(int n,int l,vector<vector<int>> &points,vector<vector<int>> &dp){	
-	if(n==0){
-		int maxp=0;
-		for(int i=0;i<3;i++){
-			if(i!=l)
-				
-				maxp=max(maxp,points[n][i]);
-		}
-		return maxp;
-	}
-	if(dp[n][l]!=-1) return dp[n][l];
-	int maxp=0;
-	for(int i=0;i<3;i++){
-		if(i!=l){
-			int t=points[n][i]+solve(n-1,i,points,dp);
-			maxp=max(maxp,t);
-		}
-	}
-	return dp[n][l]=maxp;
+int solve(int n,int l,vector<vector<int>> &points,vector<vector<int>> &dp){    
+    if(n==0){
+        int maxp=0;
+        for(int i=0;i<3;i++){
+            if(i!=l) maxp=max(maxp,points[n][i]);
+        }
+        return maxp;
+    }
+    if(dp[n][l]!=-1) return dp[n][l];
+    int maxp=0;
+    for(int i=0;i<3;i++){
+        if(i!=l){
+            int t=points[n][i]+solve(n-1,i,points,dp);
+            maxp=max(maxp,t);
+        }
+    }
+    return dp[n][l]=maxp;
+}
+
+int ninjaTraining(int n, vector<vector<int>> &points){
+    vector<vector<int>> dp(n,vector<int>(4,-1));
+    return solve(n-1,3,points,dp);
 }
 
 // Tabulation....
@@ -65,3 +68,5 @@ int ninjaTraining(int n, vector<vector<int>> &points){
 	}
 	return prev[3];
 }
+
+Link - https://www.codingninjas.com/codestudio/problems/ninja-s-training_3621003?leftPanelTab=1
