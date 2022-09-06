@@ -1,0 +1,14 @@
+    bool containOne(TreeNode *root){
+        if(!root) return false;
+        bool leftOne=containOne(root->left);
+        bool rightOne=containOne(root->right);
+        
+        if(!leftOne) root->left=NULL;
+        if(!rightOne) root->right=NULL;
+        return (root->val==1 || leftOne || rightOne);
+    }
+    
+    TreeNode* pruneTree(TreeNode* root) {
+        if(containOne(root)) return root;
+        return NULL;
+    }
