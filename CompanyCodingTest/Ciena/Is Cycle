@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+using namespace std;
+int a[100001], b[100001];
+int n;
+bool vis[100001];
+
+bool isCycle(int start, int node, int cnt, int n, set<int> adj[]){
+  if(cnt == n){
+    for(auto nodes: adj[node]){
+      if(nodes == start)    return true;
+    }
+    return false;
+  }
+  vis[node] = true;
+  
+  for(auto nodes: adj[node]){
+    if(!vis[nodes]){
+      if(isCycle(start, nodes, cnt+1, n, adj))   return true;
+    }
+  }
+  vis[node] = false;
+  return false;
+}
+
+int main(){
+  cin >> n;
+  for(int i=0;i<n;i++)    cin >> a[i];
+  for(int i=0;i<n;i++)    cin >> b[i];
+  
+  set<int> adj[n+1];
+  for(int i=0;i<n;i++){
+    adj[a[i]].insert(b[i]);
+  }
+  cout << isCycle(1, 1, 1, n, adj);
+  return 0;
+}
