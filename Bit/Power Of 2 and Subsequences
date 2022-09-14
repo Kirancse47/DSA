@@ -1,0 +1,14 @@
+    long long numberOfSubsequences(int N, long long A[]){
+        int mod=1e9+7;
+        int cnt=0;
+        for(int i=0;i<N;i++){
+            if(!(A[i] & (A[i]-1))) cnt++;
+        }
+        long long ans=1;
+        for(int i=1;i<=cnt;i++){
+            ans=(ans*2)%mod;
+        }
+        return ans-1;
+    }
+    
+    Link - https://practice.geeksforgeeks.org/problems/power-of-2-and-subsequences0759/1
