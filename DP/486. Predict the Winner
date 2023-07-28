@@ -1,0 +1,32 @@
+// Recursion...
+    int help(vector<int>& nums,int i,int j){
+        if(i>j) return 0;
+        if(i==j) return nums[i];
+        int ci=nums[i]+min(help(nums,i+2,j),help(nums,i+1,j-1));
+        int cj=nums[j]+min(help(nums,i+1,j-1),help(nums,i,j-2));
+        return max(ci,cj);
+    }
+    
+    bool PredictTheWinner(vector<int>& nums) {
+        int sum=accumulate(nums.begin(),nums.end(),0);
+        int ans=help(nums,0,nums.size()-1);
+        return ans>=(sum-ans);
+    }
+
+// Memoization...
+    int help(vector<int>& nums,vector<vector<int>> &dp,int i,int j){
+        if(i>j) return 0;
+        if(i==j) return nums[i];
+        if(dp[i][j]!=-1) return dp[i][j];
+        int ci=nums[i]+min(help(nums,dp,i+2,j),help(nums,dp,i+1,j-1));
+        int cj=nums[j]+min(help(nums,dp,i+1,j-1),help(nums,dp,i,j-2));
+        return dp[i][j]=max(ci,cj);
+    }
+    
+    bool PredictTheWinner(vector<int>& nums) {
+        int sum=accumulate(nums.begin(),nums.end(),0);
+        int n=nums.size();
+        vector<vector<int>> dp(n+1,vector<int>(n+1,-1));
+        int ans=help(nums,dp,0,n-1);
+        return ans>=(sum-ans);
+    }
