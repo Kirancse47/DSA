@@ -1,0 +1,7 @@
+    bool repeatedSubstringPattern(string s) {
+        string t=s+s;
+        t.pop_back();
+        t.erase(t.begin());
+        if(t.find(s)!=-1) return 1;
+        else return 0;
+    }
