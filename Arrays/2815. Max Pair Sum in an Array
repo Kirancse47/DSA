@@ -1,0 +1,21 @@
+    int maxD(int n){
+        int ans=-1;
+        while(n){
+            ans=max(ans,n%10);
+            n/=10;
+        }
+        return ans;
+    }
+
+    int maxSum(vector<int>& nums) {
+        int n=nums.size(),ans=-1;
+        for(int i=0;i<n-1;i++){
+            for(int j=i+1;j<n;j++){
+                int sum=nums[i]+nums[j];
+                if(maxD(nums[i])==maxD(nums[j])){
+                    ans=max(ans,sum);
+                }
+            }
+        }
+        return ans;
+    }
