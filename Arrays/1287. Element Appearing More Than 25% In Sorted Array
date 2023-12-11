@@ -1,0 +1,16 @@
+int findSpecialInteger(vector<int>& arr) {
+    int n=arr.size();
+    int t=n/4;
+    int p=arr[0],cnt=1;
+    for(int i=1;i<n;i++){
+        if(arr[i]==p){
+            cnt++;
+            if(cnt>t) return p;
+        }
+        else{
+            cnt=1;
+            p=arr[i];
+        }
+    }
+    return p;
+}
