@@ -1,0 +1,13 @@
+int maxProduct(vector<int>& nums) {
+    int n=nums.size();
+    int h1=nums[0],h2=0;
+    for(int i=1;i<n;i++){
+        if(nums[i]>h1){
+            h2=h1;
+            h1=nums[i];
+        }else{
+            h2=max(h2,nums[i]);
+        }
+    }
+    return (h1-1)*(h2-1);
+}
