@@ -1,0 +1,24 @@
+int maxProductDifference(vector<int>& nums) {
+    int n=nums.size();
+    int h1=nums[0],h2=INT_MIN;
+    for(int i=1;i<n;i++){
+        if(nums[i]>h1){
+            h2=h1;
+            h1=nums[i];
+        }else{
+            h2=max(h2,nums[i]);
+        }
+    }
+
+    int l1=nums[0],l2=INT_MAX;
+    for(int i=1;i<n;i++){
+        if(nums[i]<l1){
+            l2=l1;
+            l1=nums[i];
+        }else{
+            l2=min(l2,nums[i]);
+        }
+    }
+
+    return ((h1*h2)-(l1*l2));
+}
