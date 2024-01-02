@@ -1,0 +1,19 @@
+    long long int maxSumWithK(long long int a[], long long int n, long long int k) {
+        long long int ans=INT_MIN,sum=0,fsum=0;
+        int i=0,j=0;
+        for(i=0;j<k;j++) sum+=a[j];
+        ans=sum;
+        for(j=k;j<n;j++){
+            sum+=a[j];
+            fsum+=a[i++];
+            if(fsum<0){
+                sum-=fsum;
+                fsum=0;
+            }
+            ans=max(ans,sum);
+        }
+        return ans;
+    }
+
+
+gfg Link - https://www.geeksforgeeks.org/problems/largest-sum-subarray-of-size-at-least-k3121/1
