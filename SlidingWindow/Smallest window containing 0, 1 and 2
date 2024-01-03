@@ -1,0 +1,26 @@
+    int smallestSubstring(string S) {
+        // Code here
+        int ans=INT_MAX;
+        int i=0,j=0,n=S.size();
+        int a[3]={0};
+        int cnt=0;
+        while(j<n){
+            a[S[j]-'0']++;
+            if(a[(S[j]-'0')]==1) cnt++;
+            if(cnt==3){
+                ans=min(ans,j-i+1);
+                while(cnt==3){
+                    a[(S[i]-'0')]--;
+                    if(a[(S[i]-'0')]==0) cnt--;
+                    i++;
+                    if(cnt==3) ans=min(ans,j-i+1);
+                }
+            }
+            j++;
+        }
+        if(ans==INT_MAX) return -1;
+        return ans;
+    }
+
+
+gfg link - https://www.geeksforgeeks.org/problems/smallest-window-containing-0-1-and-2--170637/1
