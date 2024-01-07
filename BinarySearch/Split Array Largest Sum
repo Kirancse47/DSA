@@ -1,0 +1,33 @@
+   bool isValid(int a[], int n, int k, int mid){
+       int sum=0,cnt=1;
+       for(int i=0;i<n;i++){
+           if(sum+a[i]<=mid) sum+=a[i];
+           else{
+               sum=a[i];
+               cnt++;
+           }
+           if(cnt>k) return false;
+       }
+       if(cnt<=k) return true;
+       return false;
+   }
+  
+    int splitArray(int arr[] ,int N, int K) {
+        int ans=INT_MAX;
+        int mx=INT_MIN,sum=0;
+        for(int i=0;i<N;i++){
+            mx=max(mx,arr[i]);
+            sum+=arr[i];
+        }
+        int low=mx,high=sum,mid;
+        while(low<=high){
+            mid=low+(high-low)/2;
+            if(isValid(arr,N,K,mid)){
+                ans=min(ans,mid);
+                high=mid-1;
+            }else low=mid+1;
+        }
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/split-array-largest-sum--141634/1
