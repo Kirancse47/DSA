@@ -1,0 +1,33 @@
+    struct Node *reverseLL(Node *head){
+        if(!head || !head->next) return head;
+        Node *prevN=NULL,*curN=head,*nextN=NULL;
+        while(curN){
+            nextN=curN->next;
+            curN->next=prevN;
+            prevN=curN;
+            curN=nextN;
+        }
+        return prevN;
+    }
+    
+    struct Node * mergeResult(Node *node1,Node *node2){
+        Node *d=new Node;
+        Node *ptr=d;
+        while(node1 && node2){
+            if(node1->data < node2->data){
+                ptr->next=node1;
+                ptr=ptr->next;
+                node1=node1->next;
+            }else{
+                ptr->next=node2;
+                ptr=ptr->next;
+                node2=node2->next;
+            }
+        }
+        if(node1){
+            ptr->next=node1;
+        }else ptr->next=node2;
+        return reverseLL(d->next);
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/merge-2-sorted-linked-list-in-reverse-order/1
