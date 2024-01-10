@@ -1,0 +1,39 @@
+    void traverse(TreeNode *r,int s,TreeNode **st,map<TreeNode*,TreeNode*>&mp){
+        if(!r) return;
+        if(r->left) mp[r->left]=r;
+        if(r->right) mp[r->right]=r;
+        if(r->val == s) *st=r;
+        traverse(r->left,s,st,mp);
+        traverse(r->right,s,st,mp);
+    }
+    int amountOfTime(TreeNode* root, int start) {
+        map<TreeNode*,TreeNode*> mp;
+        TreeNode* st=NULL;
+        unordered_set<int> vi;
+        traverse(root,start,&st,mp);
+        if(!st) return -1;
+        queue<TreeNode*> q;
+        q.push(st);
+        vi.insert(st->val);
+        int ans=0;
+        while(!q.empty()){
+            int len=q.size();
+            for(int i=0;i<len;i++){
+                TreeNode *tmp=q.front();q.pop();
+                if(tmp->left && vi.find(tmp->left->val)==vi.end()) {
+                    q.push(tmp->left);
+                    vi.insert(tmp->left->val);
+                }
+                if(tmp->right && vi.find(tmp->right->val)==vi.end()) {
+                    q.push(tmp->right);
+                    vi.insert(tmp->right->val);
+                }
+                if(mp.find(tmp)!=mp.end() && vi.find(mp[tmp]->val)==vi.end()) {
+                    q.push(mp[tmp]);
+                    vi.insert(mp[tmp]->val);
+                }
+            }
+            ans++;
+        }
+        return ans-1;
+    }
