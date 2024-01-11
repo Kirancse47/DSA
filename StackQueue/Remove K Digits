@@ -1,0 +1,29 @@
+    string removeKdigits(string S, int K) {
+        int n=S.size();
+        stack<char> st;
+        for(auto s : S){
+            while(!st.empty() && K>0 && st.top()>s){
+                st.pop();
+                K--;
+            }
+            
+            if(!st.empty() || s!='0'){
+                st.push(s);
+            }
+        }
+        
+        while(!st.empty() && K--){
+            st.pop();
+        }
+        
+        if(st.empty()) return "0";
+        
+        while(!st.empty()){
+            S[n-1]=st.top();
+            st.pop();
+            n--;
+        }
+        return S.substr(n);
+    }
+
+gfg Link - https://www.geeksforgeeks.org/problems/remove-k-digits/1
