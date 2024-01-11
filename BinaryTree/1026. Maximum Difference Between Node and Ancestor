@@ -1,0 +1,14 @@
+    void solve(TreeNode* root,int &ans,int mn,int mx){
+        if(!root) return;
+        ans=max(ans,max(abs(root->val - mn),abs(root->val - mx)));
+        mn=min(mn,root->val);
+        mx=max(mx,root->val);
+        solve(root->left,ans,mn,mx);
+        solve(root->right,ans,mn,mx);
+    }
+
+    int maxAncestorDiff(TreeNode* root) {
+        int ans=0,mn=root->val,mx=root->val;
+        solve(root,ans,mn,mx);
+        return ans;
+    }
