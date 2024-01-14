@@ -1,0 +1,12 @@
+    vector<int> repeatedRows(vector<vector<int>> &matrix, int M, int N) {
+        vector<int> ans;
+        set<vector<int>> st;
+        for(int i=0;i<M;i++){
+            if(st.find(matrix[i])==st.end()) st.insert(matrix[i]);
+            else ans.push_back(i);
+        }
+        return ans;
+    }
+
+
+gfg link - https://www.geeksforgeeks.org/problems/find-duplicate-rows-in-a-binary-matrix/1
