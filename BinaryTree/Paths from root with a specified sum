@@ -1,0 +1,19 @@
+    void solve(Node *r,int s, vector<int> &t, vector<vector<int>> &a){
+        if(!r) return;
+        s-=r->key;
+        t.push_back(r->key);
+        if(s==0) a.push_back(t);
+        solve(r->left,s,t,a);
+        solve(r->right,s,t,a);
+        t.pop_back();
+    
+    }
+    
+    vector<vector<int>> printPaths(Node *root, int sum) {
+        vector<vector<int>> ans;
+        vector<int> temp;
+        solve(root,sum,temp,ans);
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/paths-from-root-with-a-specified-sum/1
