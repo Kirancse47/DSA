@@ -1,0 +1,38 @@
+// Tabulation.....
+    vector<int> recamanSequence(int n){
+        // code here
+        vector<int> dp(n+1,0);
+        unordered_map<int,bool> mp;
+        for(int i=1;i<n+1;i++){
+            if(dp[i-1]>i && !mp[dp[i-1]-i]) dp[i]=dp[i-1]-i;
+            else dp[i]=dp[i-1]+i;
+            mp[dp[i]]=true;
+        }
+        return dp;
+    }
+    
+// Memoization...
+    int solve(int n,vector<int> &dp,unordered_map<int,bool> &mp){
+        if(n==0) return dp[n]=0;
+        if(dp[n]!=-1) return dp[n];
+        if(solve(n-1,dp,mp)>n && mp[(solve(n-1,dp,mp)-n)]==false){ 
+            mp[solve(n-1,dp,mp)-n]=true;
+            return dp[n]=solve(n-1,dp,mp)-n;
+        }
+        else {
+            mp[solve(n-1,dp,mp)+n]=true;
+            return dp[n]=solve(n-1,dp,mp)+n;
+        }
+    }
+    
+    vector<int> recamanSequence(int n){
+        // code here
+        vector<int> dp(n+1,-1);
+        unordered_map<int,bool> mp;
+        for(int i=n;i>=0;i--){
+            dp[i]=solve(i,dp,mp);
+        }
+        return dp;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/recamans-sequence4856/1
