@@ -1,0 +1,15 @@
+    vector<int> rearrangeArray(vector<int>& nums) {
+        int n=nums.size();
+        vector<int> ans(n);
+        int i=0,j=1;
+        for(auto it : nums){
+            if(it<0){
+                ans[j]=it;
+                j=j+2;
+            }else{
+                ans[i]=it;
+                i=i+2;
+            }
+        }
+        return ans;
+    }
