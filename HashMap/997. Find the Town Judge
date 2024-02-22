@@ -1,0 +1,12 @@
+    int findJudge(int n, vector<vector<int>>& trust) {
+        unordered_map<int,int> mp1,mp2;
+        for(auto it : trust){
+            mp1[it[1]]++;
+            mp2[it[0]]++;
+        }
+        for(auto it : mp1){
+            if(it.second==n-1 && mp2[it.first]==0) return it.first;
+        }
+        if(n==1) return 1;
+        return -1;
+    }
