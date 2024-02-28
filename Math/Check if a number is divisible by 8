@@ -1,0 +1,12 @@
+int DivisibleByEight(string s){
+    int n=s.size();
+    int num;
+    if(n>3){
+        string st=s.substr(n-3);
+        num=stoi(st);
+    }else num=stoi(s);
+    if(num%8==0) return 1;
+    return -1;
+}
+
+gfg link - https://www.geeksforgeeks.org/problems/check-if-a-number-is-divisible-by-83957/1
