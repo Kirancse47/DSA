@@ -1,0 +1,12 @@
+string customSortString(string order, string s) {
+    unordered_map<char,int> mp;
+    for(auto it : s) mp[it]++;
+    string ans="";
+    for(auto it : order){
+        while(mp[it]--) ans.push_back(it);
+    }
+    for(auto it : mp){
+        for(int i=0;i<it.second;i++) ans.push_back(it.first);
+    }
+    return ans;
+}
