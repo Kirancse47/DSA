@@ -1,0 +1,23 @@
+ListNode* removeZeroSumSublists(ListNode* head) {
+    ListNode* dummy=new ListNode(0);
+    dummy->next=head;
+    unordered_map<int,ListNode*> mp;
+    int psum=0;
+    mp[0]=dummy;
+    ListNode *ptr=head;
+    while(ptr){
+        psum+=ptr->val;
+        if(mp.find(psum)!=mp.end()){
+            ListNode* to_del=mp[psum]->next;
+            int tsum=psum+to_del->val;
+            while(to_del!=ptr){
+                mp.erase(tsum);
+                to_del=to_del->next;
+                tsum+=to_del->val;
+            }
+            mp[psum]->next=ptr->next;
+        }else mp[psum]=ptr;
+        ptr=ptr->next;
+    }
+    return dummy->next;
+}
