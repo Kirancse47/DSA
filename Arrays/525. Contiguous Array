@@ -1,0 +1,14 @@
+int findMaxLength(vector<int>& nums) {
+    int n=nums.size(),i=0,sum=0,ans=0;
+    unordered_map<int,int> mp;
+    mp[sum]=-1;
+    while(i<n){
+        if(nums[i]==1) sum+=1;
+        else sum-=1;
+        if(mp.find(sum)!=mp.end()){
+            ans=max(ans,i-mp[sum]);
+        }else mp[sum]=i;
+        i++;
+    }
+    return ans;
+}
