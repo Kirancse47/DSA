@@ -1,0 +1,23 @@
+    void diaSum(Node *root,int lev,map<int,int> &mp){
+        if(!root) return;
+        if(root->right){
+            mp[lev]+=root->right->data;
+            diaSum(root->right,lev,mp);
+        }
+        if(root->left){
+            mp[lev+1]+=root->left->data;
+            diaSum(root->left,lev+1,mp);
+        }
+    }
+    
+    vector<int> diagonalSum(Node* root) {
+        vector<int> ans;
+        if(!root) return ans;
+        map<int,int> mp;
+        mp[0]=root->data;
+        diaSum(root,0,mp);
+        for(auto it : mp) ans.push_back(it.second);
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/diagonal-sum-in-binary-tree/1
