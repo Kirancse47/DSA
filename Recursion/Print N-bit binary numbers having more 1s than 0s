@@ -1,0 +1,16 @@
+void solve(int n,int one,int zero,string op,vector<string> &ans){
+    if(n==0){
+        ans.push_back(op);
+        return;
+    }
+    solve(n-1,one+1,zero,op+'1',ans);
+    if(one>zero) solve(n-1,one,zero+1,op+'0',ans);
+}
+
+vector<string> NBitBinary(int n){
+    vector<string> ans;
+    solve(n,0,0,"",ans);
+    return ans;
+}
+
+gfg link - https://www.geeksforgeeks.org/problems/print-n-bit-binary-numbers-having-more-1s-than-0s0252/1
