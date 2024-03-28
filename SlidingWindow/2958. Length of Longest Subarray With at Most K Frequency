@@ -1,0 +1,20 @@
+    int maxSubarrayLength(vector<int>& nums, int k) {
+        int n=nums.size(),i=0,j=0,ans=0;
+        unordered_map<int,int> mp;
+        int cnt=0;
+        while(j<n){
+            mp[nums[j]]++;
+            cnt=max(cnt,mp[nums[j]]);
+            if(cnt<=k){
+                ans=max(ans,j-i+1);
+            }else{
+                while(cnt>k){
+                    if(cnt==mp[nums[i]]) cnt--;
+                    mp[nums[i]]--;
+                    i++;
+                }
+            }
+            j++;
+        }
+        return ans;
+    }
