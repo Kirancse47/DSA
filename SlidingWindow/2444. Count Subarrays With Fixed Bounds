@@ -1,0 +1,11 @@
+long long countSubarrays(vector<int>& nums, int minK, int maxK) {
+    int n=nums.size(),i=-1,j=-1,k=-1;
+    long long ans=0;
+    for(int idx=0;idx<n;idx++){
+        if(!(minK<=nums[idx] && nums[idx]<=maxK)) k=idx;
+        if(nums[idx]==minK) i=idx;
+        if(nums[idx]==maxK) j=idx;
+        ans+=max(0,min(i,j)-k);
+    }
+    return ans;
+}
