@@ -1,0 +1,23 @@
+    void solve(Node *root,int n,int &ans){
+        if(!root) return;
+        if(root->key == n){
+            ans=root->key;
+            return;
+        }
+        else if(root->key <n){
+            ans=max(ans,root->key);
+            solve(root->right,n,ans);
+        }
+        else{
+            solve(root->left,n,ans);
+        }
+    }
+
+    int findMaxForN(Node* root, int n) {
+        int ans=INT_MIN;
+        solve(root,n,ans);
+        if(ans==INT_MIN) return -1;
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/closest-neighbor-in-bst/1
