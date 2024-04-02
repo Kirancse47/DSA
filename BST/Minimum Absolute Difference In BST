@@ -1,0 +1,14 @@
+void solve(Node *root,int &ans,int &prev){
+    if(!root) return;
+    solve(root->left,ans,prev);
+    ans=min(ans,abs(prev-root->data));
+    prev=root->data;
+    solve(root->right,ans,prev);
+}
+int absolute_diff(Node *root){
+    int ans=INT_MAX,prev=INT_MAX;
+    solve(root,ans,prev);
+    return ans;
+}
+
+gfg link - https://www.geeksforgeeks.org/problems/minimum-absolute-difference-in-bst-1665139652/1
