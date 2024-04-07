@@ -1,0 +1,17 @@
+	int solve(int i, int j, int a[], int b[], vector<vector<int>>&dp){
+	    if(j<0) return 0;
+	    if(i<0) return -1e9;
+	    
+	    if(dp[i][j]!=-1) return dp[i][j];
+	    int no_mul=solve(i-1, j, a, b, dp);
+	    int mul=a[i]*b[j]+solve(i-1, j-1, a, b, dp);
+	    
+	    return dp[i][j]=max(mul, no_mul);
+	}
+	
+	int maxDotProduct(int n, int m, int a[], int b[]){ 
+		vector<vector<int>>dp(n, vector<int>(m, -1));
+		return solve(n-1, m-1, a, b, dp);
+	} 
+
+gfg link - https://www.geeksforgeeks.org/problems/maximize-dot-product2649/1
