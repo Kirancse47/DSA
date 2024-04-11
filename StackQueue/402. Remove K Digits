@@ -1,0 +1,12 @@
+    string removeKdigits(string num, int k) {
+        string st="";
+        for(auto it : num){
+            while(!st.empty() && st.back()>it && k){
+                st.pop_back();
+                k--;
+            }
+            if(!st.empty() || it!='0') st.push_back(it);
+        }
+        while(!st.empty() && k--) st.pop_back();
+        return st=="" ? "0" : st;
+    }
