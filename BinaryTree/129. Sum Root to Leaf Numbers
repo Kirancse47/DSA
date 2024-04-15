@@ -1,0 +1,15 @@
+    void solve(int res,TreeNode *root,int &ans){
+        if(!root) return;
+        if(!root->left && !root->right){
+            ans+=res*10+root->val;
+            return;
+        }
+        if(root->left) solve(res*10+root->val,root->left,ans);
+        if(root->right) solve(res*10+root->val,root->right,ans);
+    }
+
+    int sumNumbers(TreeNode* root) {
+        int ans=0;
+        solve(0,root,ans);
+        return ans;
+    }
