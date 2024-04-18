@@ -1,0 +1,10 @@
+    vector<int> twoRepeated (int arr[], int n) {
+        vector<int> ans;
+        for(int i=0;i<n+2;i++){
+            if(arr[abs(arr[i])-1]<0) ans.push_back(abs(arr[i]));
+            else arr[abs(arr[i])-1]*=(-1);
+        }
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/two-repeated-elements-1587115621/1
