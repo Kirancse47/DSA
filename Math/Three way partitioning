@@ -1,0 +1,14 @@
+   void threeWayPartition(vector<int>& array,int a, int b){
+        int i=0,j=0,k=array.size()-1;
+        while(j<=k){
+            if(array[j]<a){
+                swap(array[i],array[j]);
+                i++;j++;
+            }else if(array[j]>b){
+                swap(array[k],array[j]);
+                k--;
+            }else j++;
+        }
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/three-way-partitioning/1
