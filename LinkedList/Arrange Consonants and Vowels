@@ -1,0 +1,18 @@
+    struct Node* arrangeCV(Node* head) {
+        Node *dc=new Node('#'), *dv=new Node('#'),*c=dc,*v=dv;
+        while(head){
+            if(head->data=='a' || head->data=='e' || head->data=='i' || head->data=='o' || head->data=='u'){
+                v->next=head;
+                v=v->next;
+            }else{
+                c->next=head;
+                c=c->next;
+            }
+            head=head->next;
+        }
+        v->next=dc->next;
+        c->next=NULL;
+        return dv->next;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/arrange-consonants-and-vowels/1
