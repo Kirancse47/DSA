@@ -1,0 +1,18 @@
+    void solve(int vl,Node *root,map<int,int> &mp){
+        if(!root) return;
+        mp[vl]+=root->data;
+        if(root->left) solve(vl-1,root->left,mp);
+        if(root->right) solve(vl+1,root->right,mp);
+    }
+  
+    vector <int> verticalSum(Node *root) {
+        vector<int> ans;
+        map<int,int> mp;
+        solve(0,root,mp);
+        for(auto it : mp){
+            ans.push_back(it.second);
+        }
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/vertical-sum/1
