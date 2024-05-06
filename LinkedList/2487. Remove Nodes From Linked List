@@ -1,0 +1,18 @@
+    ListNode* removeNodes(ListNode* head) {
+        ListNode *ptr=head;
+        stack<ListNode*> st;
+        while(ptr){
+            while(!st.empty() && st.top()->val < ptr->val){
+                st.pop();
+            }
+            st.push(ptr);
+            ptr=ptr->next;
+        }
+        ListNode *ans=NULL;
+        while(!st.empty()){
+            ListNode *t=ans;
+            ans=st.top();st.pop();
+            ans->next=t;
+        }
+        return ans;
+    }
