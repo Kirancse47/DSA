@@ -1,0 +1,12 @@
+    vector<int> kthSmallestPrimeFraction(vector<int>& arr, int k) {
+        priority_queue<pair<double, pair<int, int>>, vector<pair<double, pair<int, int>>>, greater<>> minHeap;
+        for(int i=0;i<arr.size();i++){
+            for(int j=i+1;j<arr.size();j++){
+                minHeap.push({(double)arr[i]/arr[j],{arr[i],arr[j]}});
+            }
+        }
+        k--;
+        while(k--) minHeap.pop();
+        auto ans=minHeap.top();
+        return {ans.second.first,ans.second.second};
+    }
