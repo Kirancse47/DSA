@@ -1,0 +1,21 @@
+    int findClosest( int n, int k,int arr[]) { 
+        int i=0,j=n-1;
+        int diff=INT_MAX;
+        int ans=0;
+        while(i<=j){
+            int mid=i+(j-i)/2;
+            int curDiff=arr[mid]-k;
+            if(abs(curDiff)==diff){
+                ans=max(ans,arr[mid]);
+            }else if(abs(curDiff)<diff){
+                ans=arr[mid];
+                diff=abs(curDiff);
+            }
+            if(curDiff==0) return arr[mid];
+            else if(curDiff>0) j=mid-1;
+            else i=mid+1;
+        }
+        return ans;
+    }
+
+gfg Link - https://www.geeksforgeeks.org/problems/find-the-closest-number5513/1
