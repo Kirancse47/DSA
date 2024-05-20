@@ -1,0 +1,14 @@
+    void solve(int idx,int x,int &ans,vector<int> &nums){
+        if(idx==nums.size()){
+            ans+=x;
+            return;
+        }
+        solve(idx+1,x^nums[idx],ans,nums);
+        solve(idx+1,x,ans,nums);
+    }
+
+    int subsetXORSum(vector<int>& nums) {
+        int ans=0;
+        solve(0,0,ans,nums);
+        return ans;
+    }
