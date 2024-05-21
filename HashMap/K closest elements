@@ -1,0 +1,27 @@
+    struct cmp{
+        bool operator()(pair<int,int> &p1,pair<int,int> &p2){
+            if(p1.first<p2.first) return true;
+            if(p1.first==p2.first){
+                return p1.second>p2.second;
+            }
+            return false;
+        }
+    };
+  
+    vector<int> printKClosest(vector<int> arr, int n, int k, int x) {
+        priority_queue< pair<int,int>, vector<pair<int,int>>, cmp> maxh;
+        for(auto it : arr) {
+            if(it==x) continue;
+            maxh.push({abs(it-x),it});
+            if(maxh.size()>k) maxh.pop();
+        }
+        vector<int> ans;
+        while(maxh.size()>0){
+            ans.push_back(maxh.top().second);
+            maxh.pop();
+        }
+        reverse(ans.begin(),ans.end());
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/k-closest-elements3619/1
