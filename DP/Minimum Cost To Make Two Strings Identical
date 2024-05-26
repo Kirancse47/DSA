@@ -1,0 +1,15 @@
+    int lcs(int xn,int yn,string &x,string &y,vector<vector<int>> &dp){
+        if(xn==0 || yn==0) return 0;
+        if(dp[xn][yn]!=-1) return dp[xn][yn];
+        if(x[xn-1]==y[yn-1]) return dp[xn][yn]=1+lcs(xn-1,yn-1,x,y,dp);
+        return dp[xn][yn]=max(lcs(xn-1,yn,x,y,dp),lcs(xn,yn-1,x,y,dp));
+    }
+  
+    int findMinCost(string x, string y, int costX, int costY) {
+        int xn=x.size(),yn=y.size();
+        vector<vector<int>> dp(xn+1,vector<int>(yn+1,-1));
+        int l=lcs(xn,yn,x,y,dp);
+        return (xn-l)*costX+(yn-l)*costY;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/minimum-cost-to-make-two-strings-identical1107/1
