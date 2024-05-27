@@ -1,0 +1,17 @@
+    int solve(int idx,int pre,int n,vector<int> &a,vector<vector<int>> &dp){
+        if(idx>=n) return 0;
+        if(dp[idx][pre+1]!=-1) return dp[idx][pre+1];
+        int notTake=solve(idx+1,pre,n,a,dp);
+        int take=0;
+        if(pre==-1 || abs(a[pre]-a[idx])==1){
+            take=1+solve(idx+1,idx,n,a,dp);
+        }
+        return dp[idx][pre+1]=max(take,notTake);
+    }
+  
+    int longestSubseq(int n, vector<int> &a) {
+        vector<vector<int>> dp(n+1,vector<int>(n+1,-1));
+        return solve(0,-1,n,a,dp);
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/longest-subsequence-such-that-difference-between-adjacents-is-one4724/1
