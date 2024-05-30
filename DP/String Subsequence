@@ -1,0 +1,18 @@
+    int solve(int i,int j,int n1,int n2,string &s1,string &s2,vector<vector<int>> &dp){
+        if(j==n2) return 1;
+        if(i==n1) return 0;
+        if(dp[i][j]!=-1) return dp[i][j];
+        int x=0,y=0;
+        if(s1[i]==s2[j]) x=solve(i+1,j+1,n1,n2,s1,s2,dp);
+        y=solve(i+1,j,n1,n2,s1,s2,dp);
+        int mod=1e9+7;
+        return dp[i][j]=(x+y)%mod;
+    }
+  
+    int countWays(string s1, string s2) {
+        int n1=s1.size(),n2=s2.size();
+        vector<vector<int>> dp(n1,vector<int>(n2,-1));
+        return solve(0,0,n1,n2,s1,s2,dp);
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/find-number-of-times-a-string-occurs-as-a-subsequence3020/1
