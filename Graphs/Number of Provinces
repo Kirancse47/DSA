@@ -1,0 +1,33 @@
+    void dfs(int node,vector<int> a[],vector<int> &vis){
+        vis[node]=1;
+        for(auto it : a[node]){
+            if(!vis[it]){
+               dfs(it,a,vis); 
+            }
+        }
+    }
+  
+    int numProvinces(vector<vector<int>> adj, int V) {
+        vector<int> a[V];
+        for(int i=0;i<V;i++){
+            for(int j=0;j<V;j++){
+                if(adj[i][j]){
+                    a[j].push_back(i);
+                    a[i].push_back(j);
+                    
+                }
+            }
+        }
+        
+        vector<int> vis(V,0);
+        int ans=0;
+        for(int i=0;i<V;i++){
+            if(!vis[i]){
+                ans++;
+                dfs(i,a,vis);
+            }
+        }
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/number-of-provinces/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=number_of_provinces
