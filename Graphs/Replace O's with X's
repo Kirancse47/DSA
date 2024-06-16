@@ -1,0 +1,54 @@
+    vector<vector<char>> fill(int n, int m, vector<vector<char>> mat){
+        queue<pair<int,int>> q;
+        for(int i=0;i<m;i++){
+            if(mat[0][i]=='O'){
+                q.push({0,i});
+                mat[0][i]='Y';
+            }
+            if(mat[n-1][i]=='O'){
+                q.push({n-1,i});
+                mat[n-1][i]='Y';
+            }
+        }
+        for(int i=0;i<n;i++){
+            if(mat[i][0]=='O'){
+                q.push({i,0});
+                mat[i][0]='Y';
+            }
+            if(mat[i][m-1]=='O'){
+                q.push({i,m-1});
+                mat[i][m-1]='Y';
+            }
+        }
+        
+        int dx[]={0,0,1,-1};
+        int dy[]={1,-1,0,0,};
+        while(!q.empty()){
+            int i=q.front().first;
+            int j=q.front().second;
+            q.pop();
+            for(int k=0;k<4;k++){
+                int x=i+dx[k];
+                int y=j+dy[k];
+                if(x>=0 && x<n && y>=0 && y<m && mat[x][y]=='O'){
+                    mat[x][y]='Y';
+                    q.push({x,y});
+                }
+            }
+            
+        }
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(mat[i][j]=='O') mat[i][j]='X';
+            }
+        }
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(mat[i][j]=='Y') mat[i][j]='O';
+            }
+        }
+        return mat;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/replace-os-with-xs0052/1
