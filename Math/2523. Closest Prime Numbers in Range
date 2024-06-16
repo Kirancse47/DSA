@@ -1,0 +1,24 @@
+    vector<int> closestPrimes(int left, int right) {
+        vector<int> prime(right+1,true);
+        prime[0]=false;prime[1]=false;
+        for(int i=2;i*i<=right;i++){
+            if(prime[i]){
+                for(int j=i*i;j<=right;j+=i) prime[j]=false;
+            }
+        }
+        vector<int> ans(2,-1);
+        int diff=INT_MAX;
+        int pre=left;
+        while(pre<=right && !prime[pre]) pre++;
+        for(int cur=pre+1;cur<=right;cur++){
+            if(prime[cur]){
+                if(diff>(cur-pre)){
+                    ans[0]=pre;
+                    ans[1]=cur;
+                    diff=cur-pre;
+                }
+                pre=cur;
+            }
+        }
+        return ans;
+    }
