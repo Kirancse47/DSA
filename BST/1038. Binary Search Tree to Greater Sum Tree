@@ -1,0 +1,14 @@
+    void trav(TreeNode* root,int &sum){
+        if(root){
+            trav(root->right,sum);
+            sum+=root->val;
+            root->val=sum;
+            trav(root->left,sum);
+        }
+    }
+
+    TreeNode* bstToGst(TreeNode* root) {
+        int sum=0;
+        trav(root,sum);
+        return root;
+    }
