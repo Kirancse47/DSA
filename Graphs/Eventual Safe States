@@ -1,0 +1,27 @@
+    vector<int> eventualSafeNodes(int V, vector<int> adj[]) {
+        vector<int> ans;
+        vector<int> Radj[V];
+        vector<int> indeg(V,0);
+        for(int i=0;i<V;i++){
+            for(auto it : adj[i]){
+                Radj[it].push_back(i);
+                indeg[i]++;
+            }
+        }
+        queue<int> q;
+        for(int i=0;i<V;i++){
+            if(indeg[i]==0) q.push(i);
+        }
+        while(!q.empty()){
+            int cur=q.front();q.pop();
+            ans.push_back(cur);
+            for(auto it : Radj[cur]){
+                indeg[it]--;
+                if(indeg[it]==0) q.push(it);
+            }
+        }
+        sort(ans.begin(),ans.end());
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/eventual-safe-states/1
