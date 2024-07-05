@@ -1,0 +1,16 @@
+    int mn=0,mx=0;
+    void inorder(Node* root,int p){
+        if(!root) return;
+        mn=min(mn,p);
+        mx=max(mx,p);
+        inorder(root->left,p-1);
+        inorder(root->right,p+1);
+    }
+    
+    int verticalWidth(Node* root) {
+        if(!root) return 0;
+        inorder(root,0);
+        return mx-mn+1;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/vertical-width-of-a-binary-tree/1
