@@ -1,0 +1,16 @@
+    double averageWaitingTime(vector<vector<int>>& customers) {
+        int n=customers.size();
+        int start = customers[0][0];
+        int end=start+customers[0][1];
+        double ans=customers[0][1];
+        for(int i=1;i<n;i++){
+            if(customers[i][0]<end){
+                ans+=(end-customers[i][0]);
+                start=end;
+            }else start=customers[i][0];
+            end=start+customers[i][1];
+            ans+=customers[i][1];
+        }
+        ans=ans/(double)n;
+        return ans;
+    }
