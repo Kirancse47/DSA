@@ -1,0 +1,17 @@
+    int sum(int n){
+        int t=0;
+        while(n){
+            t+=n%10;
+            n/=10;
+        }
+        return t;
+    }
+  
+    string smallestNumber(int s, int d) {
+        for(int i=pow(10,d-1);i<=pow(10,d)-1;i++){
+            if(sum(i)==s) return to_string(i);
+        }
+        return "-1";
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/smallest-number5829/1
