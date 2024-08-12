@@ -1,0 +1,31 @@
+    int SumofMiddleElements(vector<int> &arr1, vector<int> &arr2) {
+        int l1=arr1.size(),l2=arr2.size();
+        int len=l1+l2;
+        len/=2;
+        int i=0,j=0,k=0;
+        int ans=0;
+        while(i<l1 && j<l2){
+            if(arr1[i]<=arr2[j]){
+                if(k==len || k==len-1) ans+=arr1[i];
+                i++;
+            }
+            else {
+                if(k==len || k==len-1) ans+=arr2[j];
+                j++;
+            }
+            k++;
+        }
+        while(i<l1){
+            if(k==len || k==len-1) ans+=arr1[i];
+            i++;
+            k++;
+        }
+        while(j<l2){
+            if(k==len || k==len-1) ans+=arr2[j];
+            j++;
+            k++;
+        }
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/sum-of-middle-elements-of-two-sorted-arrays2305/1
