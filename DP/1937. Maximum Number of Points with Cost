@@ -1,0 +1,55 @@
+/*  //Memoization....TLE 
+    long long solve(int i,int j,vector<vector<int>> &p,vector<vector<long long>> &dp){
+        if(i==0) return dp[i][j]=p[i][j];
+        if(dp[i][j]!=-1) return dp[i][j];
+        long long ans=0;
+        for(int k=0;k<p[0].size();k++){
+            if(dp[i-1][k]!=-1) ans=max(ans,p[i][j]-abs(j-k)+dp[i-1][k]);
+            else ans=max(ans,p[i][j]-abs(j-k)+solve(i-1,k,p,dp));
+        }
+        return dp[i][j]=ans;
+    }
+    
+    long long maxPoints(vector<vector<int>>& points) {
+        int n=points.size(),m=points[0].size();
+        vector<vector<long long>> dp(n,vector<long long>(m,-1));
+        long long ans=0;
+        for(int i=0;i<m;i++) ans=max(ans,solve(n-1,i,points,dp));
+        return ans;
+    }
+*/
+/*  //Tabulation...TLE
+    long long maxPoints(vector<vector<int>>& points) {
+        int n=points.size(),m=points[0].size();
+        vector<vector<long long>> dp(n,vector<long long>(m,0));
+        for(int i=0;i<m;i++) dp[0][i]=points[0][i];
+        for(int i=1;i<n;i++){
+            for(int j=0;j<m;j++){
+                for(int k=0;k<m;k++){
+                    dp[i][j]=max(dp[i][j],points[i][j]-abs(k-j)+dp[i-1][k]);
+                }
+            }
+        }
+        return *max_element(dp[n-1].begin(),dp[n-1].end());
+    }
+*/
+
+    long long maxPoints(vector<vector<int>>& points) {
+        int row = points.size(), col = points[0].size();
+        vector<long long> dp(col, 0);
+        for(int i = 0; i < col; i++) dp[i] = points[0][i];
+        for(int r = 1; r < row; r++) {
+            vector<long long> leftMax(col, 0), rightMax(col, 0), newDp(col, 0);
+            
+            leftMax[0] = dp[0];
+            for(int i = 1; i < col; i++) leftMax[i] = max(leftMax[i-1], dp[i] + i);
+            
+            rightMax[col-1] = dp[col-1] - (col-1);
+            for(int i = col-2; i >= 0; i--) rightMax[i] = max(rightMax[i+1], dp[i] - i);
+
+            for(int i = 0; i < col; i++) newDp[i] = max(leftMax[i] - i, rightMax[i] + i) + points[r][i];
+            
+            dp = newDp;
+        }        
+        return *max_element(dp.begin(), dp.end());
+    }
