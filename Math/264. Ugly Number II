@@ -1,0 +1,19 @@
+    int nthUglyNumber(int n) {
+        vector<int> up={2,3,5};
+        unordered_set<long> vis;
+        priority_queue<long,vector<long>,greater<long>> mnh;
+        vis.insert(1);
+        mnh.push(1);
+        long cur_ugly;
+        for(int i=0;i<n;i++){
+            cur_ugly=mnh.top();mnh.pop();
+            for(auto it : up){
+                long new_ugly=cur_ugly*it;
+                if(vis.find(new_ugly)==vis.end()){
+                    mnh.push(new_ugly);
+                    vis.insert(new_ugly);
+                }
+            } 
+        }
+        return (int)cur_ugly;
+    }
