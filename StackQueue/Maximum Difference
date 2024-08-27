@@ -1,0 +1,23 @@
+    int findMaxDiff(vector<int> &arr) {
+        int n=arr.size();
+        vector<int> ls(n,0),rs(n,0);
+        stack<int> st;
+        st.push(arr[0]);
+        for(int i=1;i<n;i++){
+            while(!st.empty() && st.top()>=arr[i]) st.pop();
+            if(!st.empty()) ls[i]=st.top();
+            st.push(arr[i]);
+        }
+        while(!st.empty()) st.pop();
+        st.push(arr[n-1]);
+        for(int i=n-2;i>=0;i--){
+            while(!st.empty() && st.top()>=arr[i]) st.pop();
+            if(!st.empty()) rs[i]=st.top();
+            st.push(arr[i]);
+        }
+        int ans=0;
+        for(int i=0;i<n;i++) ans=max(ans,abs(ls[i]-rs[i]));
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/maximum-difference-1587115620/1
