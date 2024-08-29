@@ -1,0 +1,48 @@
+class DS{
+    vector<int> parent,size;
+    public:
+    DS(int n){
+        size.resize(n+1,1);
+        parent.resize(n+1,0);
+        for(int i=0;i<=n;i++) parent[i]=i;
+    }
+    int findP(int node){
+        if(parent[node]==node) return node;
+        return parent[node]=findP(parent[node]);
+    }
+    void unionN(int u,int v){
+        int p_u=findP(u);
+        int p_v=findP(v);
+        if(p_u==p_v) return;
+        if(size[p_u]>size[p_v]){
+            parent[p_v]=p_u;
+            size[p_u]+=size[p_v];
+        }else{
+            parent[p_u]=p_v;
+            size[p_v]+=size[p_u];
+        }
+    }
+
+};
+class Solution {
+public:
+    int removeStones(vector<vector<int>>& stones) {
+        int maxr=0,maxc=0;
+        for(auto it : stones){
+            maxr=max(maxr,it[0]);
+            maxc=max(maxc,it[1]);
+        }
+        DS ds(maxr+maxc+1);
+        unordered_set<int> s;
+        for(auto it : stones){
+            ds.unionN(it[0],it[1]+maxr+1);
+            s.insert(it[0]);
+            s.insert(it[1]+maxr+1);
+        }
+        int grp=0;
+        for(auto it : s){
+            if(ds.findP(it)==it) grp++;
+        }
+        return stones.size()-grp;
+    }
+};
