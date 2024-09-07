@@ -1,0 +1,22 @@
+    bool isL(ListNode* head,TreeNode* root){
+        if(!head) return true;
+        if(!root) return false;
+        if(head->val!=root->val) return false;
+        return (isL(head->next,root->left) || isL(head->next,root->right));
+    }
+
+    bool isSubPath(ListNode* head, TreeNode* root) {
+        if(!head) return true;
+        if(!root) return false;
+        queue<TreeNode*>q;
+        q.push(root);
+        while(!q.empty()){
+            auto it=q.front();q.pop();
+            if(it->val==head->val){
+                if(isL(head,it)) return true;
+            }
+            if(it->left) q.push(it->left);
+            if(it->right) q.push(it->right);
+        }
+        return false;
+    }
