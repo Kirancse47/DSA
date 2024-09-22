@@ -1,0 +1,14 @@
+    void dfs(int cur,int &limit,vector<int> &ans){
+        if(cur>limit) return;
+        ans.push_back(cur);
+        for(int i=0;i<=9;i++){
+            dfs(cur*10+i,limit,ans);
+        }
+    }
+    vector<int> lexicalOrder(int n) {
+        vector<int> ans;
+        for(int i=1;i<=9;i++){
+            dfs(i,n,ans);
+        }
+        return ans;
+    }
