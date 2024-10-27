@@ -1,0 +1,16 @@
+    bool findTriplet(vector<int>& arr) {
+        sort(arr.begin(),arr.end());
+        int n=arr.size();
+        for(int i=2;i<n;i++){
+            int j=0,k=i-1;
+            while(j<k){
+                int sum=arr[j]+arr[k];
+                if(sum==arr[i]) return true;
+                else if(sum<arr[i]) j++;
+                else k--;
+            }
+        }
+        return false;
+    }
+
+gfg - https://www.geeksforgeeks.org/problems/triplet-family/1
