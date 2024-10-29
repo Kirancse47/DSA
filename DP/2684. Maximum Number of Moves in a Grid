@@ -1,0 +1,20 @@
+    vector<vector<int>> dp;
+    int solve(int i,int j,vector<vector<int>> &g){
+        if(dp[i][j]!=-1) return dp[i][j];
+        int n=g.size(),m=g[0].size();
+        int res=0;
+        if((i-1)>=0 && (j+1)<m && g[i-1][j+1]>g[i][j]) res=max(res,1+solve(i-1,j+1,g));
+        if((j+1)<m && g[i][j+1]>g[i][j]) res=max(res,1+solve(i,j+1,g));
+        if((i+1)<n && (j+1)<m && g[i+1][j+1]>g[i][j]) res=max(res,1+solve(i+1,j+1,g));
+        return dp[i][j]=res;
+    }
+
+    int maxMoves(vector<vector<int>>& grid) {
+        int n=grid.size(),m=grid[0].size();
+        int ans=0;
+        dp=vector<vector<int>>(n,vector<int>(m,-1));
+        for(int i=0;i<n;i++){
+            ans=max(ans,solve(i,0,grid));
+        }
+        return ans;
+    }
