@@ -1,0 +1,14 @@
+    long subarrayXor(vector<int> &arr, int k) {
+        long ans=0;
+        unordered_map<int,int> mp;
+        int curx=0;
+        mp[0]++;
+        for(auto it : arr){
+            curx^=it;
+            ans+=mp[curx^k];
+            mp[curx]++;
+        }
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/count-subarray-with-given-xor/1
