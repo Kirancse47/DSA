@@ -1,0 +1,14 @@
+    int countPairs(vector<int> &arr, int target) {
+        sort(arr.begin(),arr.end());
+        int n=arr.size(),i=0,j=n-1,ans=0;
+        while(i<j){
+            int sum=arr[i]+arr[j];
+            if(sum<target){
+                ans+=(j-i);
+                i++;
+            }else j--;
+        }
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/count-pairs-whose-sum-is-less-than-target/1
