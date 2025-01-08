@@ -1,0 +1,19 @@
+    bool isPrefixAndSuffix(string s1,string s2){
+        int n=s2.size(),m=s1.size();
+        if(m>n) return false;
+        for(int i=0;i<m;i++){
+            if(s1[i]!=s2[i] || s1[i]!=s2[n-m+i]) return false;
+        }
+        return true;
+    }
+
+    int countPrefixSuffixPairs(vector<string>& words) {
+        int n=words.size();
+        int ans=0;
+        for(int i=0;i<n-1;i++){
+            for(int j=i+1;j<n;j++){
+                if(isPrefixAndSuffix(words[i],words[j])) ans++;
+            }
+        }
+        return ans;
+    }
