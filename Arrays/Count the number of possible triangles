@@ -1,0 +1,18 @@
+    int countTriangles(vector<int>& arr) {
+        int n=arr.size(),ans=0;
+        sort(arr.begin(),arr.end());
+        for(int i=n-1;i>=2;i--){
+            int high=i-1,low=0;
+            while(high>low){
+                int sum=arr[high]+arr[low];
+                if(sum<=arr[i]) low++;
+                else{
+                    ans+=(high-low);
+                    high--;
+                }
+            }
+        }
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/count-possible-triangles-1587115620/1
