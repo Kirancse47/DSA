@@ -1,0 +1,19 @@
+    vector<int> countDistinct(vector<int> &arr, int k) {
+        unordered_map<int,int> mp;
+        int n=arr.size();
+        if(k>n) return {};
+        int i=0;
+        while(i<k) mp[arr[i++]]++;
+        vector<int> ans;
+        ans.push_back(mp.size());
+        while(i<n){
+            mp[arr[i]]++;
+            mp[arr[i-k]]--;
+            if(mp[arr[i-k]]==0) mp.erase(arr[i-k]);
+            ans.push_back(mp.size());
+            i++;
+        }
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/count-distinct-elements-in-every-window/1
