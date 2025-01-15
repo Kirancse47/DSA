@@ -1,0 +1,32 @@
+    int minimizeXor(int num1, int num2) {
+        int noSet1=0,noSet2=0;
+        while(num2){
+            noSet2++;
+            num2=(num2 & num2-1);
+        }
+        int tmp=num1;
+        while(tmp){
+            noSet1++;
+            tmp=(tmp & tmp-1);
+        }
+        int ans=0;
+        if(noSet1==noSet2) return num1;
+        else if(noSet2>noSet1){
+            int diff=noSet2-noSet1;
+            ans=num1;
+            for(int i=0;i<31 && diff;i++){
+                if(!(num1 & (1<<i))){
+                    ans=(ans | (1<<i));
+                    diff--;
+                }
+            }
+        }else{
+            for(int i=31;i>=0 && noSet2;i--){
+                if((num1 & (1<<i))){
+                    ans=(ans | (1<<i));
+                    noSet2--;
+                }
+            }
+        }
+        return ans;
+    }
