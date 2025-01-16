@@ -1,0 +1,16 @@
+    int maxLen(vector<int> &arr) {
+        int c0=0,c1=0;
+        int n=arr.size(),ans=0;
+        unordered_map<int,int> mp;
+        for(int i=0;i<n;i++){
+            if(arr[i]) c1++;
+            else c0++;
+            int diff=c1-c0;
+            if(diff==0) ans=max(ans,i+1);
+            if(mp.find(diff)!=mp.end()) ans=max(ans,i-mp[diff]);
+            else mp[diff]=i;
+        }
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/largest-subarray-of-0s-and-1s/1
