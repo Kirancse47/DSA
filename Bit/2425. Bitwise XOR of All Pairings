@@ -1,0 +1,11 @@
+    int xorSum(vector<int>& a){
+        int xs=0;
+        for(int i=0;i<a.size();i++) xs^=a[i];
+        return xs;
+    }
+    int xorAllNums(vector<int>& nums1, vector<int>& nums2) {
+        int n1=nums1.size(),n2=nums2.size(),ans=0;
+        if(n1&1) ans^=xorSum(nums2);
+        if(n2&1) ans^=xorSum(nums1);
+        return ans;
+    }
