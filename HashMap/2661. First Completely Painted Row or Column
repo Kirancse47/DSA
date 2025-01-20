@@ -1,0 +1,17 @@
+    int firstCompleteIndex(vector<int>& arr, vector<vector<int>>& mat) {
+        int m=mat.size(),n=mat[0].size();
+        vector<pair<int,int>> mp(m*n+1);
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                mp[mat[i][j]]={i,j};
+            }
+        }
+        vector<int> row(m,0),col(n,0);
+        for(int k=0;k<arr.size();k++){
+            auto it=mp[arr[k]];
+            row[it.first]++;
+            col[it.second]++;
+            if(row[it.first]==n || col[it.second]==m) return k;
+        }
+        return -1;
+    }
