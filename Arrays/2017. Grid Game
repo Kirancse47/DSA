@@ -1,0 +1,12 @@
+    long long gridGame(vector<vector<int>>& grid) {
+        long long ans=LONG_MAX;
+        long long tsum=accumulate(grid[0].begin(),grid[0].end(),0LL);
+        long long bsum=0;
+        int n=grid[0].size();
+        for(int i=0;i<n;i++){
+            tsum-=grid[0][i];
+            ans=min(ans,max(tsum,bsum));
+            bsum+=grid[1][i];
+        }
+        return ans;
+    }
