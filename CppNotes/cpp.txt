@@ -1,0 +1,2119 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+             						C++ NOTES
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+############################################################################
+C++11 AND C++14
+############################################################################
+1) things added in c++14
+	a) generic lambdas:
+		-> c++11 lambdas 
+			[](int a, int b) -> int { return a + b; }
+		-> c++14 lambdas 
+			template<typename T>
+				[](T a, T b) -> T { return a + b };
+	
+
+	b) Return Type Deduction for Functions: 
+		-> C++14 extended the auto type deduction to work with the return types of functions.
+		-> auto func() {
+						return 42; // deduces return type as int
+					}
+	
+	c) enhancements in multithreading
+		-> std::shared_timed_mutex introduced 
+
+std::shared_mutex is a synchronization primitive that lets several threads use a shared resource simultaneously for reading while guaranteeing exclusive writing access.
+
+############################################################################
+
+############################################################################
+ITERATOR IN C++
+############################################################################
+
+1) iterators are objects that points to data of containers
+2) Different types of container
+	a) Random - Access: 
+			-> They are the most powerful iterators. They are not limited to moving sequentially, 
+				as their name suggests, they can randomly access any element inside the container. 
+			-> They are the ones whose functionality are same as pointers.
+			-> strongest of all iteraors
+			-> vector and dequeue support this iteraor
+			
+	b) bi-directional:
+			-> increment and decrement supported
+			-> list, map, multimap, set, multiset
+			
+	c) forward:
+			-> only increment is supported.
+			-> forward_list(singlt linked list), unordered set, unordered map, unordered multimap, unordered multiset
+			
+	d) input:
+			-> istream_iterator
+	e) output
+			-> ostream_iterator
+
+############################################################################
+
+
+############################################################################
+contianers in c++
+############################################################################
+
+1) list:(non-contiguous)
+	a) internal implementation: doubly linked list
+	b) iterator: bi-directional
+	c) time complexity:
+		-> insertion/deletion O(n)
+		-> access O(n)
+
+2) deque:(contiguous)
+	a) internal implementation: arrays
+	b) iterator: random access 
+	c) time complexity:
+		-> insertion/deletion O(n)
+		-> access O(1)  //similar to vector( diff some extra functions for front and back)
+
+3) vector:(contiguous)
+	a) internal implementation: arrays
+	b) iterator: random access 
+	c) time complexity:
+		-> insertion/deletion O(n)
+		-> access O(1)  
+
+4) set and multiset: non-contiguous
+	a) internal implementation: self balancing binary tree  (red black tree)
+	b) iterator: bi-directional
+	c) time complexity:
+		-> insertion/deletion O(logn)
+		-> access O(logn) 
+		
+5) map and multimap: non contiguous
+	a) internal implementation: self balancing binary tree  (red black tree)
+	b) iterator: bi-directional
+	c) time complexity:
+		-> insertion/deletion O(logn)
+		-> access O(logn) 
+
+6) unordered set:
+	a) internal implementation: hash data structure 
+	b) iterator: forward 
+	c) time complexity:
+		-> insertion/deletion average O(1) and worst case O(n)
+		-> access O(1)
+
+7) unordered map:
+	a) internal implementation: hash data structure 
+	b) iterator: forward 
+	c) time complexity:
+		-> insertion/deletion average O(1) and worst case O(n)
+		-> access O(1)
+############################################################################
+
+
+
+############################################################################
+OOPS
+############################################################################
+
+1) Class and Objects:
+2) Encapsulation: 
+		It involves bundeling of data members and member functions, and promotes access control and data hiding by making them public, 
+		private and protected.
+		* Acess control: The encapsulation ensures that the internal state of the object is protected from unauthorized access and modification.
+		* Data hiding: 
+		* setter and getter
+		
+3) Inheritance:
+		it is one of a core principles of oop by which one class uses the property and attributes of another class.
+		It is a "IS-A" relationship ('maruti' is a 'car')
+		* Acess control:
+			PUBLIC: 
+				-> public members of base class will be public for derived class 
+				-> protected members will be protected 
+				-> private members will not be accessible
+			
+			PROTECTED:
+				-> public members of base class will be protected
+				-> protected will be protected
+				-> private will not be accessible 
+				
+			PRIVATE:
+				-> public members of base class will be private in derived class
+				-> protected members will be private
+				-> private will not be accessible
+		* Types
+			-> Single inheritance
+			-> Multiple inheritance:
+				class Derived : public Base1, public Base2
+			-> Multilevel inheritance:
+				class Grandparent, 
+				class Parent : public Grandparent, 
+				class Child : public Parent
+			-> Hierarchical inheritance:
+				class Animal, class Dog : public Animal, class Cat : public Animal
+		
+4) Polymorphism:
+		It allows objects of different classes to be treated as objects of a common base class, providing flexibility and extensibility in your code.
+		It is often achieved by virtual functions (method overriding).
+		Abstrat class: A class having one pure virtual function.
+			pure virtual function is a virtual fucntion asigned to 0, that means it must be defined in its derived class.
+	    Dynamic binding (run time polymorphism)
+		
+		Types:
+			1) Compile Time:
+				a) function overloading
+				b) operator overloading
+			2) Run time:
+				a) virtual functions 
+				b) function overriding
+		for virtual concept search for (VIRTUAL TABLE AND VIRTUAL POINTER)
+5) Abstraction:
+		-> it allows to decide what information to be displayed to the outer world and which is not (via public and private accessfier)
+
+############################################################################
+
+
+
+############################################################################
+				types of constructor
+############################################################################
+
+
+#if 0
+#include <iostream>
+using namespace std;
+class abc
+{
+    public:
+    int a;
+    int b;
+    //default constructor
+    abc()
+    {
+        
+    }
+    //parametrized constructor
+    abc(int x, int y)
+    {
+        a= x;
+        b= y;
+    }
+    //copy constructor
+    abc(const abc &x)
+    {
+        a = x.a;
+        b = x.b;
+    }
+};
+int main() {
+    // Write C++ code here
+    std::cout << "Hello world!";
+    abc obj1(900,89990);
+    cout<<obj1.a;
+    //abc obj2 = obj1;
+    abc obj2(obj1);
+    cout<<obj2.a;
+    return 0;
+}
+#endif
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&
+note:
+shallow copy: 
+	1) default copy constructor (gets created for each class if no copy constructor is defined)
+	2) happens only in heap memory
+	3) also as arguments are passed by address, change in one argument will affect other object as well
+deep copy: 
+	1) user defined copy constructor
+	2) happens only in heap memory
+	2) no memory is shared between objects
+	
+	SUMMARY:
+	1) suppose there is a class having one pointer that is pointing to memory address xABCD, now we created an other object that is 
+	shallow copy of the existing one, what will happen,
+	the created object will also point to the same xABCD memory location. (both the object will share the resources)
+	to avoid this, we use deep copy, in which if there is any pointer or dynamic thing happening, we will do the same for the newly 
+	created object so that they do not share any common resource.
+	hence we will have to delete those allocated resources in destructor explictley.
+	
+	2) constructor can be overloaded but destructor can not be as destructor can not have any argument.
+	3) both constructor and destructor can be private, constructor is made private to controll the object creation i.e. singleton class
+	e.g.
+	class MyClass {
+private:
+    MyClass() {
+        // Private constructor
+    }
+
+public:
+    static MyClass& getInstance() {
+        static MyClass instance;
+        return instance;
+    }
+
+    void someFunction() {
+        // You can use the public members and methods here
+    }
+};
+
+
+Note: 
+1) in case of inheritance, constructor of base is executed first and destructor is called last
+	syntax:
+		class B (base)
+		class C : public B
+		{
+			C():B()   // default constructor of base class is called first by constructor of child class
+			{
+			}
+		}
+	a) Note: compiler only calls default constructor of base class, in case of base class having parametrized constructor(there will be no default constr)
+			, its base class's responsibility to call the paramatrized constructor manually to avoid errors
+			
+		//code 
+			class base
+			{
+				int a;
+				public:
+			   
+				base(int x)
+				{
+					std::cout<<"base class constructor is called"<<std::endl;
+					a = x;
+				}
+			};
+
+
+			class child:public base
+			{
+			   public:
+				child():base(5)
+				{
+					std::cout<<"child constructor is called"<<std::endl;
+				}
+				
+			};
+			 
+		
+
+2) a constructor can be private, as while creating object, constructor will be called from outside of the class, if no object
+   is to be created for that class, it can have a private constructor	 
+   
+3) a destructor can be private with same above reason. Either if no object has to be created or 
+	if object is created with new operator, it is possible to have private destructor as 
+	compiler assumes that is is programmer's responsibility to delete that memory
+   
+4) a constructor can never be static, as function of constructor is to initialize the member variables of an instance. and static fucntions 
+   have nothing to do with member variables.
+
+5) a destructor can never be static with the same above reason.
+
+6) a constructor can never be virtual as when constructor of a class is executed, there is no virtual table in the memory so no virtual pointer 
+   is defined.
+7) a destructor can be virtual, making a destructor virtual ensures that space occupied by both parent and child classes will be freed.
+	ORDER OF CONSTRUCTOR AND DESTRUCTOR CALL:
+		1) constructor of parent is called 
+		2) constructor of child is called
+		3) destructor of child is called
+		4) destructor of parent is called
+8) a constructor can never be cosnt, as fucntionality of constructor is to initialize data members of an instance and const says that the 
+   function can not change the data members.
+9) const destructor can never be destructor 
+10) constrructor and destructor are instance member functions
+&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+
+####################################################################################
+
+
+####################################################################################
+		template and implementation of our own stl (generic programming)
+####################################################################################
+
+=> a mechanism that provides facility of providing data types as argument to make the program generic
+=> ADVANTAGES: 
+	1) Code Reusability:  A simple function or class or structure can be used for multiple data data types.
+	2) Type Saftey: Compiler perform type checking at compile time.
+=> DISADVANTAGES:
+	1) Compilation Time: Same code is duplicated by compiler for each different types.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+template syntax
+%%%%%%%%%%%%%%%%%%%%%%%
+
+	
+	template<typename T>
+	void swap1(T &a, T &b)
+	{
+		T temp = a;
+		a =b;
+		b =temp;
+		return;
+	}
+
+	int main() {
+		string s = "bhaskar";
+		string t = "jaiswal";
+		swap1(s, t);
+		cout<<s<<" "<<t<<endl;
+		int x =10, y =1;
+		swap1(x,y);
+		cout<<x<<" "<<y;
+		return 0;
+	}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+implementation of vector stl
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+template<typename T> class myVector{
+    int length = 0;
+    struct node
+    {
+        T value;
+        node* next;
+    };
+    public:
+    myVector(int size, T value)
+    {
+        for(int i=0; i<size; i++)
+        {
+            push_back(value);
+        }
+        cout<<"vector of size "<<size<<" "<<"is created with all initial value: "<<value<<endl;
+        print_my_vector();
+    }
+    node* head = NULL;
+    int size()
+    {
+        return length;
+    }
+    void push_back(T data)
+    {
+        node* new_node = new node;
+        new_node->value = data;
+        new_node->next = NULL;
+        if(head == NULL)
+        {
+            head = new_node;
+        }
+        else
+        {
+            node* temp = head;
+            while(temp->next != NULL)
+            {
+                temp =temp->next;
+            }
+            temp->next = new_node;
+        }
+        length++;
+        return;
+    }
+    
+    void pop_back()
+    {
+        if(head == NULL)
+        {
+            cout<<"vector is empty";
+            return;
+        }
+        node* temp = head;
+        if(head -> next == NULL)
+        {
+            delete(head);
+            head = NULL;
+        }
+        else
+        {
+            node* temp = head;
+            while(temp->next->next != NULL)
+            {
+                temp = temp->next;
+            }
+            delete(temp->next);
+            temp->next = NULL;
+        }
+        length--;
+        return;
+    }
+    void pop_front()
+    {
+        if(head == NULL)
+        {
+            cout<<"vector is empty"<<endl;
+        }
+        else
+        {
+            node *temp = head;
+            head = head->next;
+            delete(temp);
+            temp = NULL;
+        }
+        length--;
+        return;
+    }
+    void pop_back(int count)
+    {
+        for(int i=0; i<count; i++)
+        {
+            pop_back();
+        }
+        return;
+    }
+    void pop_front(int count)
+    {
+        for(int i=0; i<count; i++)
+        {
+            pop_front();
+        }
+        return;
+    }
+    
+    void print_my_vector()
+    {
+        node* temp = head;
+        while(temp != NULL)
+        {
+            cout<<temp->value;
+            temp = temp->next;
+        }
+        cout<<endl;
+    }
+};
+
+int main()
+{
+    myVector<int> v1(10, 4);
+    for(int i=0; i<5; i++)
+    {
+        v1.push_back(i);
+    }
+    cout<<v1.size()<<endl;
+    v1.print_my_vector();
+    v1.pop_back();
+    cout<<v1.size()<<endl;
+    v1.print_my_vector();
+    v1.pop_front();
+    cout<<v1.size()<<endl;
+    v1.print_my_vector();
+    //accessing with index
+    //sorting a linked list to sort a vector
+    //initilization (multiple types)
+    //iterator
+}
+#endif
+
+##############################################################################
+
+
+
+
+
+
+
+##############################################################################
+cosnt keyword
+##############################################################################
+
+
+possibilites:
+	1) const int variable = some_value;                //cosntant variable
+		#variable that is of type int and it is constant
+		#value of this variable cant be changed (hence initilization required)
+		
+	2) int* const pointer = &some_variable;            //constant pointer
+		#there is a pointer which is constant and pointing to integer type
+		#alaways points to same address
+		
+	3) const int* pointer = &some_variable;            //pointer to constant variable
+		#there is pointer pointing to int type variable that is constant
+		#also can be declared as int const* pointer = &some_variable;
+		
+	4) foo(const int x)                                //constant function argument
+		#there is an argument which is of type int and is constant
+		#x cant be changed inside the function
+		
+	5) return_type member_func()const{}                //const member function
+		#there is a constant member function of type return type
+		#constant member function of a class that never changes any class data members, 
+			and it also never calls any non-const function .
+		#It is also known as the read-only function.
+		#We can create a constant member function of a class by adding the const keyword after the name of the member function.
+		#uses to be checked
+		
+	6) const data_type data_member                     //const data member of a class
+		#there is a data member of type data_type and is constant
+		#value can be assigned only in constructor
+		
+	7) const class_name obj;                           //const obj of a classs
+		#there is an object of type class_name and it is constant
+		#in case of const objects, class must have constructor from where objects can initialize their members
+		
+	Note: const data members cant be initialized at the time of declaration(in previous versions, now it can be)
+		WAYS TO INITIALIZE CONST DATA MEMBER:
+			1) make it static const and initialize at declaration
+				static const int a = 10; //at declaration
+			2) make static const and initilize outside the class:
+				class A
+				{
+				  static const int a; //declaration
+				};
+
+				const int A::a = 10; //defining the static member outside the class
+			3) initialize it with constructor (not in constructor) via list initializer
+				class A
+				{
+				  const int b;
+				  A(int c) : b(c) {} //const member initialized in initialization list
+				};
+	Places where list initializer is must (places where initialisaion is to be done at that instant)
+		1) initializing const data members
+		2) initializing reference data members
+		3) in case of inheritance (to initialize data members of base class if derived one is having any paramatrized constructor)
+				
+				
+		
+	
+###############################################################################
+	
+	
+	
+############################################
+MEMORY LAYOUT IN C++
+############################################
+
+The memory layout in C++ can be complex, as it involves various memory regions and how data is organized within those regions. 
+Here's an overview of the typical memory layout in a C++ program:
+
+	Code Section:
+		The code section, also known as the text section, contains the compiled machine code instructions of the program. 
+		This is where the actual executable code resides.
+
+	Data Section:
+		Initialized Data (Data Segment): This section contains global and static variables that are explicitly initialized with values. 
+		These variables have a specific memory location and are stored in the data segment. Static member variables of classes are often located here.
+
+	Uninitialized Data (BSS Segment): 
+		Uninitialized global and static variables (variables without explicit initialization) are 
+		stored in this section. 
+		The memory for these variables is allocated but not initialized with specific values. It is called the BSS (Block Started by Symbol) segment.
+
+	Heap:
+		The heap is a dynamically allocated memory area that is managed by functions like new (in C++) or malloc (in C). 
+		It is used for dynamic memory allocation, such as creating objects and data structures at runtime. Memory allocated on the heap 
+		needs to be explicitly deallocated to prevent memory leaks.
+
+	Stack:
+		The stack is used for function call management and storing local variables. When a function is called, a new stack frame is created to 
+		store function parameters, local variables, and return addresses. 
+		The stack follows a last-in-first-out (LIFO) order, which means the most recently called function's stack frame is at the top.
+
+	Constants and Read-Only Data:
+		Constants, string literals, and read-only data are often stored in a separate read-only data section. This data is not modifiable during 
+		program execution.
+		
+	Code, Instructions, and Libraries:
+	The program's executable code, as well as any libraries or external functions it depends on, are loaded into memory and placed in 
+	appropriate sections. 
+	These sections contain the instructions needed for program execution.
+	
+	Memory Management Structures:
+	The runtime environment may include memory management structures like the heap's free list, which keeps track of available memory 
+	blocks for allocation.
+	Dynamic Memory Pools (optional):
+
+	In some applications, custom memory management schemes or memory pools may be used to allocate and manage memory efficiently for 
+	specific data structures or objects.
+	The exact memory layout of a C++ program can vary based on the compiler, platform, and program's architecture. 
+	Additionally, memory layout optimizations and features like virtual memory can further complicate the layout.
+	Understanding the memory layout of your program is important for memory management, performance optimization, and debugging 
+	memory-related issues.
+	
+
+#####################################################################################################################################################
+
+
+
+
+
+#####################################################################################################################################################
+                                                   STATIC KEYWORD
+#####################################################################################################################################################
+
+1) STATIC LOCAL VARIBALE: 
+	-> memory will be allocated at once
+	-> get memory once program starts and get deallocated once program ends
+	-> belongs to data segement, (initialized data segement, hence int is initilizes with 0)
+2) STATIC MEMBER VARIABLE:
+	->common for all objects
+	->can be accessed with and without object
+3) STATIC MEMBER FUCNTION:
+	->common for all objects
+	->can be accessed with and without object
+	->can only access static member but in case of creating one object inside that static member function can access non static members as well
+	
+################################################################################################################################################
+
+
+
+
+
+
+############################################################################################################################################
+													OPERATOR OVERLOADING
+############################################################################################################################################
+
+Any operator (except sizeof and ? (conditional)) that exists for primitive data type can be overloaded for user defined data types to change its
+functional behaviour.
+
+#include <iostream>
+
+using namespace std;
+
+class bhaskar
+{
+    public:
+    int data;
+    bhaskar operator +(bhaskar b1)
+    {
+        bhaskar temp(0);
+        temp.data = data + b1.data;
+        return temp;
+    }
+    bhaskar(int x)
+    {
+        data = x;
+    }
+    void show_data()
+    {
+        cout<<data;
+    }
+};
+
+
+
+int main()
+{
+    cout<<"Hello World";
+    bhaskar b1(5), b2(5);
+    bhaskar b3 = b1 + b2;
+    b3.show_data();
+    return 0;
+}
+
+
+
+##UNARY OPERATOR OVELOADING
+
+#include <iostream>
+
+using namespace std;
+
+class parent
+{
+    private:
+    int x,y;
+    public:
+    void show_data()
+    {
+        cout<<x<<" + "<<y<<"i"<<endl;
+    }
+    parent operator+(parent c2)
+    {
+        parent temp(0,0);
+        temp.x = x + c2.x;
+        temp.y = y + c2.y;
+        return temp;
+    }
+    
+    parent operator++()
+    {
+        parent temp(0,0);
+        temp.x = x++;
+        temp.y = y++;
+        return temp;
+    }
+    
+    parent operator++(int)
+    {
+        parent temp(0,0);
+        temp.x = ++x;
+        temp.y = ++y;
+        return temp;
+    }
+    
+    
+    parent(int real, int img)
+    {
+        x = real;
+        y = img;
+    }
+    
+};
+
+
+int main()
+{
+    cout<<"Hello World"<<endl;
+    parent n1(4,3);
+    parent n2(3,4);
+    parent n3 = n1.operator+(n2);
+    n3.show_data();
+    n3.operator++();
+    n3.show_data();
+    parent n4 = ++n3;
+    n3.show_data();
+    n4.show_data();
+    return 0;
+}
+
+//output
+
+Hello World
+7 + 7i
+8 + 8i
+9 + 9i
+8 + 8i
+
+
+#####################################################################################################################################################
+
+
+
+
+
+
+
+#######################################################################################################################################
+TYPE CASTING
+#######################################################################################################################################
+
+1) IMPLICIT TYPE CASTING:
+	char -> short int -> int -> unsigned int -> long int -> float -> double -> long double, etc.  (lower -> higher maintains data precision)
+	Note: Implicit Type Casting should be done from low to higher data types. Otherwise, it affects the fundamental data type, 
+	which may lose precision or data, and the compiler might flash a warning to this effect.
+	example:
+	int to float -> no precision loss
+	float to int -> decimal values will be lost
+
+2) EXPLICIT TYPE CASTING:
+	i) static_cast
+	
+		#include <iostream>
+		using namespace std;
+
+		class animal
+		{
+			public:
+			string name;
+			int age;
+			void speak()
+			{
+				cout<<"I am an animal"<<endl;
+			}
+		};
+
+		class dog : public animal
+		{
+			public:
+			bool loyal;
+			void bark()
+			{
+				cout<<"I bark"<<endl;
+			}
+		};
+
+
+		class cat : public animal
+		{
+			public:
+			void mewos()
+			{
+				cout<<"I mewos"<<endl;
+			}
+		};
+
+		int main()
+		{
+			dog d;
+			d.loyal = true;
+			animal a = static_cast<animal>(d);
+			a.name = "bhura";
+			a.age = 34;
+			a.speak();
+			d.speak();
+			
+			return 0;
+		}
+		
+	
+   ii) dynamic_cast
+		* run time casting only for class pointer and references
+		* run time checks
+		* in case of invalid cast will result to null pointer or bas::bad_cast exception
+		
+   iii) const_cast
+   iv) interpret_cast
+
+
+##########################################################################################################################################
+
+
+
+##########################################################################################################################################
+										VIRTUAL TABLE AND VIRTUAL POINTER
+##########################################################################################################################################
+=> In case of a class having virtual functions, compiler adds one vptr (pointer) as a member of that class.
+=> this vptr points to a table (2 dimensional array) called vtable which contains function pointers.
+=> on runtime, based on the type of memory base class object is allocated, that vptr is used to call functions.
+=> e.g. if base class object pointer is pointing to memory location of child class type, vptr of child class will be used to 
+	call the functions of child classes.
+	
+=> ADVANTAGES:
+	1) Allows base class pointer to invoke required function at run time.
+
+=> DISADVANTAGES:
+	1) RUN TIME OVERHEAD: vptr and vtable increases run time as processing is needed to allocate space for each instance 
+		hence increasing processing time.
+	2) Memory Overhead: presence of vptr and vtable for each instance accquires memory.
+=> (see screen shot of vtable and vptr)
+
+
+
+#########################################################################################################################################
+
+#########################################################################################################################################
+					SIZE OF USER DEFINED DATA TYPES
+#########################################################################################################################################
+
+	// Online C++ compiler to run C++ program online
+	#include <iostream>
+
+	class parent
+	{
+		int a;
+		char b;
+	};
+	struct child
+	{
+		
+	};
+
+	enum bhaskar
+	{
+		
+	};
+	enum jaiswal
+	{
+		apple
+	};
+
+	typedef int kalu;
+
+	int main() {
+		// Write C++ code here
+		parent a;
+		std::cout<<"class "<<sizeof(a)<<std::endl;
+		child b;
+		std::cout<<"empty structure "<<sizeof(b)<<std::endl;
+		bhaskar b1;
+		std::cout<<"empty enum "<<sizeof(b1)<<std::endl;
+		jaiswal j1;
+		std::cout<<"filled enum "<<sizeof(j1)<<std::endl;
+		
+		kalu k1;
+		std::cout<<"typedef "<<sizeof(k1)<<std::endl;
+		return 0;
+	}
+	===================================================
+	OUTPUT
+	class 8
+	empty structure 1
+	empty enum 4
+	filled enum 4
+	typedef 4
+	===================================================
+
+
+
+
+	1) size of an empty class is 1 byte
+	2) size of an class having one int member is 4 bytes
+	3) SIZE OF ENUM is same as the size of data type it is having
+	4) structure size is 1 if empty otherwise sum of size of all the members with padding 
+	5) in case of inheritance, size depends on below points
+		-> data members of a base and derived class 
+		-> padding
+		-> virtual inheritance and virtual functions: in case of a class having virtual function or virtually inherited from another class
+			there will be an extra member added by compiler that is called virtual table pointer, that will adds to the size of the object
+			* without inheritance:
+				class a1{
+					public:
+					int a;double c;char b;
+					a1(){cout<<"constructor called for a1"<<endl;}
+					};
+				class b //:public a1
+				{
+					public:int x;int y;int z;int z1;
+					b(){cout<<"constructor called for b"<<endl;}
+				};
+				int main() {b obj_b;std::cout<<sizeof(obj_b); //size is 16 bytes
+					return 0;
+				}
+			
+			* with inheritance:
+				class a1{
+					public:
+					int a;double c;char b;
+					a1(){cout<<"constructor called for a1"<<endl;}
+					};
+				class b :public a1 //inheritance
+				{
+					public:int x;int y;int z;int z1;
+					b(){cout<<"constructor called for b"<<endl;}
+				};
+				int main() {b obj_b;std::cout<<sizeof(obj_b);//size is 40 bytes
+					return 0;
+				}
+				
+			* with virtual functions
+				8 bytes of vptr will get added  also padding will change to 8 bytes packing
+			Note: in case of inheritace, padding may change based on the class having the largest data member of primitive type.
+			
+	6)for more details, refer https://thoughts-on-coding.com/2020/09/14/structure-padding-in-cpp/
+
+###################################################################################################################
+
+
+###################################################################################################################
+						STRUCTURE AND CLASS PADDING
+###################################################################################################################
+
+struct{
+	char a; 
+	char b;
+	int c;
+};
+
+
+=> If we create any object of this structure, contiguous memory will be allocated for the members a, b, c.
+=> Based on the preocessor, it is decided that in one CPU cycle how much bytes of data can be read.
+	a) 32 bit means 4 bytes of data in a CPU cycle (1 Word = 4 bytes)
+	b) 64 bit means 8 bytes of data in a CPU cycle
+=> Now, if we see the memory allocation for an object of this cstructure
+	it will be a1 b1 c1 c2 c3 c4    (a1 b1 c1 c2 c3 c4 are of one byte each)
+	now while accessing a and b it can be done in one cpu cycle (as we can read 4 bytes), but if we try to read "c", it will take 2 
+	CPU cycles (1 CPU cycle to access a1 b1 c1 c2 (4 bytes) and then another cycle for c3 and c4.
+=> Here we can observe that to read an integer data type, it is taking two cycles of CPU to read that. 
+	To minimise this number of cycles, the concept of padding was introduced
+
+=> In padding, what compiler does is it creates 2 bytes of empty space as below
+	a1 b1 _ _ c1 c2 c3 c4
+	Now if c is to be accessed, it will onle take 1 CPU cycles.
+
+=> Padding is automatically done by the compiler
+=> Padding also can be controlled by the programmers in two ways
+	1) #pragma pack(1) : here "1" means packaging will be done with one byte (means no padding)
+		#pragma pack(1)  
+		struct base  
+		{  
+			int a;  
+			char b;  
+			double c;  
+		};  
+		int main()  
+		{  
+			struct base var; // variable declaration of type base  
+			// Displaying the size of the structure base  
+			printf("The size of the var is : %d", sizeof(var)); 
+			//it will return 13 bytes
+			return 0;  
+		}  
+	2) By using attribute
+		struct base  
+		{  
+			int a;  
+			char b;  
+			double c;  
+		}__attribute__((packed));  ;  
+		int main()  
+		{  
+			struct base var; // variable declaration of type base  
+			// Displaying the size of the structure base  
+			printf("The size of the var is : %d", sizeof(var));  
+			//will return 13 bytes
+			return 0;  
+		}  
+	
+###################################################################################################################
+
+
+###################################################################################################################
+STL MAP
+###################################################################################################################
+
+1) implemented as a self balancing red black tree.
+2) search complexity: o(log(n))
+3) preffered for small input (for huge data, hash is preffered)
+4) two self balancing trees are there 
+	a) Red black tree: balancing cost is less (requires less number of rotations than AVL trees), time complexity(searching, sorting, deletion) is O(log(n)),
+		same is AVL trees
+		if search, insert, delete is frequently required, Red Black tree is preffered
+	b) AVL trees: trees are more balanced
+		if search is only frequently required, AVL trees are preffered
+	
+
+
+
+###################################################################################################################
+
+###################################################################################################################
+RED BLACK TREE
+###################################################################################################################
+
+properties:
+1) root is always black
+2) leaf node (null node of each leaf) is black
+3) red parents have black node and vice versa
+4) Depth Property: all the leaves have the same black depth
+5) Path Property: all simple path from root to leaf node contains same number of black nodes
+
+advantages:
+	1) time complexity for search, delete, insert all are O(log(n)), n is number of nodes
+
+
+
+###################################################################################################################
+
+
+
+###################################################################################################################
+SMART POINTERS
+###################################################################################################################
+
+1) in c++ its programmer's responsiblity of memory management
+2) resulting mem leak, dangling pointers, double free, out bound reach
+3) to resolve these issues, concept of smart pointer has come
+4) using smart pointers, we do not need to deallocate the allocated memory as it gets deleted by itself once object goes out of scope
+
+TYPES OF SMART POINTERS:
+1) UNIQUE_POINTERS:
+	a) memory ownership will be with only one pointer. no two pointers can point to the same memory.
+	b) if any other pointer has to point to the same memory, ownership will have to move from previous to next pointer using function "move".
+2) SHARED_POINTERS:
+	a) two pointers can point to the same memory location
+	b) memory will getdeleted once all the pointers are out of scope ( to check is all pointers are out of scope or not, shared pointers have 
+		one member called "reference_count".
+	c) use_count() function can be used to print the number of pointers pointing to the same memory location
+3) WEAK_PONTERS:
+	a) weak_ptrs are same as shared_ptr, only difference is when you create one weak pointer to shared_ptr, reference count will not increase
+		and once shared_ptr goes out of scope, memory will be deleted.
+	b) weak ptr is used to trac a memory location if it is still pointed by some other pointer with the help of function ".lock()"
+###################################################################################################################
+
+
+###################################################################################################################
+							MALLOC vs NEW
+###################################################################################################################
+
+1) NEW calls constructor where malloc does not
+2) NEW is an operator and malloc is a fucntion
+3) NEW returns exact data type of which it is allcoating memory where malloc returns void*
+4) in case of failure,new returns bad_alloc_expection where as malloc return NULL
+5) NEW doesnot allow to change the buffer size where as malloc allows using realloc function
+6) required size of memory block is calculated by compiler based on data type, where for malloc we have to provide the size 
+
+Note: Heap and free store are two different thing
+	Dynamic memory area has two partionions, Heap, and Free store. All new, delete happen in this Free store where malloc, realloc and free happen
+	in Heap.
+###################################################################################################################
+
+
+###################################################################################################################
+							FRIEND KEYWORD
+###################################################################################################################
+FREIND CLASS:
+	1) a friend class can access public, private and protected members of the class of which it is declared friend
+	class foo
+	{
+		private:
+		int a;
+		public:
+		foo():a(10)
+		{
+			std::cout<<"constructor called for foo"<<std::endl;
+		}
+		friend class boo;
+	};
+	class boo
+	{
+	  int c;
+	  public:
+	  boo()
+	  {
+		  std::cout<<"constructor called for boo"<<std::endl;
+	  }
+	};
+	int main() {
+		boo b1; //constructor of only boo will be called
+		std::cout<<b1.a; //will throw error, no member named a
+		return 0;
+	}
+FRIEND FUNCTION:
+	1) friend function can also access and manipulate the private members of the class
+	2)HOW:
+		a) Global Fucntion
+			class abc{
+				friend void foo(abc &obj);
+			}
+			void foo(abc &obj);
+		b) function of another class:
+			class a{
+				void foo(a &obj);
+			}
+			class b{
+				friend void a::foo(a &obj);
+			}
+				
+
+###################################################################################################################							
+
+###################################################################################################################
+STAGES OF CODE COMPILATION
+###################################################################################################################
+
+1) PREPROCESSING: #define, #include, macros expansion and inline expansion occurs
+2) COMPILATION: preprocessed code is fed to compiler to convert it into assembly language
+3) ASSEMBLY: assembler converts assembly code into object code
+4) LINKING: linker links all the multiple object files, dependent libraries into single executable or shared library
+
+Flags used with gcc/g++ command
+1) -o 		-> to change the name of bianry
+2) -Wall 	-> print every warning in the code (like un initialised variables)
+3) -l (L) 	-> to link shared library (e.g. gcc main.c -o main -lpthread
+4) -E 		-> to get the pre processed code (first stage of compilation)
+5) -S 		-> to get the assembly code
+6) -C 		-> to get the compiled code without linking
+7) -Werror	-> to treat all the warnings as error
+8) -v 		-> verbose (to display internal compilation output to console)
+
+
+
+
+###################################################################################################################
+
+###################################################################################################################
+INLINE FUNCTION
+###################################################################################################################
+
+INLINE FUNCTION:
+1) its a request to compiler, compiler may or may not expand it
+2) inline function's variable somehow use register, so using too many variables inside inline function is a drawback
+3) WHY INLINE FUNCTIONS ARE USED: in usual scenario, below steps are sequence of execution for a function call
+	a) CPU stores the address of instruction having fucntion call.
+	b) copying the arguments to the stack
+	c) transferring the control to that fucntion
+	d) function execution and storing return type in memory/register
+	e) returning control back to callee fucntion
+	
+	for the above steps, two types of cost are there
+	1) time to call that function (steps a to c)
+	2) function execution time
+
+4) ADVANTAGES OF INLINE FUNCTION:
+	a) no function call overhead
+	b) saves the time of pushing and popping the variables in the stack
+	c) overhead of returning the flow to callee again
+
+5) DISADVANTAGES OF INLINE FUNCTION:
+	a) added variables in inline functions consume additional register
+	b) if inline function is called from too many places, binary size will increase as same repeated code will get added at each callee
+	c) a single change in an inline function will reflect change at each callee
+
+###################################################################################################################
+
+
+
+
+###################################################################################################################	
+
+###################################################################################################################
+LAMBDA FUNCTION/EXPRESSIONS IN C++
+###################################################################################################################
+
+1) fucntions without name hence non reusable
+2) kind of inline functions
+3) possible syntax
+	1)[]()->return_t{}();   
+	2)"->return_t" part can be ignored as compiler impicitly can decide the return type, but for few cases,
+		it should be written explicitly
+		[capture clause](parameters){fucntion body}; // ";" is just like semicolon at the end of calling any function with name
+		
+	3) Examples:
+	  a)
+		int main()
+		{
+			int a=4, b=5;
+			[](int a, int b)->void{std::cout<<a<<" "<<b;}(a,b);
+			
+		}
+	  b)
+		int main()
+		{
+			int a=4, b=5;
+			[=]()->void{std::cout<<a<<" "<<b;}();
+			// here "equal in capture clause tells that this function have copies of all the variables of parent funtion (main)"
+			// immutable lambda function
+			
+		}
+	  c) 
+	    int main()
+		{
+			int a=4, b=5;
+			[&]()->void{std::cout<<a<<" "<<b;}();
+			// here "& in capture clause tells that this function have refrence of all the variables of parent funtion (main)"
+			//mutable lambda function
+			
+		}
+	  d) 
+	    int main()
+		{
+			int a=4, b=5;
+			[]()->void{std::cout<<a<<" "<<b;}();
+			// this code will throw error as lambda function dont have access to parent function's variable implicitly
+			
+			
+		}
+
+
+###################################################################################################################
+					
+					
+###################################################################################################################
+FUNCTORS
+###################################################################################################################
+- FUNCTORS are functions wrapped inside a class with overloaded "()" function call operator so that we can call the function with object 
+	of that class
+- also known as function objects
+- commonly used with STL
+- an object that can be called as function by overloading function call operator "()"
+example:
+	
+#include <iostream>
+class parent
+{
+    public:
+        void operator()(int a, int b)
+        {
+            std::cout<<a<<" "<<b<<std::endl;
+        }
+};
+int main() {
+    parent p1;
+    p1(4,5);
+    return 0;
+}
+
+
+
+
+
+example2:
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// A Functor
+class increment
+{
+private:
+	int num;
+public:
+	increment(int n) : num(n) { }
+
+	// This operator overloading enables calling
+	// operator function () on objects of increment
+	int operator () (int arr_num) const {
+		return num + arr_num;
+	}
+};
+
+// Driver code
+int main()
+{
+	int arr[] = {1, 2, 3, 4, 5};
+	int n = sizeof(arr)/sizeof(arr[0]);
+	int to_add = 5;
+
+	transform(arr, arr+n, arr, increment(to_add));
+
+	for (int i=0; i<n; i++)
+		cout << arr[i] << " ";
+}
+
+###################################################################################################################
+
+
+
+###################################################################################################################
+							KEYWORDS IN C++
+###################################################################################################################
+
+1) STATIC: covered
+2) AUTO: 
+	* Self type deduction at the time of initialization. (initialization is must)
+	* Increases compile time slightly but no effect on run time
+3) EXTERN:
+	* it is used to declare a variable which can be accessed across multiple files and headers.
+	* multiple declaration of a extern variable is possible inside a same file
+	* in case of no definition, compiler assumes that it will be defined somewhere, but linker will throw n error
+	e.g.
+		#include <iostream>
+		extern int a;
+		int main() {
+			// Write C++ code here
+			std::cout << "Try programiz.pro";
+			std::cout<<std::endl<<a;
+			return 0;
+		}
+		=======error========
+		/rbin/ld: /tmp/ccgEile3.o: in function `main':
+		AuUPDvUkpH.cpp:(.text+0x27): undefined reference to `a'
+		ERROR!
+		collect2: error: ld returned 1 exit status
+4) MUTABLE:
+	A const member function can not change any data member.
+	mutable is a keyword that is used to allow const member function to modify it.
+	So, if a data member is to be modified with const member function, it can only happen with mutable keyword
+5) REGISTER:
+	variables that are most likely to be accessed frequently can be made register type.
+	making register type variable requests compiler to provide memory in register for this perticular variable.
+	it compiler's choice to make it or not
+	registers are faster than normal memory
+	KEY POINTS:
+	1) getting adddress of a register variable may lead to compilation error in c but will work fine in c++
+	2) a pointer variable can be made as register type
+	3) register can't be static and global (to be checked)
+###################################################################################################################
+
+
+###################################################################################################################
+object slicing
+###################################################################################################################
+1) in case of inheritance, child class objects have properties of both base class and derived class but base class
+	objects have their own properties only.
+2) in case if we assign a derived class object to base class object, all the properties of derived class will be silced off
+	this is called object slicing
+3) another way when object slicing can happen is when we pass an object of derived class to a fuction that takes 
+	object of base class as an argument
+	
+To avoid this slicing problems, we can use pointers and references
+
+
+===============================================================
+// Online C++ compiler to run C++ program online
+#include <iostream>
+class base
+{
+    public: 
+    virtual void display()
+    {
+        std::cout<<"display function is called in base class"<<std::endl;
+    }
+    int a, b, c;
+};
+
+
+class derived : public base
+{
+    public:
+        virtual void display()
+        {
+             std::cout<<"display function is called in derived class"<<std::endl;
+        }
+};
+
+
+void somefunction(base obj)
+{
+    obj.display();
+}
+int main() {
+    base b1;
+    somefunction(b1);
+    derived d1;
+    somefunction(d1);
+    return 0;
+}
+===============================================================
+ISSUE
+/tmp/vSNnPGJgnA.o
+display function is called in base class
+display function is called in base class
+===============================================================
+
+
+
+
+solution
+using refernece
+===============================================================
+// Online C++ compiler to run C++ program online
+#include <iostream>
+class base
+{
+    public: 
+    virtual void display()
+    {
+        std::cout<<"display function is called in base class"<<std::endl;
+    }
+    int a, b, c;
+};
+
+
+class derived : public base
+{
+    public:
+        virtual void display()
+        {
+             std::cout<<"display function is called in derived class"<<std::endl;
+        }
+};
+
+
+void somefunction(base& obj)
+{
+    obj.display();
+}
+int main() {
+    base b1;
+    somefunction(b1);
+    derived d1;
+    somefunction(d1);
+    return 0;
+}
+===============================================================
+display function is called in base class
+display function is called in derived class
+
+===============================================================
+
+using pointers
+===============================================================
+// Online C++ compiler to run C++ program online
+#include <iostream>
+class base
+{
+    public: 
+    virtual void display()
+    {
+        std::cout<<"display function is called in base class"<<std::endl;
+    }
+    int a, b, c;
+};
+
+
+class derived : public base
+{
+    public:
+        virtual void display()
+        {
+             std::cout<<"display function is called in derived class"<<std::endl;
+        }
+};
+
+
+void somefunction(base* obj)
+{
+    obj->display();
+}
+int main() {
+    base* b1 = new base();
+    somefunction(b1);
+    derived* d1 = new derived();
+    somefunction(d1);
+    return 0;
+}
+===============================================================
+/tmp/4ENUueuyvL.o
+display function is called in base class
+display function is called in derived class
+===============================================================
+
+
+###################################################################################################################
+name mangling
+###################################################################################################################
+technique that compiler uses to dinstiguish between function with same name (function overlaoding)
+example:
+	int fx(int a, int b); -> will change to something like this int_fx_int_int
+	int fx(flaot a, int b); -> will change to something like this int_fx_float_int
+	
+###################################################################################################################
+
+
+###################################################################################################################
+death of diamond problems
+###################################################################################################################
+Problem: in case when two super class of and inherited class share a common base class
+		A
+	   / \
+	  B   C 
+	   \ /
+	    D
+	in this case, if we create an object of class D, constructor of A will be called twice. Same case will be with the destructor.
+	that means object of D will have two copies of wach data members of A.
+Solution:
+	1) using scope resolution operator to dinstiguish between members of class A.
+	2) using virtual inheritance
+	#include <iostream>
+
+		class A {
+			public:
+			 int x = 5;
+		};
+		class B : virtual public A{
+			public:
+			  int i = 6;
+		};
+		class C : virtual public A{
+			public:
+			  int i = 7;
+		};
+		class D : public B, public C{
+			
+		};
+
+		int main(){
+			D obj;
+			std::cout << obj.x << std::endl;
+
+		}
+###################################################################################################################
+
+###################################################################################################################
+file handeling in c++
+###################################################################################################################
+File stream classes:
+	1) fstream:  for creating, reading and writing to a file
+	2) ifstream: for reading info from file 
+	3) ofstream: create and  write into file
+
+ofstream:
+	ofstream filestream("testout.txt"); //creating an object of ofstream class and assigning file name
+	if (filestream.is_open()) {
+		filestream << "Welcome to javaTpoint.\n";
+		filestream.close();
+	}
+	
+ifstream:
+	ifstream filestream("testout.txt");  
+	if (filestream.is_open()){
+		while ( getline (filestream,srg) ){
+			cout<<srg<<endl;
+		}
+		filestream.close();
+	}
+
+fstream:
+	fstream fio;
+	string line;
+	fio.open("sample.txt", ios::trunc | ios::out | ios::in);
+	while (fio) {
+		getline(cin, line);
+		if (line == "-1") break;
+		fio << line << endl;
+	
+	}
+	fio.close();
+
+
+###################################################################################################################
+
+
+###################################################################################################################
+TIME COMPLEXITY NOTATIONS in c++
+###################################################################################################################
+
+1) Big O Notation (O):
+	-> Big O notation describes the upper bound or worst-case scenario of an algorithm's time complexity. 
+	-> It provides an asymptotic upper limit on the growth rate of the algorithm's running time.
+	
+2) Big Omega Notation (Ω):
+	-> Big Omega notation describes the lower bound or best-case scenario of an algorithm's time complexity.
+	-> It provides an asymptotic lower limit on the growth rate of the algorithm's running time.
+
+3) Big Theta Notation (Θ):
+	-> Big Theta notation describes the exact bound or average-case scenario of an algorithm's time complexity.
+	-> It provides both an upper and lower limit on the growth rate of the algorithm's running time, 
+		indicating that the time complexity is tightly bound within a constant factor of n.
+
+###################################################################################################################
+
+###################################################################################################################
+SORTING ALGORITHMS AND THEIR TIME COMPLEXITY
+###################################################################################################################
+
+
+
+###################################################################################################################
+
+
+###################################################################################################################
+POINTER TO AN ARRAY AND POINTER ARITHMATICS
+###################################################################################################################
+
+	#include <iostream>
+	using namespace std;
+	int main() {
+		int arr[5] = {1,2,3,4,5};
+		
+		//pointer arithmatic
+		cout<<"arr is:"		<<arr<<endl; 	//arr is: 0x7ffe3f1dc2c0 	//decimal 140729957335744
+		cout<<"arr+1 is:"	<<arr+1<<endl; 	//arr+1 is: 0x7ffe3f1dc2c4 	//decimal 140729957335748
+		cout<<"&arr is:"	<<&arr<<endl; 	//&arr is: 0x7ffe3f1dc2c0 	//decimal 140729957335744
+		cout<<"&arr+1 is:"	<<&arr+1<<endl;	//&arr+1 is: 0x7ffe3f1dc2d4 //decimal 140729957335764
+	
+		//pointer to an array
+		int* ptr = arr;
+		// *(ptr) = arr[0], *(ptr + 1)=arr[1]........
+		int (*ptr1)[5];	//points to whole array 
+		ptr1 = &arr;
+		return 0;
+	}
+	
+Applications of pointer to an array
+	1) Passing Arrays to Functions:
+	2) Dynamic Memory Allocation:
+	3) Accessing Array Elements:
+
+Pointer to a multidimensional array to be checked
+
+Pointer arithmatic:
+	1) Increment
+	2) decrement
+	3) comparision
+	4) addition of constant
+	5) substraction of constant
+	6) comparision to NULL	
+###################################################################################################################
+
+###################################################################################################################
+New for an array and multidimensional array
+###################################################################################################################
+
+	#include <iostream>
+	using namespace std;
+
+	int main() {
+		//for an integer
+		int* arr = new int;
+		delete arr;
+		
+		//for array of integers
+		int** arr1 = new int*[10];
+		delete[] arr1;
+		//for a string
+		string* s = new string;
+		delete s;
+		
+		//for array of strings
+		string** s1 = new string*[10];
+		for(int i=0; i<10; i++)
+		{
+			string* ptr = new string;
+			*ptr = "bhaskar";
+			s1[i] = ptr;
+		}
+		delete[] s1;
+		
+		//for array of array of string
+		
+		string*** s3 = new string**;
+		delete s3;
+		
+		
+		return 0;
+	}
+
+MEMORY ALLOCATION FOR A 2D ARRAY:
+1) Single Allocation (Contiguous Memory):
+	int main() {
+		 int row = 3;
+		 int column = 5;
+		 int *arr = new int[row*column];
+		 for(int i=0; i<row; i++)
+		 {
+			 for(int j=0; j<column; j++)
+			 {
+				 arr[row + column*j] = 1234;
+			 }
+		 }
+		 delete[] arr;
+	}
+
+2) Double Allocation (Array of Pointers)
+	int main() {
+		 int** arr = new int*[10];
+		 for(int i=0; i<10; i++)
+		 {
+			 int* row = new int[10]();//()initialise the array with 0
+			 arr[i] = row;
+		 }
+		 for(int i=0; i<10; i++)
+		 {
+			 for(int j=0; j<10; j++)
+			 {
+				 std::cout<<arr[i][j]<<" ";
+			 }
+			 cout<<endl;
+		 }
+		 delete[] arr;
+	}
+	
+MEMORY ALLOCATION FOR 3-D ARRAY
+
+	int main() {
+		 int*** arr = new int**[10];
+		 for(int i=0; i<10; i++)
+		 {
+			 int** length = new int*[10];
+			 for(int j=0; j<10; j++)
+			 {
+				 int* value = new int(10);
+				 length[j] = value;
+			 }
+			 arr[i] = length;
+		 }
+	}
+
+###################################################################################################################
+
+
+###################################################################################################################
+BIT WISE OPERATORS
+###################################################################################################################
+
+1) Bitwise AND (&)
+2) Bitwise OR (|)
+3) Bitwise XOR (^)
+4) Bitwise NOT (~)
+5) Left Shift (<<)
+6) Right Shift (>>)
+###################################################################################################################
+
+
+###################################################################################################################
+STRING, MEMBER FUNCTIONS AND CHARACTER ARRAY
+###################################################################################################################
+
+String:
+	-> str.at(index) — Access character at index with bounds checking.
+	-> str.capacity() — Returns the number of characters that can be held without 
+	-> str.resize(new_size) — Changes the size of the string.
+	-> str1.append(str2) — Appends str2 to str1.
+	-> str1 < str2 — Compares str1 and str2 lexicographically.
+	-> str.substr(pos, len) — Returns a substring starting at pos with length len.
+	-> str.find(substring) — Finds the first occurrence of substring.
+	-> str.rfind(substring) — Finds the last occurrence of substring.
+	-> str.find_first_of(chars) — Finds the first occurrence of any character in chars.
+	-> str.find_last_of(chars) — Finds the last occurrence of any character in chars.
+	
+	Manipulation:
+	-> str.insert(pos, substring) — Inserts substring at pos.
+	-> str.erase(pos, len) — Erases len characters starting at pos.
+	-> str.replace(pos, len, substring) — Replaces len characters starting at pos with substring.
+	
+	Conversion:
+	-> str.c_str() — Returns a C-style string (const char*).
+	-> std::stoi(str) — Converts str to int.
+	-> std::stod(str) — Converts str to double.
+	-> std::to_string(value) — Converts value to a std::string.
+
+
+Char array(#include <cstring>:
+	-> strlen(arr)
+	-> strcpy(destination, source) to copy one char array to another.
+	-> strcat(arr1 + ar2)
+	-> strcmp(arr1, arr2)	
+
+###################################################################################################################
+
+
+
+
+###################################################################################################################
+						DESIGN PATTERN IN C++
+###################################################################################################################
+
+- Design pattern is bsically a solution for reoccuring problems while creating a software. It provides what pattern you can adopt for the  
+software that you are designing. For example: if you are creating an logging software that writes logs, you can take the singelton 
+approach where using single object can write the logs for you and there will not be any issue of multiple objects writing to the same 
+file.
+
+- Types of Design pattern:
+  1) Creational Design Pattern: 
+	a) They deal with process of creation of objects to make them mire efficient and flexible.
+
+##########################################Singleton class#########################################################################
+
+A Singleton is a design pattern that ensures a class has only one instance and provides a global point of access to that instance. This is particularly useful when exactly one object is needed to coordinate actions across the system, such as in logging, configuration management, or connection pooling.
+
+Implementing a Singleton Class in C++
+To implement a Singleton in C++, you typically follow these steps:
+
+Private Constructor: The constructor is made private to prevent direct instantiation of the class from outside.
+Static Instance: A static method that returns the single instance of the class.
+Deleted Copy Constructor and Assignment Operator: To prevent copying of the Singleton instance.
+Here's how you can implement a basic Singleton in C++:
+
+cpp
+Copy code
+#include <iostream>
+
+class Singleton {
+private:
+    // Private constructor to prevent instantiation
+    Singleton() {
+        std::cout << "Singleton instance created." << std::endl;
+    }
+
+    // Declare (but not define) copy constructor and assignment operator
+    Singleton(const Singleton&) = delete;
+    Singleton& operator=(const Singleton&) = delete;
+
+public:
+    // Static method to get the instance of the class
+    static Singleton& getInstance() {
+        static Singleton instance;  // Guaranteed to be destroyed and instantiated on first use
+        return instance;
+    }
+
+    void showMessage() {
+        std::cout << "Hello from Singleton!" << std::endl;
+    }
+};
+
+int main() {
+    // Access the Singleton instance
+    Singleton& singleton = Singleton::getInstance();
+    singleton.showMessage();  // Outputs: Hello from Singleton!
+
+    return 0;
+}
+Key Points
+Private Constructor: The constructor is private to ensure that no other object can create an instance of Singleton using the new keyword.
+
+Static Instance Method: The getInstance() method returns the single instance of the class. It uses the local static variable instance, which ensures that the Singleton is created only once and destroyed when the program terminates.
+
+Deleted Copy Constructor and Assignment Operator: The copy constructor and assignment operator are deleted to ensure that the Singleton cannot be copied or assigned, which would violate the Singleton property.
+
+Thread Safety: The C++11 standard guarantees that the local static variable initialization is thread-safe, meaning the above Singleton implementation is safe for use in multithreaded environments.
+
+#################################Multithreading#############################################################
+
+syntax :  
+	std::thread thread_object (callable);
+
+std::thread is the thread class that represents a single thread in C++. To start a thread we simply need to create a new thread object and pass 
+the executing code to be called (i.e, a callable object) into the constructor of the object. Once the object is created a new thread is launched 
+which will execute the code specified in callable. 
+
+A callable can be any of the five:
+1. A Function Pointer
+		void foo(param)
+		{ 
+		  Statements; 
+		}
+		// The parameters to the function are put after the comma
+		std::thread thread_obj(foo, params);
+		
+2. A Lambda Expression
+
+		// Define a lambda expression
+		auto f = [](params)
+		{
+			Statements;
+		};
+
+		// Pass f and its parameters to thread
+		// object constructor as
+		std::thread thread_object(f, params);
+
+3. A Function Object
+
+		// Define the class of function object
+		class fn_object_class {
+			// Overload () operator
+			void operator()(params)
+			{ 
+			  Statements; 
+			}
+		}
+		// Create thread object
+		std::thread thread_object(fn_object_class(), params)
+
+4. Non-Static Member Function
+
+		// defining clasc
+		class Base {
+		public:
+			// non-static member function
+			void foo(param) { Statements; }
+		}
+
+		// object of Base Class
+		Base b;
+
+		// first parameter is the reference to the functionn
+		// and second paramter is reference of the object
+		// at last we have arguments
+		std::thread thread_obj(&Base::foo, &b, params);
+
+5. Static Member Function
+
+		// defining class
+		class Base {
+		public:
+			// static member function
+			static void foo(param) { Statements; }
+		}
+
+		// object of Base Class
+		Base b;
+		// first parameter is the reference to the function
+		// and rest are arguments
+		std::thread thread_obj(&Base::foo, params);
+
+# Waiting for threads to finish
+	Once a thread has started we may need to wait for the thread to finish before we can take some action. 
+To wait for a thread, use the std::thread::join() function. This function makes the current thread wait until the thread 
+identified by *this has finished executing.
+For instance, to block the main thread until thread t1 has finished we would do:
+
+		int main()
+		{
+			// Start thread t1
+			std::thread t1(callable);
+
+			// Wait for t1 to finish
+			t1.join();
+
+			// t1 has finished do other stuff
+			Statements;
+		}
+
+
+A Complete C++ Program For Multithreading 
+A C++ program is given below. It launches three threads from the main function. Each thread is called using one of the callable objects specified above.
+
+// C++ program to demonstrate
+// multithreading using three
+// different callables.
+#include <iostream>
+#include <thread>
+using namespace std;
+
+// A dummy function
+void foo(int Z)
+{
+    for (int i = 0; i < Z; i++) {
+        cout << "Thread using function"
+                " pointer as callable\n";
+    }
+}
+
+// A callable object
+class thread_obj {
+public:
+    void operator()(int x)
+    {
+        for (int i = 0; i < x; i++)
+            cout << "Thread using function"
+                    " object as callable\n";
+    }
+};
+
+// class definition
+class Base {
+public:
+    // non-static member function
+    void foo()
+    {
+        cout << "Thread using non-static member function "
+                "as callable"
+             << endl;
+    }
+    // static member function
+    static void foo1()
+    {
+        cout << "Thread using static member function as "
+                "callable"
+             << endl;
+    }
+};
+
+// Driver code
+int main()
+{
+    cout << "Threads 1 and 2 and 3 "
+            "operating independently"
+         << endl;
+
+    // This thread is launched by using
+    // function pointer as callable
+    thread th1(foo, 3);
+
+    // This thread is launched by using
+    // function object as callable
+    thread th2(thread_obj(), 3);
+
+    // Define a Lambda Expression
+    auto f = [](int x) {
+        for (int i = 0; i < x; i++)
+            cout << "Thread using lambda"
+                    " expression as callable\n";
+    };
+
+    // This thread is launched by using
+    // lambda expression as callable
+    thread th3(f, 3);
+
+    // object of Base Class
+    Base b;
+  
+    thread th4(&Base::foo, &b);
+
+    thread th5(&Base::foo1);
+
+    // Wait for the threads to finish
+    // Wait for thread t1 to finish
+    th1.join();
+
+    // Wait for thread t2 to finish
+    th2.join();
+
+    // Wait for thread t3 to finish
+    th3.join();
+
+    // Wait for thread t4 to finish
+    th4.join();
+
+    // Wait for thread t5 to finish
+    th5.join();
+
+    return 0;
+}
+
+
+########################Storage Class#################################
+Specifier     	           Scope	        Lifetime	                                         Purpose
+auto	                   Local	        Until block exits	                      Automatic storage (default for local vars)
+register	               Local	        Until block exits	                     Hints to store in a CPU register
+static	                   Local/Global	    Lifetime of the program	                Retains value between function calls
+extern	                   Global	        Lifetime of the program	                 Refers to a variable/function defined elsewhere
+mutable	                   Class Member	    Lifetime of the object	                Allows modification in const objects
+thread_local	           Local/Global	    Lifetime of a thread	                Unique for each thread
