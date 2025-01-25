@@ -1,0 +1,24 @@
+vector<int> lexicographicallySmallestArray(vector<int>& nums, int limit) {
+        int n=nums.size();
+        vector<pair<int,int>> copy(n);
+        for(int i=0;i<n;i++){
+            copy[i]={nums[i],i};
+        }
+        sort(copy.begin(),copy.end());
+
+        int i=0,j=1;
+        while(j<n){
+            vector<int> pos={copy[i].second};
+            while(j<n && (copy[j].first - copy[j-1].first)<=limit){
+                pos.push_back(copy[j].second);
+                j++;
+            }
+            sort(pos.begin(),pos.end());
+            for(int k=0;k<j-i;k++){
+                nums[pos[k]]=copy[i+k].first;
+            }
+            i=j;
+            j++;
+        }
+        return nums;
+    }
