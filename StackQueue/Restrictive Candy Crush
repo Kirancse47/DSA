@@ -1,0 +1,31 @@
+string Reduced_String(int k,string s){
+        if(k==1) return "";
+        stack<pair<char,int>> st;
+        for(auto it : s){
+            if(st.empty()) {
+                st.push({it,1});
+                continue;
+            }
+            char ch=st.top().first;
+            int cnt=st.top().second;
+            if(it!=ch){
+                st.push({it,1});
+            }else{
+                if(cnt==k-1){
+                    while(cnt-- && !st.empty()) st.pop();
+                }else{
+                    st.push({it,cnt+1});
+                }
+            }
+        }
+        string ans="";
+        while(!st.empty()){
+            ans.push_back(st.top().first);
+            st.pop();
+        }
+        reverse(ans.begin(),ans.end());
+        return ans;
+    }
+
+
+gfg link - https://www.geeksforgeeks.org/problems/restrictive-candy-crush--141631/1?itm_source=geeksforgeeks&itm_medium=article&itm_campaign=practice_card
