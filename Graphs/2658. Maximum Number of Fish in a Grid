@@ -1,0 +1,23 @@
+    void dfs(int i,int j,vector<vector<int>> &g,int &r){
+        if(i<0 || i>=g.size() || j<0 || j>=g[0].size() || !g[i][j]) return;
+        r+=g[i][j];
+        g[i][j]=0;
+        dfs(i,j+1,g,r);
+        dfs(i,j-1,g,r);
+        dfs(i+1,j,g,r);
+        dfs(i-1,j,g,r);
+    }
+    int findMaxFish(vector<vector<int>>& grid) {
+        int n=grid.size(),m=grid[0].size();
+        int ans=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j]){
+                    int res=0;
+                    dfs(i,j,grid,res);
+                    ans=max(ans,res);
+                }
+            }
+        }
+        return ans;
+    }
