@@ -1,0 +1,24 @@
+    int findParent(int node,vector<int> &parent){
+        if(node==parent[node]) return node;
+        return parent[node]=findParent(parent[node],parent);
+    }
+    void unionNode(int x,int y,vector<int> &parent,vector<int> &rank){
+        if(rank[x]>rank[y]) parent[y]=x;
+        else if(rank[y]>rank[x]) parent[x]=y;
+        else{
+            parent[y]=x;
+            rank[x]++;
+        }
+    }
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        int n=edges.size();
+        vector<int> parent(n+1),rank(n+1,0);
+        for(int i=1;i<=n;i++) parent[i]=i;
+        for(auto it : edges){
+            int x=findParent(it[0],parent);
+            int y=findParent(it[1],parent);
+            if(x!=y) unionNode(x,y,parent,rank);
+            else return it;
+        }
+        return {};
+    }
