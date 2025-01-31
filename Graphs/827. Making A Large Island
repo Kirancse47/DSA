@@ -1,0 +1,53 @@
+    int dx[4]={0,0,1,-1};
+    int dy[4]={1,-1,0,0};
+    unordered_map<int,int> mp;
+    int id=2;
+
+    void dfs(int i,int j,vector<vector<int>> &grid){
+        int n=grid.size();
+        grid[i][j]=id;
+        mp[id]++;
+        for(int k=0;k<4;k++){
+            int x=i+dx[k];
+            int y=j+dy[k];
+            if(x>=0 && x<n && y>=0 && y<n && grid[x][y]==1){
+                dfs(x,y,grid);
+            }
+        }
+    } 
+
+    int largestIsland(vector<vector<int>>& grid) {
+        int n=grid.size(),cnt0=0;
+        if(n==0 || n==1) return 1;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==1){
+                    dfs(i,j,grid);
+                    id++;
+                }else if(grid[i][j]==0) cnt0++;
+            }
+        }
+        if(cnt0==0 || cnt0==1) return n*n;
+        int ans=1;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==0){
+                    int res=1;
+                    unordered_set<int> s;
+                    for(int k=0;k<4;k++){
+                        int x=i+dx[k];
+                        int y=j+dy[k];
+                        if(x>=0 && x<n && y>=0 && y<n){
+                            int gid=grid[x][y];
+                            if(gid!=0 && s.find(gid)==s.end()){
+                                res+=mp[gid];
+                                s.insert(gid);
+                            }
+                        }
+                    }
+                    ans=max(ans,res);
+                }
+            }
+        }
+        return ans;
+    }
