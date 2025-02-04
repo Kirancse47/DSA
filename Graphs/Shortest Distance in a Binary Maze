@@ -1,0 +1,30 @@
+    int shortestPath(vector<vector<int>> &grid, pair<int, int> source,pair<int, int> destination) {
+        if(source==destination) return 0;
+        if(!grid[destination.first][destination.second]) return -1;
+        int n=grid.size(),m=grid[0].size();
+        vector<vector<int>> dist(n,vector<int>(m,1e9));
+        queue<pair<int,int>> q;
+        q.push(source);
+        dist[source.first][source.second]=0;
+        int dx[]={0,0,1,-1};
+        int dy[]={1,-1,0,0};
+        while(!q.empty()){
+            auto it=q.front();q.pop();
+            int i=it.first;
+            int j=it.second;
+            for(int k=0;k<4;k++){
+                int x=i+dx[k];
+                int y=j+dy[k];
+                if(x>=0 && x<n && y>=0 && y<m && grid[x][y]==1){
+                    if(dist[x][y]>1+dist[i][j]){
+                        dist[x][y]=1+dist[i][j];
+                        if(destination.first==x && destination.second==y) return dist[x][y];
+                        q.push({x,y});
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/shortest-path-in-a-binary-maze-1655453161/1
