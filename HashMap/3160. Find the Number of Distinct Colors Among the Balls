@@ -1,0 +1,15 @@
+    vector<int> queryResults(int limit, vector<vector<int>>& que) {
+        unordered_map<int,int> ball,col;
+        vector<int> ans;
+        for(auto it : que){
+            col[it[1]]++;
+            if(ball.find(it[0])!=ball.end()){
+                int preCol=ball[it[0]];
+                col[preCol]--;
+                if(col[preCol]==0) col.erase(preCol);
+            }
+            ball[it[0]]=it[1];
+            ans.push_back(col.size());
+        }
+        return ans;
+    }
