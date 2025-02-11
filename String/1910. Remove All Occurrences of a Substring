@@ -1,0 +1,14 @@
+    string removeOccurrences(string s, string part) {
+        string ans;
+        int len=part.size();
+        char endCh=part[len-1];
+        for(auto it : s){
+            ans.push_back(it);
+            if(it==endCh && ans.size()>=len){
+                if(ans.substr(ans.size()-len)==part){
+                    ans.erase(ans.size()-len);
+                }
+            }
+        }
+        return ans;
+    }
