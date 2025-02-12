@@ -7,17 +7,15 @@
         return sum;
     }
     int maximumSum(vector<int>& nums) {
-        unordered_map<int,vector<int>> mp;
-        sort(nums.begin(),nums.end(),greater<int>());
+        unordered_map<int,int> mp;
+        int ans=-1;
         for(auto it : nums){
             int sdig=sumDigit(it);
-            if(mp[sdig].size()<2) mp[sdig].push_back(it);
-        }
-        int ans=-1;
-        for(auto it : mp){
-            if(it.second.size()==2){
-                ans=max(ans,it.second[0]+it.second[1]);
-            }
+            if(mp.find(sdig)!=mp.end()){
+                int pval=mp[sdig];
+                ans=max(ans,it+pval);
+                mp[sdig]=max(pval,it);
+            }else mp[sdig]=it;
         }
         return ans;
     }
