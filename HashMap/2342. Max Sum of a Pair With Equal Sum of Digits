@@ -1,0 +1,23 @@
+    int sumDigit(int no){
+        int sum=0;
+        while(no){
+            sum+=no%10;
+            no/=10;
+        }
+        return sum;
+    }
+    int maximumSum(vector<int>& nums) {
+        unordered_map<int,vector<int>> mp;
+        sort(nums.begin(),nums.end(),greater<int>());
+        for(auto it : nums){
+            int sdig=sumDigit(it);
+            if(mp[sdig].size()<2) mp[sdig].push_back(it);
+        }
+        int ans=-1;
+        for(auto it : mp){
+            if(it.second.size()==2){
+                ans=max(ans,it.second[0]+it.second[1]);
+            }
+        }
+        return ans;
+    }
