@@ -1,0 +1,13 @@
+    int minOperations(vector<int>& nums, int k) {
+        priority_queue<long long, vector<long long> , greater<long long>> minh;
+        for(auto it : nums) minh.push(it);
+        int ans=0;
+        while(!minh.empty() && minh.top()<k){
+            long long n1=minh.top();minh.pop();
+            long long  n2=minh.top();minh.pop();
+            long long  n=((min(n1,n2)*2) + max(n1,n2));
+            minh.push(n);
+            ans++;
+        }
+        return ans;
+    }
