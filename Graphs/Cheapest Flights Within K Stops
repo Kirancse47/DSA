@@ -1,0 +1,28 @@
+    int CheapestFLight(int n, vector<vector<int>>& flights, int src, int dst, int K)  {
+        vector<vector<int>> adj[n];
+        for(auto it : flights){
+            adj[it[0]].push_back({it[1],it[2]});
+        }
+        queue<pair<int,pair<int,int>> >q;
+        q.push({0,{src,0}});
+        vector<int> dis(n,1e9);
+        dis[src]=0;
+        while(!q.empty()){
+            auto ft=q.front();q.pop();
+            int step=ft.first;
+            int node=ft.second.first;
+            int dist=ft.second.second;
+            for(auto it : adj[node]){
+                int next=it[0];
+                int nextd=it[1];
+                if(dis[next]>dist+nextd && step<=K){
+                    dis[next]=dist+nextd;
+                    q.push({step+1,{next,dis[next]}});
+                }
+            }
+        }
+        if(dis[dst]!=1e9) return dis[dst];
+        return -1;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/cheapest-flights-within-k-stops/1
