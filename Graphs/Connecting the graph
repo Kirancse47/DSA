@@ -1,0 +1,46 @@
+class DisjointSet{
+    public:
+        vector<int> parent,size;
+        DisjointSet(int n){
+            size.resize(n,1);
+            parent.resize(n);
+            for(int i=0;i<n;i++) parent[i]=i;
+        }
+        int findParent(int u){
+            if(u==parent[u]) return u;
+            return parent[u]=findParent(parent[u]);
+        }
+        void unionNodes(int u,int v){
+            int pu=findParent(u);
+            int pv=findParent(v);
+            if(pu==pv) return;
+            if(size[pu]>size[pv]){
+                parent[pv]=pu;
+                size[pu]+=size[pv];
+            }else{
+                parent[pu]=pv;
+                size[pv]+=size[pu];
+            }
+        }
+};
+class Solution {
+  public:
+    int Solve(int n, vector<vector<int>>& edge) {
+        DisjointSet ds(n);
+        int nre=0;
+        for(auto it : edge){
+            int pu=ds.findParent(it[0]);
+            int pv=ds.findParent(it[1]);
+            if(pu==pv) nre++;
+            else ds.unionNodes(pu,pv);
+        }
+        int ncc=0;
+        for(int i=0;i<n;i++){
+            if(ds.parent[i]==i) ncc++;
+        }
+        if(nre>=ncc-1) return ncc-1;
+        else return -1;
+    }
+};
+
+gfg link - https://www.geeksforgeeks.org/problems/connecting-the-graph/1
