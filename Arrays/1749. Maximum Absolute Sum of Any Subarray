@@ -1,0 +1,19 @@
+    int kadane(vector<int>a){
+        int sum=0;
+        int maxSum=0;
+        for(auto it : a){
+            sum+=it;
+            maxSum=max(maxSum,sum);
+            if(sum<0) sum=0;
+        }
+        return maxSum;
+    }
+
+    int maxAbsoluteSum(vector<int>& nums) {
+        int ans=kadane(nums);
+        for(auto &it : nums){
+            it*=(-1);
+        }
+        ans=max(ans,kadane(nums));
+        return ans;
+    }
