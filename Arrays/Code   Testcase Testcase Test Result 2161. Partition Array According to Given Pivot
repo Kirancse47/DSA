@@ -1,0 +1,13 @@
+    vector<int> pivotArray(vector<int>& nums, int pivot) {
+        int n=nums.size();
+        vector<int> ans(n);
+        int l=0,r=n-1;
+        int al=0,ar=n-1;
+        while(l<n){
+            if(nums[l]<pivot) ans[al++]=nums[l];
+            if(nums[r]>pivot) ans[ar--]=nums[r];
+            l++;r--;
+        }
+        for(int i=al;i<=ar;i++) ans[i]=pivot;
+        return ans;
+    }
