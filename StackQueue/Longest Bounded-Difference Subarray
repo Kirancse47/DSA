@@ -22,3 +22,5 @@
         for(int i=st;i<=en;i++) res.push_back(arr[i]);
         return res;
     }
+
+gfg link - https://www.geeksforgeeks.org/problems/longest-bounded-difference-subarray/1
