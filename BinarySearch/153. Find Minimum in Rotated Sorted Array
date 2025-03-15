@@ -4,6 +4,10 @@
         int ans=INT_MAX;
         while(i<=j){
             int m=i+(j-i)/2;
+            if(nums[i]<=nums[j]){
+                ans=min(ans,nums[i]);
+                return ans;
+            }
             if(nums[i]<=nums[m]){
                 ans=min(ans,nums[i]);
                 i=m+1;
