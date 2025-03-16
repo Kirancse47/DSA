@@ -1,0 +1,16 @@
+    int jump(vector<int>& nums) {
+        int n=nums.size();
+        int jump=0;
+        int curMax=0;
+        int curReach=0;
+        for(int i=0;i<n-1;i++){
+            curMax=max(curMax,i+nums[i]);
+            if(i>curReach) return -1;
+            if(i==curReach){
+                jump++;
+                curReach=curMax;
+            }
+        }
+        if(curReach<n-1) return -1;
+        return jump;
+    }
