@@ -1,0 +1,19 @@
+    int longestNiceSubarray(vector<int>& nums) {
+        int n=nums.size();
+        int i=0,j=0;
+        int xors=0;
+        int curs=0;
+        int ans=1;
+        while(j<n){
+            curs+=nums[j];
+            xors^=nums[j];
+            while(xors!=curs){
+                curs-=nums[i];
+                xors^=nums[i];
+                i++;
+            }
+            ans = max(ans,j-i+1);
+            j++;
+        }
+        return ans;
+    }
