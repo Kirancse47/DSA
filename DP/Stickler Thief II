@@ -1,0 +1,15 @@
+    int solve(int i,vector<int> &arr,vector<int> &dp){
+        if(i<=0) return 0;
+        if(dp[i]!=-1) return dp[i];
+        return dp[i]=max(arr[i-1]+solve(i-2,arr,dp),solve(i-1,arr,dp));
+    }
+    int maxValue(vector<int>& arr) {
+        int n=arr.size();
+        vector<int> left=arr,right=arr;
+        left.erase(left.begin());
+        right.pop_back();
+        vector<int> dp1(n,-1),dp2(n,-1);
+        return max(solve(n-1,left,dp1),solve(n-1,right,dp2));
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/house-robber-ii/1
