@@ -1,0 +1,18 @@
+    int solve(int i,string &digits,vector<int> &dp){
+        if(i==digits.size()) return 1;
+        if(digits[i]=='0') return 0;
+        if(dp[i]!=-1) return dp[i];
+        if(i==digits.size()-1) return dp[i]=solve(i+1,digits,dp);
+        string len2=digits.substr(i,2);
+        if(len2<="26") return dp[i]=solve(i+1,digits,dp)+solve(i+2,digits,dp);
+        return dp[i]=solve(i+1,digits,dp);
+    }
+  
+    int countWays(string &digits) {
+        int n=digits.size();
+        if(digits[0]=='0') return 0;
+        vector<int> dp(n,-1);
+        return solve(0,digits,dp);
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/total-decoding-messages1235/1
