@@ -1199,6 +1199,7 @@ Flags used with gcc/g++ command
 6) -C 		-> to get the compiled code without linking
 7) -Werror	-> to treat all the warnings as error
 8) -v 		-> verbose (to display internal compilation output to console)
+9) -w           -> to disable all the warnings 
 
 
 
