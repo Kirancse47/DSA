@@ -1,0 +1,18 @@
+    long long countPair(vector<int> &nums,int cmp){
+        int n=nums.size();
+        int i=0,j=n-1;
+        long long ans=0;
+        while(i<j){
+            int sum=nums[i]+nums[j];
+            if(sum>cmp){
+                ans+=(j-i);
+                j--;
+            }else i++;
+        }
+        return ans;
+    }
+
+    long long countFairPairs(vector<int>& nums, int lower, int upper) {
+        sort(nums.begin(),nums.end());
+        return countPair(nums,lower-1)-countPair(nums,upper);
+    }
