@@ -1,8 +1,11 @@
 ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-        ListNode *pa=headA, *pb=headB;
-        while(pa!=pb){
-            pa = pa ? pa->next : headB;
-            pb = pb ? pb->next : headA;
+        ListNode *ptra=headA, *ptrb=headB;
+        while(ptra!=ptrb){
+            ptra = ptra->next; 
+            ptrb = ptrb->next;
+            if(!ptra && !ptrb) return NULL;
+            if(!ptra) ptra=headB;
+            if(!ptrb) ptrb=headA;
         }
-        return pa;
+        return ptra;
     }
