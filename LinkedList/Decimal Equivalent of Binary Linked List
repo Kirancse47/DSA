@@ -1,0 +1,11 @@
+    long long unsigned int decimalValue(Node *head) {
+        Node* cur=head;
+        long long unsigned int ans=0,mod=1e9+7;
+        while(cur){
+            ans=(ans<<1 | cur->data)%mod;
+            cur=cur->next;
+        }
+        return ans;
+    }
+
+gff link - https://www.geeksforgeeks.org/problems/decimal-equivalent-of-binary-linked-list/1
