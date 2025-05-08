@@ -1,0 +1,27 @@
+    int minTimeToReach(vector<vector<int>>& moveTime) {
+        int n=moveTime.size(),m=moveTime[0].size();
+        vector<vector<int>> dis(n,vector<int>(m,INT_MAX));
+        priority_queue<vector<int>,vector<vector<int>>,greater<vector<int>>> minH;
+        minH.push({0,0,0});
+        moveTime[0][0]=0;
+        int dx[]={0,0,1,-1};
+        int dy[]={1,-1,0,0,};
+        while(!minH.empty()){
+            auto it = minH.top();minH.pop();
+            int curTime=it[0];
+            int i=it[1],j=it[2];
+            if(i==n-1 && j==m-1) return curTime;
+            for(int k=0;k<4;k++){
+                int x=i+dx[k];
+                int y=j+dy[k];
+                if(x>=0 && x<n && y>=0 && y<m){
+                    int nextTime=max(moveTime[x][y],curTime)+1;
+                    if(dis[x][y]>nextTime) {
+                        dis[x][y]=nextTime;
+                        minH.push({nextTime,x,y});
+                    }
+                }
+            }
+        }
+        return -1;
+    }
