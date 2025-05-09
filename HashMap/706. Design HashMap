@@ -1,0 +1,59 @@
+struct node{
+    int key;
+    int val;
+    node* next;
+    node(int k,int v){
+        key=k;
+        val=v;
+        next=NULL;
+    }
+};
+
+class MyHashMap {
+    vector<node*> mp;
+    static const int size=1009;
+public:
+    MyHashMap() {
+        mp.resize(size);
+        for(int i=0;i<size;i++){
+            mp[i]=new node(-1,-1);
+        }
+    }
+    
+    void put(int key, int value) {
+        if(key==-1) return;
+        int hash=key%size;
+        node *ptr=mp[hash];
+        while(ptr->next){
+            if(ptr->next->key==key) {
+                ptr->next->val=value;
+                return;
+            }
+            ptr=ptr->next;
+        }
+        ptr->next=new node(key,value);
+    }
+    
+    int get(int key) {
+        int hash=key%size;
+        node *ptr=mp[hash]->next;
+        while(ptr){
+            if(ptr->key==key) return ptr->val;
+            ptr=ptr->next;
+        }
+        return -1;
+    }
+    
+    void remove(int key) {
+        int hash=key%size;
+        node *ptr=mp[hash];
+        while(ptr && ptr->next && ptr->next->key!=key){
+            ptr=ptr->next;
+        }
+        if(ptr->next){
+            node *tmp=ptr->next;
+            ptr->next=ptr->next->next;
+            delete tmp;
+        }
+    }
+};
