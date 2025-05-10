@@ -1,27 +1,50 @@
-void insert(struct TrieNode *root, string key)
-{
-    // code here
-    TrieNode* node=root;
-    for(auto it : key){
-        if(node->children[it-'a']==NULL){
-            node->children[it-'a']=getNode();
+struct Node{
+    Node* link[26];
+    bool flag;
+    Node(){
+        for(int i=0;i<26;i++){
+            link[i]=NULL;
         }
-        node=node->children[it-'a'];
+        flag=false;
     }
-    node->isLeaf=true;
-}
+};
 
-//Function to use TRIE data structure and search the given string.
-bool search(struct TrieNode *root, string key) {
-    // code here
-    TrieNode* node=root;
-    for(auto it : key){
-        if(node->children[it-'a']==NULL){
-            return false;
-        }
-        node=node->children[it-'a'];
+class Trie {
+  public:
+    Node *head;
+    Trie() {
+        head=new Node();
     }
-    return node->isLeaf;
-}
+
+    void insert(string &word) {
+        // insert word into Trie
+        Node *ptr=head;
+        for(auto it : word){
+            if(!ptr->link[it-'a']) ptr->link[it-'a']=new Node();
+            ptr=ptr->link[it-'a'];
+        }
+        ptr->flag=true;
+    }
+
+    bool search(string &word) {
+        // search word in the Trie
+        Node *ptr=head;
+        for(auto it : word){
+            if(!ptr->link[it-'a']) return false;
+            ptr=ptr->link[it-'a'];
+        }
+        return ptr->flag;
+    }
+
+    bool isPrefix(string &word) {
+        // search prefix word in the Trie
+        Node *ptr=head;
+        for(auto it : word){
+            if(!ptr->link[it-'a']) return false;
+            ptr=ptr->link[it-'a'];
+        }
+        return true;
+    }
+};
 
 Link - https://practice.geeksforgeeks.org/problems/trie-insert-and-search0651/1
