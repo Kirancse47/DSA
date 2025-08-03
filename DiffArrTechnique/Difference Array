@@ -1,0 +1,16 @@
+    vector<int> diffArray(vector<int>& arr, vector<vector<int>>& opr) {
+        int n=arr.size();
+        vector<int> diffA(n+1,0);
+        for(auto it : opr){
+            int l=it[0],r=it[1],v=it[2];
+            diffA[l]+=v;
+            diffA[r+1]-=v;
+        }
+        for(int i=0;i<n;i++){
+            if(i!=0) diffA[i]+=diffA[i-1];
+            arr[i]+=diffA[i];
+        }
+        return arr;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/difference-array/1
