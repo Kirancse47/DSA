@@ -1,0 +1,20 @@
+    vector<vector<int>> applyDiff2D(vector<vector<int>>& mat,vector<vector<int>>& opr) {
+        int n=mat.size(),m=mat[0].size();
+        vector<vector<int>> diff(n,vector<int>(m+1,0));
+        for(auto it : opr){
+            int v=it[0],r1=it[1],c1=it[2],r2=it[3],c2=it[4];
+            for(int i=r1;i<=r2;i++){
+                diff[i][c1]+=v;
+                diff[i][c2+1]-=v;
+            }
+        }
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(j!=0) diff[i][j]+=diff[i][j-1];
+                mat[i][j]+=diff[i][j];
+            }
+        }
+        return mat;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/2-d-difference-array/1
