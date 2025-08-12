@@ -1,0 +1,22 @@
+    vector<int> minMaxCandy(vector<int>& prices, int k) {
+        sort(prices.begin(),prices.end());
+        int n=prices.size();
+        if(k==0){
+            int sum=accumulate(prices.begin(),prices.end(),0);
+            return {sum,sum};
+        }
+        int mn=0,mx=0;
+        int i=0,j=n-1;
+        while(i<=j){
+            mn+=prices[i++];
+            j-=k;
+        }
+        i=0,j=n-1;
+        while(i<=j){
+            mx+=prices[j--];
+            i+=k;
+        }
+        return {mn,mx};
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/shop-in-candy-store1145/1
