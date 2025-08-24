@@ -1,0 +1,21 @@
+    // Function to merge k sorted arrays.
+    vector<int> mergeKArrays(vector<vector<int>> arr, int k) {
+        priority_queue<pair<int,pair<int,int>>,vector<pair<int,pair<int,int>>>,greater<pair<int,pair<int,int>>> > minh;
+        vector<int> idx(k,0);
+        for(int i=0;i<k;i++){
+            minh.push({arr[i][0],{i,0}});
+        }
+        vector<int> ans;
+        while(!minh.empty()){
+            auto it = minh.top();minh.pop();
+            ans.push_back(it.first);
+            int i=it.second.first; //array 
+            int j=it.second.second; //idx in array
+            if(j+1 < k){
+                minh.push({arr[i][j+1],{i,j+1}});
+            }
+        }
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/merge-k-sorted-arrays/1
