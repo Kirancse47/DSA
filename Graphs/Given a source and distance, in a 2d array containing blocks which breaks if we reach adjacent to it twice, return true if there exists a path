@@ -1,0 +1,55 @@
+
+struct Cell {
+    int x, y;
+};
+
+bool isValid(int x, int y, int n, int m) {
+    return x >= 0 && y >= 0 && x < n && y < m;
+}
+
+bool existsPath(vector<vector<int>>& grid, pair<int,int> src, pair<int,int> dst) {
+    int n = grid.size();
+    int m = grid[0].size();
+
+    vector<vector<int>> visited(n, vector<int>(m, 0));
+    vector<vector<int>> adjCount(n, vector<int>(m, 0)); // count adjacency touches
+
+    queue<Cell> q;
+    q.push({src.first, src.second});
+    visited[src.first][src.second] = 1;
+
+    int dx[4] = {1, -1, 0, 0};
+    int dy[4] = {0, 0, 1, -1};
+
+    while (!q.empty()) {
+        auto cur = q.front(); q.pop();
+
+        if (cur.x == dst.first && cur.y == dst.second) {
+            return true;
+        }
+
+        for (int k = 0; k < 4; k++) {
+            int nx = cur.x + dx[k];
+            int ny = cur.y + dy[k];
+
+            if (!isValid(nx, ny, n, m)) continue;
+
+            if (grid[nx][ny] == 0 && !visited[nx][ny]) {
+                // Normal free cell
+                visited[nx][ny] = 1;
+                q.push({nx, ny});
+            } 
+            else if (grid[nx][ny] == 1) {
+                // It's a block → increase adjacency count
+                adjCount[nx][ny]++;
+                if (adjCount[nx][ny] >= 2) {
+                    // Block breaks, treat as free
+                    grid[nx][ny] = 0;
+                    visited[nx][ny] = 1;
+                    q.push({nx, ny});
+                }
+            }
+        }
+    }
+    return false;
+}
