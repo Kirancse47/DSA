@@ -1,0 +1,16 @@
+    void solve(TreeNode* root,int t,vector<int> &res,vector<vector<int>> &ans){
+        if(!root) return;
+        res.push_back(root->val);
+        if(!root->left && !root->right && t==root->val) ans.push_back(res);
+        solve(root->left,t-root->val,res,ans);
+        solve(root->right,t-root->val,res,ans);
+        res.pop_back();
+    }
+
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+        vector<vector<int>> ans;
+        vector<int> res;
+        if(!root) return ans;
+        solve(root,targetSum,res,ans);
+        return ans;
+    }
