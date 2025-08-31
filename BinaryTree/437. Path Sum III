@@ -1,0 +1,18 @@
+    void solve(TreeNode* root,long long sum,int t,unordered_map<long long,int> &mp,int &ans){
+        if(!root) return;
+        sum+=root->val;
+        ans+=mp[sum-t];
+        mp[sum]++;
+        solve(root->left,sum,t,mp,ans);
+        solve(root->right,sum,t,mp,ans);
+        mp[sum]--;
+    }
+
+    int pathSum(TreeNode* root, int targetSum) {
+        int ans=0;
+        if(!root) ans;
+        unordered_map<long long,int> mp;
+        mp[0]++;
+        solve(root,0,targetSum,mp,ans);
+        return ans;
+    }
