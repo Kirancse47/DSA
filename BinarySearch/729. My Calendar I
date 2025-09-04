@@ -1,0 +1,13 @@
+class MyCalendar {
+    map<int,int> intervals;
+public:
+    MyCalendar() {
+        
+    }
+    bool book(int startTime, int endTime) {
+        auto it = intervals.lower_bound(startTime+1);
+        if(it!=intervals.end() && it->second<endTime) return false;
+        intervals[endTime]=startTime;
+        return true;
+    }
+};
