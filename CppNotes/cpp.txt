@@ -2118,3 +2118,50 @@ static	                   Local/Global	    Lifetime of the program	             
 extern	                   Global	        Lifetime of the program	                 Refers to a variable/function defined elsewhere
 mutable	                   Class Member	    Lifetime of the object	                Allows modification in const objects
 thread_local	           Local/Global	    Lifetime of a thread	                Unique for each thread
+
+
+
+##########################################################################
+include guards with #ifdef / #endif (or #ifndef / #define / #endif)
+##########################################################################
+When you include header files in C++, sometimes the same header file may be included multiple times (directly or indirectly). This can cause redefinition errors (functions, variables, classes getting declared multiple times).
+
+To avoid this, we use include guards with #ifdef / #endif (or #ifndef / #define / #endif).
+
+Example:
+// MyHeader.h
+#ifndef MYHEADER_H   // check if not defined
+#define MYHEADER_H   // define it
+
+class MyClass {
+public:
+    void print();
+};
+
+#endif // MYHEADER_H
+
+
+*How it works:
+#ifndef checks if the macro (MYHEADER_H) is not defined yet.
+If not defined, it defines it and includes the code inside.
+Next time the header is included, MYHEADER_H is already defined → so compiler skips the whole header → prevents multiple definitions.
+
+*Uses of #ifdef / #endif in header files:
+Prevent multiple inclusions of the same header (classic use).
+Conditional compilation – include certain code only if a macro is defined.
+
+#ifdef DEBUG
+#define LOG(x) std::cout << x << std::endl
+#else
+#define LOG(x)
+#endif
+
+
+→ Useful for enabling/disabling debugging or platform-specific code.
+Cross-platform code – e.g., different headers for Windows vs Linux.
+
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
