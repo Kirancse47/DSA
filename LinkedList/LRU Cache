@@ -1,79 +1,69 @@
-class LRUCache
-{
-    private:
+struct Node{
+    int key;
+    int val;
+    Node* next;
+    Node* prev;
+    Node(int k,int v){
+        key=k;
+        val=v;
+        next=NULL;
+        prev=NULL;
+    }
+};
 
-    public:
-    class node{
-        public:
-            int key;
-            int val;
-            node* next;
-            node* prev;
-            node(int x,int y){
-                key=x;
-                val=y;
-            }
-    };
-    
-    node* head=new node(-1,-1);
-    node* tail=new node(-1,-1);
+class LRUCache {
+    unordered_map<int,Node*> mp;
     int capacity;
-    unordered_map<int, node*>mp;
-    
-    //Constructor for initializing the cache capacity with the given value.
-    LRUCache(int cap)
-    {
-        // code here
+    Node* front;
+    Node* rear;
+  public:
+    LRUCache(int cap) {
         capacity=cap;
-        head->next=tail;
-        tail->prev=head;
+        front=new Node(-1,-1);
+        rear=new Node(-1,-1);
+        front->next=rear;
+        rear->prev=front;
+    }
+
+    void putFront(Node* node){
+        node->next=front->next;
+        node->prev=front;
+        
+        front->next->prev=node;
+        front->next=node;
     }
     
-    void addnode(node* newnode) {
-        node* temp = head->next;
-        newnode->next = temp;
-        newnode->prev = head;
-        head->next = newnode;
-        temp->prev = newnode;
+    void removeNode(Node* node){
+        node->prev->next = node->next;
+        node->next->prev = node->prev;
     }
     
-    void deletenode(node* delnode) {
-        node* delprev = delnode->prev;
-        node* delnext = delnode->next;
-        delprev->next = delnext;
-        delnext->prev = delprev;
+    int get(int key) {
+        if(mp.find(key)==mp.end()) return -1;
+        Node* node=mp[key];
+        removeNode(node);
+        putFront(node);
+        return node->val;
     }
-    
-    //Function to return value corresponding to the key.
-    int get(int key)
-    {
-        // your code here
+
+    void put(int key, int value) {
+        if(capacity==0) return;
         if(mp.find(key)!=mp.end()){
-            node* ansN=mp[key];
-            int v=ansN->val;
-            deletenode(ansN);
-            addnode(ansN);
-            mp[key]=head->next;
-            return v;
+            Node* node=mp[key];
+            node->val=value;
+            removeNode(node);
+            putFront(node);
+        }else{
+            if(mp.size()>=capacity){
+                Node *temp=rear->prev;
+                mp.erase(temp->key);
+                removeNode(temp);
+                delete(temp);
+            }
+            Node *node=new Node(key,value);
+            mp[key]=node;
+            putFront(node);
         }
-        return -1;
-    }
-    
-    //Function for storing key-value pair.
-    void set(int key, int value)
-    {
-        // your code here
-        if(mp.find(key)!=mp.end()){
-            node* existN=mp[key];
-            mp.erase(key);
-            deletenode(existN);
-        }
-        if(mp.size()==capacity){
-            mp.erase(tail->prev->key);
-            deletenode(tail->prev);
-        }
-        addnode(new node(key,value));
-        mp[key]=head->next;
     }
 };
 
