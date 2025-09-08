@@ -1,0 +1,35 @@
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+using namespace std;
+
+mutex m;
+condition_variable cv;
+bool oddTurn = true;
+
+void printOdd(int n) {
+    for (int i = 1; i <= n; i += 2) {
+        unique_lock<mutex> lock(m);
+        cv.wait(lock, [] { return oddTurn; });
+        cout << i << " ";
+        oddTurn = false;
+        cv.notify_all();
+    }
+}
+
+void printEven(int n) {
+    for (int i = 2; i <= n; i += 2) {
+        unique_lock<mutex> lock(m);
+        cv.wait(lock, [] { return !oddTurn; });
+        cout << i << " ";
+        oddTurn = true;
+        cv.notify_all();
+    }
+}
+
+int main() {
+    int n = 10;
+    thread t1(printOdd, n), t2(printEven, n);
+    t1.join(); t2.join();
+}
