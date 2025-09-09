@@ -1,0 +1,50 @@
+                                                                 GDB Cheat Sheet
+#Starting gdb
+gdb ./a.out                    # Start with executable
+gdb ./a.out core               # Debug with core dump
+gdb ./a.out <pid>              # Attach to running process
+
+#Running Program
+run arg1 arg2                  # Run program with args
+start                          # Run and stop at main
+continue / c                   # Resume execution
+
+#Breakpoints
+break main                     # Break at main
+break 25                       # Break at line 25
+break file.cpp:40              # Break at line 40 in file.cpp
+tbreak main                    # Temporary breakpoint
+delete 1                       # Delete breakpoint 1
+info breakpoints               # Show all breakpoints
+
+#Stepping
+step / s                       # Step into function
+next / n                       # Step over function
+finish                         # Run until function returns
+until                          # Run until loop/line exits
+
+#Inspecting Code
+list                           # Show source code
+backtrace / bt                 # Show call stack
+frame 2                        # Switch to frame 2
+info locals                    # Show local variables
+info args                      # Show function arguments
+
+#Variables & Memory
+print x                        # Print variable x
+display x                      # Auto print x each step
+set var x=10                   # Change variable value
+x/4xw &arr                     # Examine memory (4 words hex)
+
+#Threads
+info threads                   # Show all threads
+thread 3                       # Switch to thread 3
+break foo if x==5              # Conditional breakpoint
+
+#Watchpoints
+watch x                        # Stop when x changes
+rwatch x                       # Stop when x is read
+awatch x                       # Stop on read/write
+
+#Exiting
+quit / q                       # Exit gdb
