@@ -911,6 +911,43 @@ TYPE CASTING
 		* run time casting only for class pointer and references
 		* run time checks
 		* in case of invalid cast will result to null pointer or bas::bad_cast exception
+        * To work with dynamic_cast, there must be one virtual function in the base class.
+#include <iostream>
+using namespace std;
+
+class Base {
+    virtual void print() {
+        cout << "Base" << endl;
+    }
+};
+
+// Derived1 class declaration
+class Derived1 : public Base {
+    void print() {
+        cout << "Derived1" << endl;
+    }
+};
+
+// Derived2 class declaration
+class Derived2 : public Base {
+    void print() {
+        cout << "Derived2" << endl;
+    }
+};
+
+int main() {
+    Derived1 d1;
+    Base* bp = &d1;
+
+    // Dynamic Casting
+    Derived2* dp2 = dynamic_cast<Derived2*>(bp);
+    if (dp2 == nullptr)
+        cout << "Casting Failed" << endl;
+    else
+        cout << "Casting Successful" << endl;
+
+    return 0;
+}
 		
    iii) const_cast
 #include <iostream>
