@@ -1,0 +1,28 @@
+    bool check(int dis,vector<int> &sta,int k){
+        int pos=sta[0];
+        int cow=1;
+        for(int i=1;i<sta.size();i++){
+            if(sta[i]-pos >= dis){
+                cow++;
+                pos=sta[i];
+            }
+            if(cow==k) return true;
+        }
+        return false;
+    }
+    
+    int aggressiveCows(vector<int> &stalls, int k) {
+        sort(stalls.begin(),stalls.end());
+        int low=1,high=stalls[stalls.size()-1]-stalls[0];
+        int ans=-1;
+        while(low<=high){
+            int mid=low+(high-low)/2;
+            if(check(mid,stalls,k)){
+                ans=mid;
+                low=mid+1;
+            }else high=mid-1;
+        }
+        return ans;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/aggressive-cows/1
