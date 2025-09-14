@@ -1,0 +1,14 @@
+    int celebrity(vector<vector<int>>& mat) {
+        int n=mat.size();
+        int cand=0;
+        for(int i=1;i<n;i++){
+            if(mat[cand][i]) cand=i;
+        }
+        for(int j=0;j<n;j++){
+            if(j==cand) continue;
+            if(mat[cand][j] || !mat[j][cand]) return -1;
+        }
+        return cand;
+    }
+
+gfg link - https://www.geeksforgeeks.org/problems/the-celebrity-problem/1
