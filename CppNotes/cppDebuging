@@ -1,36 +1,56 @@
-
-calss A{
+#1.
+class A {
 public:
-A(){}
-    void virtual fun(){
-    	cout<<"Kiran";
-    };
+    A(){}
+    virtual void fun(){  // virtual for runtime polymorphism
+        cout<<"Kiran";
+    }
 
-void fun2(){
-    cout<<"fun2 A";
-}
+    void fun2(){   // non-virtual
+        cout<<"fun2 A";
+    }
 };
 
-class B:public A{
-    public:
-    	B(){}
-    	void fun(){
-    		cout<<"Pine Labs";
-    	}
-    	void fun2(){
-    		cout<<"fun2 B";
-    	}
+class B: public A {
+public:
+    B(){}
+    void fun(){    // overrides A::fun
+        cout<<"Pine Labs";
+    }
+    void fun2(){   // hides A::fun2 (not virtual)
+        cout<<"fun2 B";
+    }
 };
 
 int main(){
-    A *p=new B();
-    p->fun();
-    p->fun2();
-    return 0;
+    A *p = new B();
+    p->fun();   // prints "Pine Labs" (dynamic dispatch, because fun is virtual)
+    p->fun2();  // prints "fun2 A" (static dispatch, because fun2 is not virtual)
+}
+✅ Explanation:
+
+fun() is virtual → resolved at runtime, uses B's version.
+
+fun2() is non-virtual → resolved at compile-time, uses A's version.
+
+#2.
+
+struct A {
+    virtual void f(int) { cout << "A::f(int)\n"; }
+};
+
+struct B : A {
+    using A::f;  // ✅ Make base class overloads visible
+    void f(double) { cout << "B::f(double)\n"; }
+};
+
+int main() {
+    B b;
+    b.f(5);      // calls A::f(int)
+    b.f(3.14);   // calls B::f(double)
 }
 
-
-
+#3.
 void print(const int& x) {
     int& y = const_cast<int&>(x); 
     y = 10; 
@@ -41,9 +61,15 @@ int main() {
     const int a = 5;
     print(a);
 }
+❌ This is undefined behavior.
 
+You are trying to modify a const int (a) via const_cast.
 
+Modifying an object that was declared const is UB in C++.
 
+👉 If a were non-const (e.g. int a=5;), then const_cast would be safe.
+
+#4.
 class MyString {
     char* str;
 public:
@@ -52,47 +78,477 @@ public:
         strcpy(str, s);
     }
     ~MyString() {
-        delete str;  
+        delete str;  // ❌ should be delete[]
     }
-   MyString MyString(const MyString &s){
-    	MyString temp;
-    	temp.str=new char[strlen(s)+1];
-    	strcpy(temp.str,s.str);
-    	return temp;
+
+    MyString MyString(const MyString &s){  // ❌ wrong declaration
+        MyString temp;
+        temp.str = new char[strlen(s.str)+1]; // also ❌ s is object, not pointer
+        strcpy(temp.str, s.str);
+        return temp; // ❌ copy ctor should not return
     }
 };
+🚩 Problems:
 
-int main() {
-    MyString s1("Hello");
-    MyString s2 = s1;
+Destructor uses delete instead of delete[].
+
+Copy constructor is written as MyString MyString(...) → this declares a function named MyString returning MyString, not a constructor.
+
+Copy constructor should not return anything.
+
+You used strlen(s) instead of strlen(s.str).
+
+✅ Correct version:
+
+cpp
+Copy code
+MyString(const MyString& s) {
+    str = new char[strlen(s.str) + 1];
+    strcpy(str, s.str);
 }
 
-
-
+#5.
 int* foo() {
     int* p = new int(42);
-    return p;
+    return p;   // valid
 }
 int main() {
     int* x = foo();
-    cout << *x << endl;
+    cout << *x << endl;  // prints 42
+    delete x;            // cleanup
+}
+✅ This is fine:
+
+foo returns a pointer to heap memory.
+
+The caller owns it and must delete it.
+
+You correctly dereference it with *x.
+
+6. Wrong Destructor (Memory Leak / Double Free)
+class A {
+    int* arr;
+public:
+    A(int n) {
+        arr = new int[n];
+    }
+    ~A() {
+        delete arr;   // ❌ Bug: should be delete[]
+    }
+};
+
+
+Question: What is wrong here?
+Expected Answer:
+
+Using delete for an array is undefined behavior.
+
+Should use delete[] arr;.
+
+🔹 7. Copy Constructor Shallow Copy Bug
+class MyString {
+    char* str;
+public:
+    MyString(const char* s) {
+        str = new char[strlen(s)+1];
+        strcpy(str, s);
+    }
+    ~MyString() { delete[] str; }
+};
+ 
+int main() {
+    MyString s1("Hello");
+    MyString s2 = s1;  // ❌ Bug: shallow copy (default copy ctor)
 }
 
 
+Question: Why is this wrong?
+Expected Answer:
 
-Input:  arr = [4, 5, 2, 25]
-Output: [5, 25, 25, -1]
- 
-Input:  arr = [13, 7, 6, 12]
-Output: [-1, 12, 12, -1]
+Default copy constructor copies only the pointer, not the buffer.
+
+Destructor runs twice → double free.
+
+Need to implement a deep copy constructor.
+
+🔹 8. Const-Cast UB
+void f(const int& x) {
+    int& y = const_cast<int&>(x);
+    y = 20;   // ❌ Bug
+}
+int main() {
+    const int a = 10;
+    f(a);
+}
 
 
- 
+Answer:
+
+Modifying a const object via const_cast → undefined behavior.
+
+Only safe if the original object is non-const.
+
+🔹 9. Virtual Destructor Missing
+class Base {
+public:
+    ~Base() { cout << "Base dtor\n"; }
+};
+class Derived : public Base {
+public:
+    ~Derived() { cout << "Derived dtor\n"; }
+};
+
+int main() {
+    Base* b = new Derived();
+    delete b;   // ❌ Bug: only Base dtor called
+}
 
 
+Answer:
+
+Base destructor should be virtual to ensure proper cleanup.
+
+Otherwise, deleting through base pointer leaks Derived resources.
+
+🔹 10. Undefined Behavior with delete
+int main() {
+    int* p = new int[5];
+    delete (p+1);   // ❌ Bug
+}
 
 
+Answer:
 
+Only the pointer returned by new should be passed to delete.
+
+p+1 is not valid → undefined behavior.
+
+🔹 11. Slicing Bug
+class A {
+public:
+    int x = 10;
+    virtual void show() { cout << "A"; }
+};
+class B : public A {
+public:
+    int y = 20;
+    void show() override { cout << "B"; }
+};
+
+int main() {
+    B b;
+    A a = b;   // ❌ Bug: object slicing
+    a.show();  // prints "A"
+}
+
+
+Answer:
+
+Copying derived into base object slices off the derived part.
+
+If you want polymorphism, use references/pointers (A& a = b;).
+
+🔹 12. Wrong Return from Function
+int& foo() {
+    int x = 5;
+    return x;   // ❌ Bug: returning reference to local variable
+}
+
+
+Answer:
+
+Local variable goes out of scope. Returning reference → dangling reference → UB.
+
+Should return by value.
+
+
+🔹 1. Rule of 3/5 Violation (Copy vs Destructor Bug)
+class Buffer {
+    int* data;
+    size_t size;
+public:
+    Buffer(size_t n) : size(n) {
+        data = new int[n];
+    }
+    ~Buffer() { delete[] data; }
+};
+
+int main() {
+    Buffer b1(10);
+    Buffer b2 = b1;  // ❌ Problem
+}
+
+
+Bug:
+
+Compiler generates default copy constructor & assignment operator → shallow copy.
+
+Both b1 and b2 point to same memory → double free on destruction.
+
+Fix: Implement Rule of 3 (copy ctor, assignment operator, destructor).
+
+🔹 2. Multiple Inheritance Diamond Destructor Bug
+struct A { 
+    A() { cout << "A\n"; } 
+    ~A() { cout << "~A\n"; } 
+};
+struct B : public A { 
+    ~B() { cout << "~B\n"; } 
+};
+struct C : public A { 
+    ~C() { cout << "~C\n"; } 
+};
+struct D : public B, public C { 
+    ~D() { cout << "~D\n"; } 
+};
+
+int main() {
+    D d;   // ❌ Problem
+}
+
+
+Bug:
+
+A gets constructed twice (once via B, once via C).
+
+Multiple destruction → can cause leaks if A had resources.
+
+Fix: Make A a virtual base class.
+
+🔹 3. Thread Race with Static Local
+void f() {
+    static int counter = 0;
+    counter++;
+    cout << counter << endl;
+}
+
+int main() {
+    std::thread t1(f);
+    std::thread t2(f);
+    t1.join(); t2.join();
+}
+
+
+Bug:
+
+static local variable is shared between threads, increment is a race condition.
+
+Undefined behavior without synchronization.
+
+Fix: Protect with std::mutex or use std::atomic<int>.
+
+🔹 4. Misuse of std::move
+string getString() {
+    string s = "hello";
+    return std::move(s);   // ❌ Problem
+}
+
+
+Bug:
+
+return std::move(s) prevents RVO (return value optimization).
+
+s becomes moved-from before return, leading to pessimization.
+
+Fix: Just return s; (compiler optimizes).
+
+🔹 5. Wrong Delete with Polymorphism
+struct Base {
+    virtual void f() {}
+    ~Base() { cout << "~Base\n"; }
+};
+struct Derived : Base {
+    ~Derived() { cout << "~Derived\n"; }
+};
+
+int main() {
+    Base* b = new Derived();
+    delete b;   // ❌ Problem
+}
+
+
+Bug:
+
+Base destructor is non-virtual → only ~Base() runs.
+
+Derived part leaks.
+
+Fix: Make Base::~Base() virtual.
+
+🔹 6. ODR Violation (One Definition Rule)
+
+File1.cpp
+
+inline int foo() {
+    static int x = 0;
+    return ++x;
+}
+
+
+File2.cpp
+
+inline int foo() {
+    static int y = 100;   // ❌ different definition
+    return ++y;
+}
+
+
+Bug:
+
+Both files provide different definitions of the same inline function.
+
+ODR violation → UB at link/run time.
+
+🔹 7. Deadlock Due to Lock Ordering
+std::mutex m1, m2;
+
+void f1() {
+    std::lock_guard<std::mutex> l1(m1);
+    std::lock_guard<std::mutex> l2(m2);
+}
+void f2() {
+    std::lock_guard<std::mutex> l2(m2);
+    std::lock_guard<std::mutex> l1(m1);  // ❌ Problem
+}
+
+int main() {
+    std::thread t1(f1);
+    std::thread t2(f2);
+    t1.join(); t2.join();
+}
+
+
+Bug:
+
+Different lock order in f1 and f2 → potential deadlock.
+
+Fix: Use std::scoped_lock(m1, m2) for consistent ordering.
+
+🔹 8. Lifetime Bug with Returning Reference
+const string& foo() {
+    return string("Hello");  // ❌ returns reference to temporary
+}
+
+
+Bug:
+
+Returning reference to a temporary → dangling reference.
+
+Fix: Return by value (string foo()).
+
+🔹 9. Hidden Base Function
+struct A {
+    virtual void f(int) { cout << "A::f(int)\n"; }
+};
+struct B : A {
+    void f(double) { cout << "B::f(double)\n"; }  // ❌ hides A::f(int)
+};
+
+int main() {
+    B b;
+    b.f(5);  // calls f(double), not f(int)
+}
+
+
+Bug:
+
+A::f(int) is hidden, not overridden.
+
+b.f(5) calls f(double) instead of f(int).
+
+Fix: Add using A::f; inside B.
+
+
+#10.
+struct A {
+    int x;
+    A(int v) : x(v) {}
+};
+
+struct B : virtual public A {
+    B() : A(10) {}  // ❌ compile error
+};
+struct C : virtual public A {
+    C() : A(20) {}  // ❌ compile error
+};
+struct D : public B, public C {
+    D() : A(30), B(), C() {}  // ✅ Only the most derived (D) constructs A
+};
+🔹 The Issue
+When you use virtual inheritance, the most-derived class (here D) is responsible for constructing the virtual base (A).
+
+That means:
+
+B and C must not call A’s constructor.
+
+Only D can (and must) call A’s constructor.
+
+But in your code:
+
+cpp
+Copy code
+struct B : virtual public A {
+    B() : A(10) {}   // ❌ ERROR
+};
+and
+
+cpp
+Copy code
+struct C : virtual public A {
+    C() : A(20) {}   // ❌ ERROR
+};
+Both try to initialize A, which is illegal with virtual inheritance.
+
+The compiler complains because only D (the most-derived) can decide what value of A::x to pass.
+
+🔹 The Fix
+Remove the A(...) calls from B and C. Let D handle it:
+
+cpp
+Copy code
+struct A {
+    int x;
+    A(int v) : x(v) {}
+};
+
+struct B : virtual public A {
+    B() {}  // ✅ Don't touch A here
+};
+struct C : virtual public A {
+    C() {}  // ✅ Don't touch A here
+};
+struct D : public B, public C {
+    D() : A(30), B(), C() {}  // ✅ D constructs A
+};
+Now:
+
+cpp
+Copy code
+int main() {
+    D d;
+    cout << d.x << endl;  // prints 30
+}
+🔹 Summary
+In virtual inheritance, only the most derived class initializes the virtual base.
+
+B and C cannot call A(...) — they must leave it for D.
+
+
+#11.
+
+struct A {
+    void hello() { cout << "Hello from A\n"; }
+};
+
+struct B : public A { };
+struct C : public A { };
+struct D : public B, public C { };  // Diamond
+
+int main() {
+    D d;
+    d.hello();  // ❌ ERROR: ambiguous
+}
+==> need to inherite virtually.
 
 
 
