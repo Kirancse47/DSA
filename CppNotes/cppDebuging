@@ -713,6 +713,244 @@ Function pointer signatures must match exactly.
 
 Watch for cyclic references with shared_ptr, use weak_ptr.
 
+#1.
+
+struct A {
+    void fun(int x) { cout << "A::fun " << x << endl; }
+};
+
+int main() {
+    void (*fp)(int) = &A::fun;   // ❌ error
+    A a;
+    fp(10);
+}
+==> make fun is static as fun is non static fun or
+int main() {
+    void (A::*fp)(int) = &A::fun;   // pointer-to-member
+    A a;
+    (a.*fp)(10);                    // call through object
+}
+
+#2.
+#include <new>
+#include <iostream>
+using namespace std;
+
+int main() {
+    char buffer[sizeof(int)];
+    int* p = new(buffer) int(42);   // construct in buffer
+    cout << *p << endl;
+
+    p->~int();   // ✅ explicitly call destructor
+    // Do NOT delete p, memory is owned by buffer
+}
+
+#include <new>
+#include <iostream>
+using namespace std;
+
+struct MyClass {
+    int x;
+    MyClass(int v) : x(v) { cout << "Constructed with " << v << endl; }
+    ~MyClass() { cout << "Destroyed " << x << endl; }
+};
+
+int main() {
+    alignas(MyClass) char buffer[sizeof(MyClass)]; // raw memory
+    MyClass* obj = new(buffer) MyClass(99);        // placement new
+    cout << obj->x << endl;
+
+    obj->~MyClass();  // ✅ manually call destructor
+    // no delete, buffer is stack memory
+}
+
+#3.
+
+#include <iostream>
+using namespace std;
+
+int main() {
+    double d = 3.14;
+    int* p = reinterpret_cast<int*>(&d);  // ❌ dangerous
+    *p = 42;
+    cout << d << endl;
+}
+🔎 What happens
+reinterpret_cast<int*>(&d)
+
+Treats the address of a double as if it were an int*.
+
+But an int and a double have different sizes and representations in memory.
+
+*p = 42;
+
+Writes 4 bytes (int) into the first 4 bytes of the double.
+
+Leaves the remaining bytes of the double uninitialized/unchanged.
+
+Now d’s binary representation is corrupted.
+
+cout << d;
+
+Prints some garbage, undefined, maybe 2.07e-322 or some nonsense value.
+
+This is undefined behavior under the C++ standard, because of the strict aliasing rule:
+
+You cannot access an object of type double through an lvalue of type int* (except via char*/std::byte*).
+
+
+#4.
+int* raw = new int(5);
+std::shared_ptr<int> sp1(raw);
+std::shared_ptr<int> sp2(raw);  // ❌ issue
+What’s happening:
+raw points to a dynamically allocated integer (5).
+
+sp1 takes ownership of raw. It will delete raw when sp1 goes out of scope.
+
+sp2 also tries to take ownership of the same raw.
+
+This is dangerous because both shared_ptr objects think they are the sole owner. When they are destroyed, they will both attempt to delete raw.
+
+✅ This leads to double deletion, which is undefined behavior and can crash your program.
+
+Correct ways to do this
+1. Let shared_ptr manage the allocation directly:
+cpp
+Copy code
+std::shared_ptr<int> sp1 = std::make_shared<int>(5);
+std::shared_ptr<int> sp2 = sp1;  // ✅ Both share ownership safely
+make_shared is the recommended way.
+
+Both sp1 and sp2 now share ownership of the same memory safely.
+
+2. If you already have a raw pointer (less recommended):
+cpp
+Copy code
+int* raw = new int(5);
+std::shared_ptr<int> sp1(raw);
+std::shared_ptr<int> sp2 = sp1; // ✅ Copy constructor, safe
+Do not create a second shared_ptr from the same raw pointer.
+
+Key takeaway:
+Never construct two shared_ptrs from the same raw pointer.
+
+Always share ownership via copying an existing shared_ptr.
+
+#5.
+struct A { int x; };
+struct B : virtual A {};
+struct C : virtual A {};
+struct D : B, C {};
+
+int main() {
+    D d;
+    A* ap = &d;  // ❌ does this work?
+}
+Key points:
+B and C inherit virtually from A.
+
+Virtual inheritance means there is only one shared A subobject in D.
+
+D inherits from B and C.
+
+So the memory layout of D roughly looks like this:
+
+css
+Copy code
+      D
+     / \
+    B   C
+     \ /
+      A  <-- single A subobject (virtual)
+What happens with A* ap = &d;?
+d is of type D.
+
+A is a virtual base, so it does exist uniquely in D.
+
+But C++ does not allow an implicit conversion from D* to A* when A is a virtual base, because the compiler doesn’t know which path to take automatically.
+
+✅ This line will not compile — it’s ambiguous in standard C++.
+
+Correct ways:
+Cast via one of the base classes:
+
+cpp
+Copy code
+D d;
+A* ap = static_cast<B*>(&d);  // ok, B has virtual A
+or
+
+cpp
+Copy code
+A* ap = static_cast<C*>(&d);  // also ok
+static_cast tells the compiler which path to use.
+
+Direct access using &d.B::A (rarely used):
+
+cpp
+Copy code
+A* ap = &d.B::A;
+Key takeaway:
+When using virtual inheritance, a derived-to-base pointer conversion can become ambiguous.
+
+You need explicit disambiguation (static_cast) if the base is virtual.
+
+#6.
+void update(int* a, int* b) {
+    *a = 5;
+    *b = *a + 1;   // ❌ potential hidden bug
+}
+
+int main() {
+    int x = 1;
+    update(&x, &x);
+    cout << x << endl;
+}
+Step by step:
+main calls update(&x, &x);
+
+Both a and b point to the same variable x.
+
+Inside update:
+
+cpp
+Copy code
+*a = 5;          // x = 5
+*b = *a + 1;     // *b = 5 + 1 = 6 ?
+At first glance, it seems x should become 6.
+
+But the C++ standard does not guarantee this. Why?
+
+Why it’s unsafe:
+*a = 5; modifies x.
+
+*b = *a + 1; reads x and writes to x in the same statement.
+
+a and b alias the same memory, so the compiler may reorder or optimize the operations.
+
+This is undefined behavior (UB) because the same memory is modified twice without a sequence point between modifications (in pre-C++17 terms; in modern C++17+ rules, the compiler still has freedom for optimizations).
+
+Some compilers may print 6, some 5, or do something unexpected.
+
+Safe ways to write it:
+Use a temporary variable:
+
+cpp
+Copy code
+void update(int* a, int* b) {
+    *a = 5;
+    int temp = *a;
+    *b = temp + 1;  // ✅ safe
+}
+Or avoid aliasing:
+
+cpp
+Copy code
+int y = x;
+update(&y, &x);
+
+#7.
 
 
 
