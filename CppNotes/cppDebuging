@@ -551,9 +551,167 @@ int main() {
 ==> need to inherite virtually.
 
 
+🔹 Q1. Dangling pointer
+int* foo() {
+    int x = 42;
+    return &x;  // ❌ returning address of local variable
+}
+int main() {
+    int* p = foo();
+    cout << *p << endl;  // UB: dangling pointer
+}
 
 
+Issue:
+x is a local variable → destroyed when foo returns. Returning &x leaves a dangling pointer. Dereferencing it is undefined behavior (UB).
 
+Solution:
+Return a dynamically allocated pointer (caller responsible to free), or better use std::unique_ptr or return by value.
+
+int* foo() {
+    return new int(42);   // caller must delete
+}
+
+
+OR (better):
+
+int foo() {
+    return 42;   // return by value, safe
+}
+
+🔹 Q2. Wrong delete
+int* arr = new int[5];
+arr[0] = 10;
+delete arr;   // ❌ wrong
+
+
+Issue:
+You allocated with new[] but deallocated with delete. Mismatch → UB.
+
+Solution:
+Always pair correctly:
+
+delete[] arr;
+
+🔹 Q3. Double free
+int* p = new int(5);
+int* q = p;
+delete p;
+delete q;   // ❌ double delete UB
+
+
+Issue:
+Both p and q point to the same memory. Deleting twice is UB.
+
+Solution:
+
+Only delete once, then nullify:
+
+delete p;
+p = nullptr;
+q = nullptr;
+
+
+Better: Use std::unique_ptr → prevents double delete automatically.
+
+🔹 Q4. Const pointer casting
+const int a = 5;
+const int* p = &a;
+int* q = const_cast<int*>(p);
+*q = 10;   // ❌ UB
+
+
+Issue:
+Casting away const on an object originally declared const and modifying → undefined behavior.
+
+Solution:
+Only use const_cast if the object was originally non-const but passed as const (e.g., legacy API). Example:
+
+void print(int* p) {
+    *p = 20;  // valid
+}
+int x = 5;
+const int* p = &x;
+print(const_cast<int*>(p));  // ✅ safe
+
+🔹 Q5. Virtual pointer calls
+struct A { virtual void f() { cout << "A\n"; } };
+struct B : A { void f() override { cout << "B\n"; } };
+
+int main() {
+    A* p = new B();
+    delete p;   // ❌ issue
+}
+
+
+Issue:
+A has a virtual function but no virtual destructor. Deleting via base pointer → UB because only A’s destructor is called, not B’s.
+
+Solution:
+Make destructor virtual:
+
+struct A {
+    virtual ~A() {}     // ✅ ensures correct destructor call
+    virtual void f() { cout << "A\n"; }
+};
+
+🔹 Q6. Function pointers
+void fun(int x) { cout << "x=" << x << endl; }
+
+int main() {
+    void (*fp)(double) = fun;  // ❌ wrong type
+    fp(3.14);
+}
+
+
+Issue:
+Function pointer type mismatch. fun(int) cannot be assigned to void(*)(double). Some compilers may warn, but if forced → UB.
+
+Solution:
+Use correct signature:
+
+void (*fp)(int) = fun;
+fp(42);
+
+🔹 Q7. Shared_ptr trap
+struct Node {
+    shared_ptr<Node> next;
+};
+
+int main() {
+    auto a = make_shared<Node>();
+    auto b = make_shared<Node>();
+    a->next = b;
+    b->next = a;   // ❌ cycle
+}
+
+
+Issue:
+Cycle of shared_ptr → reference count never drops to 0 → memory leak.
+
+Solution:
+Break the cycle using std::weak_ptr:
+
+struct Node {
+    weak_ptr<Node> next;   // ✅ weak_ptr breaks cycle
+};
+
+
+✅ Summary of Core Concepts:
+
+Don’t return addresses of locals (dangling).
+
+Always match new/delete, new[]/delete[].
+
+Avoid double deletes (use smart pointers).
+
+const_cast only safe if original object wasn’t const.
+
+Always make base classes with virtual functions have a virtual destructor.
+
+Function pointer signatures must match exactly.
+
+Watch for cyclic references with shared_ptr, use weak_ptr.
 
 
 
