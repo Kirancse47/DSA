@@ -1,0 +1,106 @@
+
+calss A{
+public:
+A(){}
+    void virtual fun(){
+    	cout<<"Kiran";
+    };
+
+void fun2(){
+    cout<<"fun2 A";
+}
+};
+
+class B:public A{
+    public:
+    	B(){}
+    	void fun(){
+    		cout<<"Pine Labs";
+    	}
+    	void fun2(){
+    		cout<<"fun2 B";
+    	}
+};
+
+int main(){
+    A *p=new B();
+    p->fun();
+    p->fun2();
+    return 0;
+}
+
+
+
+void print(const int& x) {
+    int& y = const_cast<int&>(x); 
+    y = 10; 
+    cout << x << endl;
+}
+ 
+int main() {
+    const int a = 5;
+    print(a);
+}
+
+
+
+class MyString {
+    char* str;
+public:
+    MyString(const char* s) {
+        str = new char[strlen(s) + 1];
+        strcpy(str, s);
+    }
+    ~MyString() {
+        delete str;  
+    }
+   MyString MyString(const MyString &s){
+    	MyString temp;
+    	temp.str=new char[strlen(s)+1];
+    	strcpy(temp.str,s.str);
+    	return temp;
+    }
+};
+
+int main() {
+    MyString s1("Hello");
+    MyString s2 = s1;
+}
+
+
+
+int* foo() {
+    int* p = new int(42);
+    return p;
+}
+int main() {
+    int* x = foo();
+    cout << *x << endl;
+}
+
+
+
+Input:  arr = [4, 5, 2, 25]
+Output: [5, 25, 25, -1]
+ 
+Input:  arr = [13, 7, 6, 12]
+Output: [-1, 12, 12, -1]
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
