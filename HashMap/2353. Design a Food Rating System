@@ -1,0 +1,36 @@
+class FoodRatings {
+    struct cmp {
+        bool operator()(const pair<int,string>& a, const pair<int,string>& b) const {
+            if (a.first != b.first) return a.first > b.first; // higher rating first
+            return a.second < b.second; // lexicographically smaller food first
+        }
+    };
+    unordered_map<string, set<pair<int,string>, cmp>> cnsFood;
+    unordered_map<string, string> foodCns;
+    unordered_map<string, int> foodRating;
+public:
+    FoodRatings(vector<string>& foods, vector<string>& cuisines, vector<int>& ratings) {
+        int n = foods.size();
+        for (int i = 0; i < n; i++) {
+            string food = foods[i];
+            string cns = cuisines[i];
+            int rating = ratings[i];
+            cnsFood[cns].insert({rating, food});
+            foodCns[food] = cns;
+            foodRating[food] = rating;
+        }
+    }
+    void changeRating(string food, int newRating) {
+        string cns = foodCns[food];
+        int oldRating = foodRating[food];
+        // erase old entry
+        cnsFood[cns].erase({oldRating, food});
+        // insert new entry
+        cnsFood[cns].insert({newRating, food});
+        foodRating[food] = newRating;
+    }
+    string highestRated(string cuisine) {
+        if(cnsFood.find(cuisine)==cnsFood.end()) return "";
+        return cnsFood[cuisine].begin()->second; // best food is always at begin    
+    }
+};
