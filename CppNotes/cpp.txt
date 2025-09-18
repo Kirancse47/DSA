@@ -2345,3 +2345,1020 @@ Cross-platform code – e.g., different headers for Windows vs Linux.
 #else
 #include <unistd.h>
 #endif
+
+
+
+
+
+
+
+
+########################################################################################################################################################################
+STRING, MEMBER FUNCTIONS AND CHARACTER ARRAY
+########################################################################################################################################################################
+
+String:
+	-> str.at(index) — Access character at index with bounds checking.
+	-> str.capacity() — Returns the number of characters that can be held without 
+	-> str.resize(new_size) — Changes the size of the string.
+	-> str1.append(str2) — Appends str2 to str1.
+	-> str1 < str2 — Compares str1 and str2 lexicographically.
+	-> str.substr(pos, len) — Returns a substring starting at pos with length len.
+	-> str.find(substring) — Finds the first occurrence of substring.
+	-> str.rfind(substring) — Finds the last occurrence of substring.
+	-> str.find_first_of(chars) — Finds the first occurrence of any character in chars.
+	-> str.find_last_of(chars) — Finds the last occurrence of any character in chars.
+	
+	Manipulation:
+	-> str.insert(pos, substring) — Inserts substring at pos.
+	-> str.erase(pos, len) — Erases len characters starting at pos.
+	-> str.replace(pos, len, substring) — Replaces len characters starting at pos with substring.
+	
+	Conversion:
+	-> str.c_str() — Returns a C-style string (const char*).
+	-> std::stoi(str) — Converts str to int.
+	-> std::stod(str) — Converts str to double.
+	-> std::to_string(value) — Converts value to a std::string.
+
+
+Char array(#include <cstring>):
+	-> strlen(arr)
+	-> strcpy(destination, source) to copy one char array to another.
+	-> strcat(arr1 + ar2)
+	-> strcmp(arr1, arr2)	
+
+########################################################################################################################################################################
+
+########################################################################################################################################################################
+EXCEPTION HANDELING
+########################################################################################################################################################################
+
+-> exceptions are abnormal conditions a program encounters during execution.
+-> types
+	1) Synchronous: happens in case of unexpected input or input data type such as dividing by zero.
+	2) Asynchronous: happens due to disc failure or keyboard interrupts.
+
+-> method to handle exceptions:
+	try -> a block of code that may throw exception 
+	catch -> block of code that will be executed in case of exception (there can be many catch block for a single try block)
+	throw -> (optional) once program hits throw block it terminates the current fucntion and starts searching for catch block.
+
+
+	
+-> Properties:
+	a) catch all (catch(...))
+	b) no implicit type conversion:
+		int main()
+		{
+			// try block
+			try {
+		 
+				// throw
+				throw 10;
+			}
+		 
+			// catch block
+			catch (char* excp) {
+				cout << "Caught " << excp;
+			}
+		 
+			// catch all
+			catch (...) {
+				cout << "Default Exception\n";
+			}
+			return 0;
+		}
+		/// default one will be called
+	
+	c) if exception is thrown and is not caught anywhere, program will terminate.
+	d) there can be nested try catch
+	e) in case of exception, all the objects created inside try block will be destroyed before program reaches to catch block.
+
+########################################################################################################################################################################
+
+Pure VIRTUAL function
+	A do nothing virtual function is called pure virtual function.
+	syntax : 
+		virtual void fun() = 0;
+	Compiler doesnt allow to call this function as it is useless, to avoid its calling there are certain rules
+	1. This function can be called via class object, thats why cpp doesnt allow to make a object of class having pure virtual function.
+	2. This can be called via child class object, to avoid this it is compulsory to override do nothing function. 
+	3. This can be called via pointer of base class which is pointing address of child class object. to avoid this it is mandatory to 
+		make do nothing function as virtual.
+	
+A class having atleast one do thing function is called abstract class for which we can not make object and it is only used as 
+parent class.
+
+##########################################################################################################################################
+
+Diff bw copy constructor and copy assignment operator
+
+class student
+{
+	public:
+};
+int main()
+{
+	student s1;
+	student s2 = s1; // this is done by copy constructor 
+	student s3;
+	s3 = s1;  // this is done by copy assignment operator made by compiler in class
+}
+
+
+####################################################################################################################################
+
+TEMPLATE AND STATIC VARIABLE 
+
+The basic and important thing here is in case of template function or class, compiler made different function or class for each data type.
+
+template<typename T>
+T fun(T a, T b)     | int fun(int a, int b)   |   float fun(float a, float b) 
+{                   | {                       |   {
+	return a + b;   |		return a + b;     |			return a + b;         and so on same for class.
+}                   | }                       |   }
+
+Now suppose any template class is holding data member that is static 
+
+template <class T> class Test
+{  
+private:
+  T val; 
+public:
+  static int count;
+  Test()
+  {
+    count++;
+  }
+  // some other stuff in class
+};
+
+template<class T>
+int Test<T>::count = 0;
+
+int main()
+{
+  Test<int> a;  // value of count for Test<int> is 1 now
+  Test<int> b;  // value of count for Test<int> is 2 now
+  Test<double> c;  // value of count for Test<double> is 1 now   
+  cout << Test<int>::count   << endl;  // prints 2  
+  cout << Test<double>::count << endl; //prints 1
+   
+  return 0;
+}
+
+Note - Different data type means different class as compiler will make for each data type, and all static member will be different
+		for each data type but same for different object of same data type. Same thing applies for function also.
+		
+		
+##########################################################################################################################################
+
+printf will return the number of character it is printed. 
+
+printf("%d", printf("%d\n", 123)); 
+
+O/P 
+123
+3
+second printf has returned the value of character it has printed that is 3 here.
+
+######################################################################################################################################
+
+scanf will return total no of values it has read from the console 
+
+int a, b;
+printf("%d", scanf("%d%d, &a, &b));
+
+O/P 
+2 // scnaf will read 2 data and return same value
+
+
+
+#######################################################################################################################################
+
+we can use __LINE__ to print current line number and __FUNCTION__ to print current function
+
+#######################################################################################################################################
+
+Initialising extern variable in function is not allowed but can be done gloabally.
+
+extern int c = 10;    // It will work fine
+
+void fun()
+{
+	extern int a = 10; // It will give error.
+}
+
+#######################################################################################################################################
+
+If we assign multiple character to a char variable then it will take only the last char.
+
+char ch = 'abc';  // It will take 'c' only in ch;
+
+########################################################################################################################################
+
+If we intialise any structure with values less than the varibale contained inside the structure then it will assign values from start 
+and others values will get 0.
+
+struct temp{int a, b, c};
+
+temp t = {10};  // It will assign 10 to a and for b, c will get 0.
+
+#######################################################################################################################################
+
+Modulus operator(%) will give compilation error on float numbers and to work properly we can use fmod(T val, T mod) function.
+
+#######################################################################################################################################
+
+To find the size of an array we can use the sizeof operator and it will give me the size of that array but we can only do this in same
+function in which array is declared/defined, in another function it is always passed by its base address.
+
+Array and pointer are 2 different things and internally also array(arr) is not a purely pointer variable but it can decay into pointer 
+of its first element (&arr[0]) but not always, sizeof doesnot decay array to pointer but explicit coveration or function passing will do.
+
+void fun(int arr[])   // this is same as int* arr
+{
+    cout << sizeof(arr)/sizeof(arr[0]) << endl;    // It will print 2(8 -> sizeof adress variable and 4 -> sizeof int)
+    for(int i = 0; i < 5; i++)
+        cout << arr[i] << endl;
+}
+
+int main() {
+	// your code goes here
+    int arr[] = {1, 2, 3, 4, 5};
+    cout << sizeof(arr)/sizeof(arr[0]) << endl;  // It will print 5(20 -> sizeof whole array and 4 -> sizeof int)
+    fun(arr);
+    return 0;
+}
+
+Also if we try to print arr and &arr, it will give same output but meanings are different as arr will be decayed to pointer and holds
+the address of arr[0] but &arr will hold address of the whole array that is same as the first byte address.
+This we can visualise if we try to get address by +1.
+
+arr + 1 -> it will give address of arr[1] (arr + sizeof(arr[0]))
+&arr + 1 -> it will give next byte address after the whole array basically (arr + sizeof(arr))
+
+#######################################################################################################################################
+
+While passing multidimentional array to function, we have to give all the dimensions expect the first one and it is considered as pointer
+of arr[0] but arr[0] is not a pointer type it is an array variable and thats why will give its true size.
+
+void fun(int (*arr)[5])  // it is same as arr[][5]
+{
+    cout << sizeof(arr) << ", " << sizeof(arr[0]) << endl;   // It will print 8 and 20 as arr is pointer variable but arr[0] is an 
+															//array varibale
+    for(int i = 0; i < 5; i++)
+        for(int j = 0; j < 2; j++)
+            cout << arr[i][j] << endl;
+}
+
+int main() {
+	// your code goes here
+    int arr[][5] = {{1, 2}, {3, 4}, {5, 6}, {7, 8}, {9, 10}};
+    cout << sizeof(arr) << ", " << sizeof(arr[0]) << endl;     // It will print 100(5 * 20) and 20, as here, arr and arr[0] both are
+																// array variable not pointers.
+    fun(arr);
+    return 0;
+}
+
+#########################################################################################################################################
+
+How to return 2-D array from a function?
+
+If we make any static 2-D array, and returning it then it will give segmentation fault as any memory allocated in function will go out 
+of scope if that function finishes its work.
+
+Now returning 2-D array can be done in 3 ways
+1. Using Dynamic allocation -> this will make the whole array in heap section and thatswhy can be accessed.
+
+int N = 3;
+int** getArray()
+{
+    int** arr = new int*[N];
+    for (int i = 0; i < N; ++i) {
+        arr[i] = new int[N];
+        for (int j = 0; j < N; ++j) {
+            arr[i][j] = i + j;
+        }
+    }
+    return arr;
+}
+
+int main()
+{
+    int** arr;
+    arr = getArray();
+    printArray(arr);
+    return 0;
+}
+
+2. Using static keyword -> this will make the whole array into initialised data section and can be accessed. 
+
+int (*(getArray)())[N]
+{
+    static int arr[N][N]
+        = { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 } };
+    return arr;
+}
+
+int main()
+{
+    int(*arr)[N];
+    arr = getArray();
+    printArray(arr);
+    return 0;
+}
+
+3. Using structure -> this looks like returning value and it will return a whole copy.
+
+struct ArrStruct {
+    int arr[N][N];
+};
+
+ArrStruct getArray()
+{
+    ArrStruct var;
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            var.arr[i][j] = i + j;
+        }
+    }
+    return var;
+}
+
+int main()
+{
+    ArrStruct arr;
+    arr = getArray();
+    printArray(arr);
+    return 0;
+}
+
+#####################################################################################################################################
+
+Malloc is always faster than calloc and malloc will return the void pointer returned by kernel after allocating the memory but 
+Calloc will intialise everything with 0 after it gets memory from kernel and then return the void pointer of first element.
+
+This initialisation is taking little extra time but if i have initialise everything with 0 then it shoule be better to use calloc
+instead of malloc and memset function to initialise as calloc does some optimasation and make it faster overall.
+
+#####################################################################################################################################
+
+How we can stop someone taking the adddress of our class object?
+
+If we assign adress of any class object to class type pointer then internally it will call '&' function that is made my compiler 
+implictly. To not take address basically we want to not call this function and this can be done via 
+1. make the & function private
+
+class MyClass {
+    // This will cause a compilation error if anyone tries to use `&myObject`.
+    MyClass* operator&();
+};
+
+int main() {
+    MyClass myObject;
+    // MyClass* ptr = &myObject; // ERROR: call to private member function 'operator&'
+    return 0;
+}
+
+2. Delete & function
+
+class MyClass {
+public:
+    // This will cause a compilation error if anyone tries to use `&myObject`.
+    MyClass* operator&() = delete;
+};
+
+int main() {
+    MyClass myObject;
+    // MyClass* ptr = &myObject; // ERROR: call to deleted member function 'operator&'
+    return 0;
+}
+
+
+#######################################################################################################################################
+
+LITTLE ENDIAN VS BIG ENDIAN
+
+Little endian store any data in ram from least significant byte to most significant byte but big endian will store opposite(from 
+most significant byte to least significant byte).
+
+For example
+int *ptr = 0X01234567;
+
+In Big Indian it is stored as -> |01|23|45|67| 
+In Litte Indian it is stored as -> |67|45|23|01|
+
+How to find any system is big endian or little endian
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	// your code goes here
+    unsigned int a = 1;
+    char *c = (char *)&a;
+    if(*c)
+        cout << "Little Endian";
+    else
+        cout << "Big Endian";
+    return 0;
+}
+
+########################################################################################################################################
+
+We can use pointer and refernce both instead of direct variable in some cases 
+1. Pass big object to function.
+2. To avoid object slicing.
+3. To modify local variable of caller function
+4. To acheive runtime polymorphism.
+
+Sometime we should use only reference not pointer
+1. copy constructor
+
+Sometime we should only use pointer not reference
+1. Data structure like linked list, trees, graphs as we need to assign NULL in some node to denote something.
+2. Chnage pointer to point another node. (reference varible can not refernce another varible)
+
+#######################################################################################################################################
+
+How to call some function before main()? 
+
+we can make any global object of a class which is calling some functiop in its constructor.
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int fun()
+{
+    cout << "Inside fun" << endl;
+    return 1;
+}
+class abc
+{
+    public:
+        abc()
+        {
+            fun();
+        }
+} d;
+int e = fun();
+int main() {
+	// your code goes here
+    cout << "Inside main" << endl;
+}
+
+Same we can do by making one static variable in class and then while defining we can call that function.
+
+#########################################################################################################################################
+
+Constructor Delegation
+
+We can call another type of constructor from one constructor (from initialiser list) to avoid duplicacy.
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class abc
+{
+    int a, b;
+public:
+    abc(): abc(0, 0){}
+    abc(int x) : abc(x, 0){}
+    abc(int x, int y) : a{x}, b{y} {
+        //some very big and complex code to intialse the value of a and b
+        //If we not call this from other constructor then we have to use this big and complex code in all the constructor 
+		//which is nothing but code duplicacy.
+    }
+    void print()
+    {
+        cout << "a : " << a << " b : " << b << endl;
+    }
+};
+
+int main() {
+	// your code goes here
+	abc ob1;
+	abc ob2(10);
+	abc ob3(10, 10);
+	
+	ob1.print();
+	ob2.print();
+	ob3.print();
+
+}
+
+#######################################################################################################################################
+
+How comma operator works?
+
+It works from left to right.
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	// your code goes here
+	int b = (1, 2, 3);
+	
+	cout << b << endl;  // print 3 (from left to right)
+
+}
+
+#######################################################################################################################################
+
+How to stop copy of an object ? 
+
+1. By making copy constructor and copy assignment operator private.
+2. By Deleting copy constructor and copy assignment operator.
+3. By inheriting from a class whose copy constructor and copy assignment operator is private.
+	When you copy-construct a derived class, the base part must also be copy-constructed.
+	When you assign a derived class, the base part must also be assigned.
+
+########################################################################################################################################
+
+Code Bloating
+
+code bloating is the production of code that is percieved as unnecessary long, slow or wastage of resource.
+
+int main()
+{
+	string s1("www");
+	string s2("google");
+	string s3("com");
+	
+	string googleAdress = s1 + s2 + "." + s3;
+	cout << googleAdress << endl;
+}
+
+this is the example of code bloating as we are making 3 unnecessary string instead we can do this 
+
+int main()
+{
+	cout << "www.google.com" << endl;
+}
+
+####################################################################################################################################
+
+How to convert any class into some int(primitive data type)
+
+This can be done using oparator overloading
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class abc
+{
+        int data;
+    public:
+        abc(int val)
+        {
+            data = val;
+        }
+        operator int ()
+        {
+            return data;
+        }
+};
+
+int main() {
+	// your code goes here
+	abc d(10);
+	int val = d;
+	cout << val << endl;
+	return 0;
+}
+
+To provide better readablity and force user to use static_cast we can use explicit keyword
+
+#include <iostream>
+
+class MyClass {
+public:
+    int value;
+
+    MyClass(int v) : value(v) {}
+
+    // Explicit conversion operator to int
+    explicit operator int() const {
+        return value;
+    }
+};
+
+int main() {
+    MyClass obj(20);
+    // int i = obj; // This would cause a compilation error with 'explicit'
+    int i = static_cast<int>(obj); // Explicit conversion required
+    std::cout << "Explicitly converted int: " << i << std::endl; // Output: 20
+    return 0;
+}
+
+
+How to convert a int to class ?
+This can be done using constructor and to use static cast we can make constructor explicit.
+
+########################################################################################################################################
+
+FOR_EACH
+
+for_each(arr.begin(), arr.end(), lambda function/function to be executed at each iteration) is used when we have to run a loop over 
+some intervals.
+
+#########################################################################################################################################
+
+Why return type of copy assignment operator should always be class object reference.
+
+To support chaining assignment.
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class abc
+{
+    public:
+        int data;
+        abc(){}
+        abc(int val) : data{val} {}
+        abc& operator = (abc& ob)
+        {
+            data = ob.data;
+            return *this;
+        }
+        void print()
+        {
+            cout << data << endl;
+        }
+};
+
+int main() {
+	// your code goes here
+    abc ob1(10);
+    abc ob2, ob3, ob4;
+    ob4 = ob3 = ob2 = ob1;  // this chaining assignment is not possible if return type of copy assignment operator is void or 
+							//some primitive type.
+    (ob3 = ob2) = ob1;    //this case will not give correct/expected output if return type of copy assignment operator is only 
+							//simple object but not object reference. If simple object is the return type instead of reference object
+							//ob2 will be copied to ob3 only but here expected is first ob2 copied in ob3 and then ob1 is copied in ob3.
+    ob1.print(); ob1.print(); ob3.print(); ob4.print();
+    return 0;
+}
+
+########################################################################################################################################
+
+How to identify if 2 object belongs to same class or not ?
+
+By using "typeid()" function which basically tells the type of any object.
+
+#include <iostream>
+#include<typeinfo> // this containes typeid function
+using namespace std;
+
+class A{};
+class B{};
+
+int main() {
+	// your code goes here
+    A a1, a2;
+    B b1, b2;
+    if(typeid(a1) == typeid(a2))     // we can not print these typeid as << operator is deleted and we can not use cout. 
+        cout << "Belongs to same class" << endl;
+    else
+        cout << "Belongs to different class" << endl;
+    if(typeid(a1) == typeid(b2)) 
+        cout << "Belongs to same class" << endl;
+    else
+        cout << "Belongs to different class" << endl;
+    return 0;
+}
+
+######################################################################################################################################
+
+How to restrict any class to be inherited?
+
+By using "final" keyword, if any class is declared final then that class will not be inherited.
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Base final
+{
+    public:
+        Base(){}
+};
+class Derived : public Base
+{
+    public:
+        Derived(){}
+};
+
+int main() {
+	// your code goes here
+    Derived d;
+}
+
+O/P -> This program will give compilation error as final class can not be inherited.
+
+#######################################################################################################################################
+
+OVERRIDE keyword
+
+This is basically used on that function that is overriding in derived class to increase the readablity purpose as well as testing purpose
+if Base class is in other file we dont have to go there we now if override is there this function must be in the base class.
+
+By writing this we ensure that if any function should be overrided then we can write this keyowrd and if same function is not in base 
+class with virtual keyword then will give compilation error.
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Base
+{
+    public:
+        virtual void fun(){}
+};
+class Derived : public Base
+{
+    public:
+        void fun(int x) override{}  // If override is not there then it will compile but currently it will give compilation error.
+};
+
+int main() {
+	// your code goes here
+    Derived d;
+}
+
+########################################################################################################################################
+
+Why using namespace std is bad ?
+
+In big program/project where there are so much libraries and there can be collision of the name for example if any library have something
+as cout then it will cause consfusion that's why it is good to not include "using namespace std" in program and if we have to use any
+library then we can use by "std::some_library".
+
+########################################################################################################################################
+
+Why template should be only defined in header files?
+
+Unlike normal function which can be declared in header files and can be difined in cpp file and can be used in other cpp file we can't
+do this in case of template function as compiler will make multiple function out of template function at the definition only and if 
+definition is not there in header file then used cpp file can have undefined reference error. We can resolve this by either defining in
+header file or we can include cpp file that has the required definition. 
+
+########################################################################################################################################
+
+How to print something N no of times without using loop or recursion.
+
+We can use constructor for it.
+#include <bits/stdc++.h>
+using namespace std;
+
+class abc
+{
+    public:
+        abc(){cout << "inside constructor" << endl;}
+};
+
+int main() {
+    int n = 10;
+	abc ob[n];
+	return 0;
+}
+
+########################################################################################################################################
+
+Pre increment operator is faster than the post increment operator as pre increment is taking only 3 assembly instruction while 
+post increment will take 4.
+
+########################################################################################################################################
+
+Static data member will not occupy space inside the class memory, they are just like the global variable with just have the wrapper of the 
+class to use this static data member with class name and scope resolution operator.
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class A{
+    public:
+        int a;
+        static int b;
+};
+int A::b = 10;
+int main() {
+	// your code goes here
+    cout << sizeof(A) << endl;   // It will print 4 for memory of a not 8.
+}
+
+########################################################################################################################################
+
+Alternate operator are just an alias of operator provided in c++, we can use "and" instead of "&&" or we can use "or" instead of "||".
+
+########################################################################################################################################
+
+THIS POINTER
+
+1. It is passed implictly to all non static member function of the class, static member function doesnt have this pointer.
+2. It is a const pointer that is holding the address of caller object.
+3. If any non static member function is defined/declared as const then this pointer will become const pointer to const type.
+
+abc ob;
+ob.fun(10); // this is converted into ob.fun(&ob, 10);
+
+########################################################################################################################################
+
+FUNCTION HIDING
+
+When we have a function with same name in base and derived class both with no virtual keyword then for derived class object/pointer 
+base class functions are not accessible (that has the same name in derived).
+If we want to get access of the base class functions then we can do this in 2 ways 
+1. using scope resolution operator (ob.Base::fun(100))
+2. writing "using Base::fun;" in derived class.
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Base
+{
+    public:
+        void fun(int a)
+        {
+            cout << "Base class function" << endl;
+        }
+};
+
+class Derived : public Base
+{
+    public:
+        void fun(char ch)
+        {
+            cout << "Derived class function" << endl;
+        }
+};
+
+int main() {
+    Derived ob;
+    ob.fun(500);  // it will print "Derived class function"
+    ob.fun('a');  // it will print "Derived class function"
+    return 0;
+}
+
+#########################################################################################################################################
+
+PLACEMENT NEW
+
+Base *p = new Base;
+By this statement we are requesting kernel to allocate some memory and return its address.
+
+if suppose we have to make multiple (10 or 100) object dynamically using new keyword then we have to switch user mode to krnel mode 
+again and again which is a time consuming process, so instead of that what we can do is we can make a storage of that many object.
+
+char* memory = new char[10 * sizeof(Base)];  // this is beasically memory pool we created
+
+Base *ob1 = new (&memory[0]) Base;                    //we are providing memory also so that ob1 will be created on that memory only
+Base *ob1 = new (&(memory[0] + sizeof(Base))) Base;   //we dont have to switch to kernel mode then as allocation is already there.
+Base *ob1 = new (&(memory[0] + 2 * sizeof(Base))) Base;
+
+ob1 -> ~Base();              //Calling Destructor is mendatory here as if char* memory will go out of scope, it will not call destructor.
+ob2 -> ~Base();
+ob3 -> ~Base();
+
+#########################################################################################################################################
+
+lvalue VS ravlue and lvalue refernce VS rvalue refernce
+
+what is lvalue and rvalue?
+“l-value” refers to a memory location that identifies an object. 
+"r-value” refers to the data value that is stored at some address in memory
+
+what is lvalue and rvalue reference?
+
+Lvalue reference (T&)
+Binds to an lvalue (something with a name/address).
+Example:
+int x = 10;
+int& ref = x;  // okay
+// int& ref2 = 5; // error: cannot bind non-const lvalue reference to rvalue
+
+Rvalue reference (T&&)
+Can bind to rvalues only.
+Allows us to “take ownership” of temporaries → move semantics.
+Example:
+int&& rref = 5;   // okay
+// int&& rref2 = x; // error: x is an lvalue
+
+Const lvalue reference (const T&)
+Special rule: can bind to rvalues as well.
+Compiler extends lifetime of the temporary.
+Example:
+const int& ref = 5; // okay, temporary "5" extended
+
+#######################################################################################################################################
+
+MOVE SEMANTICS
+
+Move is basically used to move the ownerwship of one object to another, this is different from copy as we can not use previous object
+if its ownership is moved to another object. To acheive this we can implement move constructor and move assignment operator and can call
+them using "std::move(object)" which basically convert any lvalue object to rvalue. 
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class simple
+{
+public:
+    int *p;
+    simple(int data):p(new int(data))
+    {
+        cout << "constructor called with data : " << (*p)<<endl;
+    }
+    simple(const simple& other)
+    {
+        p = new int(*(other.p));
+        cout << "copy constructor called with data : " << (*p)<<endl;
+    }
+    simple(simple&& other) noexcept
+    {
+        p = other.p;
+        other.p = NULL;
+        cout << "move constructor called with data : " << (*p)<<endl;
+    }
+    simple& operator =(simple&& other) noexcept
+    {
+        if(this != &other)
+        {
+            p = other.p;
+            other.p = NULL;
+        }
+        cout << "move assignment operator called with data : " << (*p) <<  endl;
+        return *this;
+    }
+    ~simple()
+    {
+        cout << "destructor called";
+        if(p)
+        {
+            cout << " with data : " << (*p);
+            delete p; // this check is required as we are assigning NULL in move constructor and without check delete will cause crash.
+        }
+        cout << endl;
+        p = NULL;
+    }
+};
+
+int main() {
+	vector<simple> arr;
+	arr.reserve(2);
+	simple ob1(10);
+	simple ob2 = std::move(ob1);
+    arr.push_back(ob2);
+	simple ob3(simple(20));
+	simple ob4(simple(30));
+	ob4 = std::move(ob3);
+	arr.push_back(ob4);
+	cout << "Resizing" << endl;
+    arr.push_back(simple(40));
+    return 0;
+}
+
+O/P - 
+constructor called with data : 10                 //this is printed due to "simple ob1(10);"
+
+move constructor called with data : 10            //this is printed due to "simple ob2 = std::move(ob1);"
+
+copy constructor called with data : 10            //this is printed due to "arr.push_back(ob2);", 
+												  //ob2 is copied to array index using copy constructor
+												  
+constructor called with data : 20                 //this is printed due to "simple ob3(simple(20));" it is basically constructor 
+												  //and move constructor but compiler will do some modification to only call 
+												  //constructor to reduce effort and attain same thing.
+												  
+constructor called with data : 30                 //this is printed due to "simple ob4(simple(30));"
+
+move assignment operator called with data : 20    //this is printed due to "ob4 = std::move(ob3);"
+
+copy constructor called with data : 20            //this is printed due to arr.push_back(ob4);
+Resizing
+constructor called with data : 40                 //this is printed due to "simple(40)" and create temp object
+
+move constructor called with data : 40            //this is printed due to "arr.push_back(simple(40));" as temp object is rvalue
+
+move constructor called with data : 10            //this is due to increase the size and data is moving into other array, 
+											      //this called move constructor as noexcept is there which tells compiler that move
+												  //constructor has no exception otherwise compiler will call for copy constructor.
+												  
+destructor called                                 //destructor called for temp object of "simple(40)"
+
+move constructor called with data : 20            //this is due to increase the size and data is moving into other array,
+
+destructor called                                 //this is for object that is in old array
+destructor called                                 //this is for object that is in old array
+destructor called with data : 20                  //this is for object ob4
+destructor called                                 //this is for object ob1 which gave ownership to ob2
+destructor called with data : 10                  //this is for object ob2
+destructor called                                 //this is for object ob3
+destructor called with data : 10                  //this is for arr[0]
+destructor called with data : 20                  //this is for arr[1]
+destructor called with data : 40                  //this is for arr[2]
+
+########################################################################################################################################
+
