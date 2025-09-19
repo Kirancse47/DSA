@@ -1,0 +1,58 @@
+#Q:
+You have a function printNumber that can be called with an integer parameter and prints it to the console.
+
+For example, calling printNumber(7) prints 7 to the console.
+You are given an instance of the class ZeroEvenOdd that has three functions: zero, even, and odd. The same instance of ZeroEvenOdd will be passed to three different threads:
+
+Thread A: calls zero() that should only output 0's.
+Thread B: calls even() that should only output even numbers.
+Thread C: calls odd() that should only output odd numbers.
+Modify the given class to output the series "010203040506..." where the length of the series must be 2n.
+
+#Sol using mutes and condition variable :
+
+class ZeroEvenOdd {
+private:
+    int n;
+    int x=1;
+    bool z=true;
+    mutex m;
+    condition_variable cv;
+public:
+    ZeroEvenOdd(int n) {
+        this->n=n;
+    }
+    // printNumber(x) outputs "x", where x is an integer.
+    void zero(function<void(int)> printNumber) {
+        while(true){
+        unique_lock<mutex> lock(m);
+        cv.wait(lock,[&](){ return z || x>n; });
+        if(x>n) {cv.notify_all();break;}
+        printNumber(0);
+        z=!z;
+        cv.notify_all();
+        }
+    }
+    void even(function<void(int)> printNumber) {
+        while(true){
+        unique_lock<mutex> lock(m);
+        cv.wait(lock,[&](){ return (z==false && x%2==0)|| x>n; });
+        if(x>n) { cv.notify_all(); break; }
+        printNumber(x);
+        x++;
+        z=!z;
+        cv.notify_all();
+        }
+    }
+    void odd(function<void(int)> printNumber) {
+        while(true){
+        unique_lock<mutex> lock(m);
+        cv.wait(lock,[&](){ return (z==false && x%2==1)|| x>n; });
+        if(x>n) {cv.notify_all(); break; }
+        printNumber(x);
+        x++;
+        z=!z;
+        cv.notify_all();
+        }
+    }
+};
