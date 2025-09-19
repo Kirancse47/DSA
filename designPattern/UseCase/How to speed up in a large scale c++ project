@@ -1,0 +1,113 @@
+🔑 1. Algorithm & Data Structure First
+
+Big-O matters most:
+
+Don’t use O(n^2) when O(n log n) is possible.
+
+Profile hotspots, then refactor.
+
+Use the right container:
+
+std::vector > std::list (better cache locality).
+
+std::unordered_map > std::map (O(1) vs O(log n)), unless ordering is required.
+
+std::deque or ring buffers for producer-consumer workloads.
+
+🔑 2. Memory & Cache Optimizations
+
+Contiguous memory is faster (CPU caches love it).
+
+Prefer std::vector, std::array.
+
+Avoid too many small heap allocations → use memory pools.
+
+Struct layout: Minimize padding, group frequently used fields together.
+
+SoA (Struct of Arrays) instead of AoS (Array of Structs) when vectorizing.
+
+🔑 3. Avoid Overhead
+
+Use move semantics (std::move) and emplace_back to skip copies.
+
+Pass large objects by const&, return by value if RVO applies.
+
+Reduce dynamic polymorphism:
+
+Virtual calls are slower than inline/template dispatch.
+
+If possible, use CRTP or templates.
+
+🔑 4. Compiler Optimizations
+
+Always compile with:
+
+g++ -O2   # good balance
+g++ -O3   # aggressive optimization
+g++ -march=native  # use CPU-specific instructions (SIMD, AVX)
+
+
+Enable link-time optimization (LTO):
+
+g++ -O3 -flto
+
+
+Profile-guided optimization (PGO): run real workloads, feed data back to compiler.
+
+🔑 5. Concurrency & Parallelism
+
+Use multi-threading when tasks are independent:
+
+std::thread, thread pools, or frameworks (TBB, OpenMP).
+
+Exploit SIMD/Vectorization (e.g., std::transform_reduce, compiler auto-vectorization, intrinsics if necessary).
+
+Async I/O for network and disk.
+
+🔑 6. Reduce I/O Bottlenecks
+
+Use buffered I/O (std::ios::sync_with_stdio(false); std::cin.tie(nullptr);).
+
+Write logs asynchronously (logger thread + queue).
+
+Batch disk and network operations.
+
+🔑 7. Profile & Measure
+
+Don’t guess, profile first:
+
+gprof, perf, valgrind --tool=callgrind, Google perftools.
+
+Find the hot 5% of code (Amdahl’s law: optimizing cold code = no speedup).
+
+🔑 8. C++17/20 Tricks
+
+Use std::string_view to avoid substring copies.
+
+Use constexpr where possible (do work at compile-time).
+
+Use [[likely]] and [[unlikely]] hints for branches (C++20).
+
+✅ Example: Faster Loop
+// Slower
+for (auto it = v.begin(); it != v.end(); it++) { use(*it); }
+
+// Faster (no temp copy of iterator)
+for (auto it = v.begin(); it != v.end(); ++it) { use(*it); }
+
+// Even faster (cache friendly)
+for (int i = 0; i < v.size(); i++) { use(v[i]); }
+
+📌 Summary
+
+Algorithm choice is the biggest win.
+
+Cache-friendly data layout > fancy data structures.
+
+Use move, emplace, references to avoid copies.
+
+Compile with O3 + LTO + PGO.
+
+Use multithreading + SIMD for parallelism.
+
+Profile & fix the hot spots, not everything.
