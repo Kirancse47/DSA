@@ -1,0 +1,150 @@
+🚇 Elevator System Design
+1. Requirements
+Functional
+
+Support multiple elevators.
+
+Elevator should serve pickup requests from floors.
+
+Users can request:
+
+From a floor → Up/Down button.
+
+From inside elevator → Choose a floor.
+
+Elevator should stop at requested floors optimally (minimize wait time).
+
+Non-Functional
+
+Efficient scheduling (least wait).
+
+Handle concurrent requests.
+
+Extendable (e.g., more elevators, priority service).
+
+2. Key Design Decisions
+
+Scheduling:
+
+Single Elevator: Use SCAN/LOOK algorithm (like disk scheduling: serve in one direction, then reverse).
+
+Multiple Elevators: Central Dispatcher/Controller assigns requests to nearest idle/best elevator.
+
+Request Handling:
+
+Separate ExternalRequest (from floor) and InternalRequest (from inside elevator).
+
+States:
+
+Idle, MovingUp, MovingDown, Stopped.
+
+Thread Safety (mutex, condition_variable) if simulating concurrency.
+
+3. Class Diagram (Conceptual)
++----------------+
+| ElevatorSystem |
+|----------------|
+| vector<Elevator> elevators |
+| RequestController controller |
++----------------+
+
++----------------+
+| Elevator       |
+|----------------|
+| int id         |
+| int currentFloor|
+| Direction dir  |
+| State state    |
+| priority_queue<int> upStops |
+| priority_queue<int> downStops|
++----------------+
+| move()         |
+| addRequest()   |
++----------------+
+
++----------------+
+| RequestController |
+|----------------|
+| assignRequest()   |
++----------------+
+
++----------------+
+| Request        |
+|----------------|
+| int floor      |
+| Direction dir  |
+| RequestType    |
++----------------+
+
+4. Example C++ LLD
+#include <bits/stdc++.h>
+using namespace std;
+
+enum class Direction { UP, DOWN, IDLE };
+enum class State { MOVING, STOPPED };
+
+struct Request {
+    int floor;
+    Direction dir;
+    bool isInternal;
+    Request(int f, Direction d, bool internal) : floor(f), dir(d), isInternal(internal) {}
+};
+
+class Elevator {
+    int id, currentFloor;
+    Direction direction;
+    State state;
+    set<int> upStops, downStops; // sorted automatically
+
+public:
+    Elevator(int id, int start = 0) : id(id), currentFloor(start), direction(Direction::IDLE), state(State::STOPPED) {}
+
+    void addRequest(int floor) {
+        if(floor > currentFloor) upStops.insert(floor);
+        else if(floor < currentFloor) downStops.insert(floor);
+    }
+
+    void step() {
+        if(direction == Direction::UP || direction == Direction::IDLE) {
+            if(!upStops.empty()) {
+                state = State::MOVING;
+                auto next = *upStops.begin();
+                upStops.erase(upStops.begin());
+                moveTo(next);
+            } else if(!downStops.empty()) {
+                direction = Direction::DOWN;
+                step();
+            } else {
+                direction = Direction::IDLE;
+                state = State::STOPPED;
+            }
+        } else { // DOWN
+            if(!downStops.empty()) {
+                state = State::MOVING;
+                auto next = *downStops.rbegin();
+                downStops.erase(prev(downStops.end()));
+                moveTo(next);
+            } else if(!upStops.empty()) {
+                direction = Direction::UP;
+                step();
+            } else {
+                direction = Direction::IDLE;
+                state = State::STOPPED;
+            }
+        }
+    }
+
+    void moveTo(int floor) {
+        cout << "Elevator " << id << " moving from " << currentFloor << " to " << floor << "\n";
+        currentFloor = floor;
+        cout << "Elevator " << id << " stopped at " << currentFloor << "\n";
+    }
+};
+
+5. Extensions
+
+Add ElevatorController to assign requests among multiple elevators.
+
+Add concurrency (threads) for multiple elevators running simultaneously.
+
+Add UI layer to simulate button presses.
