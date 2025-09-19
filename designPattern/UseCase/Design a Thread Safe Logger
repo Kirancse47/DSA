@@ -1,0 +1,52 @@
+#include <iostream>
+#include <fstream>
+#include <mutex>
+#include <string>
+#include <thread>
+#include <vector>
+
+
+class Logger {
+private:
+    std::ofstream file;
+    std::mutex mtx;
+
+    Logger() {
+        file.open("log.txt", std::ios::out | std::ios::app);
+    }
+
+    ~Logger() {
+        if (file.is_open())
+            file.close();
+    }
+
+public:
+    Logger(const Logger&) = delete;            // prevent copying
+    Logger& operator=(const Logger&) = delete;
+
+    static Logger& getInstance() {
+        static Logger instance; // thread-safe in C++11+
+        return instance;
+    }
+
+    void log(const std::string& msg) {
+        std::lock_guard<std::mutex> lock(mtx);
+        file << msg << std::endl;
+        std::cout << msg << std::endl;  // optional console output
+    }
+};
+
+
+void worker(int id) {
+    for (int i = 0; i < 5; i++) {
+        Logger::getInstance().log("Thread " + std::to_string(id) + " message " + std::to_string(i));
+    }
+}
+
+int main() {
+    std::vector<std::thread> threads;
+    for (int i = 0; i < 4; i++) {
+        threads.emplace_back(worker, i);
+    }
+    for (auto& t : threads) t.join();
+}
