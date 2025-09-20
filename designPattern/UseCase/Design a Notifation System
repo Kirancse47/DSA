@@ -1,0 +1,143 @@
+🎯 Requirements :-
+Support multiple channels: Email, SMS, Push Notification
+Extensible: easy to add new channels
+Avoid tight coupling between sender and channel logic
+
+🔹 Design (using Observer + Strategy + Factory)
+Interfaces
+// Notification interface
+class INotification {
+public:
+    virtual void send(const string& user, const string& message) = 0;
+    virtual ~INotification() = default;
+};
+
+Concrete Implementations
+class EmailNotification : public INotification {
+public:
+    void send(const string& user, const string& message) override {
+        cout << "Sending EMAIL to " << user << ": " << message << endl;
+    }
+};
+
+class SMSNotification : public INotification {
+public:
+    void send(const string& user, const string& message) override {
+        cout << "Sending SMS to " << user << ": " << message << endl;
+    }
+};
+
+class PushNotification : public INotification {
+public:
+    void send(const string& user, const string& message) override {
+        cout << "Sending PUSH to " << user << ": " << message << endl;
+    }
+};
+
+Factory
+class NotificationFactory {
+public:
+    static unique_ptr<INotification> create(const string& type) {
+        if (type == "EMAIL") return make_unique<EmailNotification>();
+        if (type == "SMS")   return make_unique<SMSNotification>();
+        if (type == "PUSH")  return make_unique<PushNotification>();
+        return nullptr;
+    }
+};
+
+Usage
+int main() {
+    vector<string> channels = {"EMAIL", "SMS", "PUSH"};
+    for (auto& ch : channels) {
+        auto notifier = NotificationFactory::create(ch);
+        notifier->send("Kiran", "Your order has been shipped!");
+    }
+}
+
+✅ Benefits :-
+Extensible → Add new channel by creating a new class
+Decoupled → Sender doesn’t need to know channel details
+Clean → Uses Factory + Strategy patterns
+
+🎯 Idea :-
+
+Subject: NotificationService → Publishes events (like "Order Shipped")
+Observers: Different notification channels (Email, SMS, Push) → Subscribe and get updates
+
+🔹 Design in C++ (Observer Pattern)
+#include <iostream>
+#include <vector>
+#include <memory>
+using namespace std;
+
+// Observer Interface
+class IObserver {
+public:
+    virtual void update(const string& user, const string& message) = 0;
+    virtual ~IObserver() = default;
+};
+
+// Concrete Observers
+class EmailNotifier : public IObserver {
+public:
+    void update(const string& user, const string& message) override {
+        cout << "EMAIL to " << user << ": " << message << endl;
+    }
+};
+
+class SMSNotifier : public IObserver {
+public:
+    void update(const string& user, const string& message) override {
+        cout << "SMS to " << user << ": " << message << endl;
+    }
+};
+
+class PushNotifier : public IObserver {
+public:
+    void update(const string& user, const string& message) override {
+        cout << "PUSH to " << user << ": " << message << endl;
+    }
+};
+
+// Subject
+class NotificationService {
+    vector<IObserver*> observers;
+public:
+    void subscribe(IObserver* obs) {
+        observers.push_back(obs);
+    }
+    void unsubscribe(IObserver* obs) {
+        observers.erase(remove(observers.begin(), observers.end(), obs), observers.end());
+    }
+    void notifyAll(const string& user, const string& message) {
+        for (auto obs : observers) {
+            obs->update(user, message);
+        }
+    }
+};
+
+// Usage
+int main() {
+    NotificationService service;
+    EmailNotifier email;
+    SMSNotifier sms;
+    PushNotifier push;
+
+    // Subscribers
+    service.subscribe(&email);
+    service.subscribe(&sms);
+    service.subscribe(&push);
+
+    // Event
+    service.notifyAll("Kiran", "Your order has been shipped!");
+
+    return 0;
+}
+
+✅ Benefits of Observer Here
+
+Loose Coupling → NotificationService doesn’t know about specific channels
+
+Extensible → New channels can be added without changing core logic
+
+Scalable → Many subscribers can listen to same event
