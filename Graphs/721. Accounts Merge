@@ -1,0 +1,66 @@
+class DS{
+    vector<int> parent,size;
+    public:
+    DS(int n){
+        parent=vector<int>(n);
+        size=vector<int>(n);
+        for(int i=0;i<n;i++){
+            parent[i]=i;
+            size[i]=1;
+        }
+    }
+    int findParent(int node){
+        if(node==parent[node]) return node;
+        return parent[node]=findParent(parent[node]);
+    }
+    void unionNode(int u,int v){
+        int p_u=findParent(u);
+        int p_v=findParent(v);
+        if(p_u!=p_v){
+            if(size[p_u]>=size[p_v]){
+                size[p_u]+=size[p_v];
+                parent[p_v]=parent[p_u];
+            }else{
+                size[p_v]+=size[p_u];
+                parent[p_u]=parent[p_v];
+            }
+        }
+    }
+};
+
+class Solution {
+public:
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        int n=accounts.size();
+        DS ds(n);
+        unordered_map<string,int> mailNo;
+        for(int i=0;i<n;i++){
+            for(int j=1;j<accounts[i].size();j++){
+                string mail=accounts[i][j];
+                if(mailNo.find(accounts[i][j])==mailNo.end()){
+                    mailNo[mail]=i;
+                }else{
+                    ds.unionNode(i,mailNo[mail]);
+                }
+            }
+        }
+
+        vector<string> mergedMail[n];
+        for(auto it : mailNo){
+            string mail=it.first;
+            int node=ds.findParent(it.second);
+            mergedMail[node].push_back(mail);
+        }
+
+        vector<vector<string>> ans;
+        for(int i=0;i<n;i++){
+            if(mergedMail[i].size()==0) continue;
+            vector<string> temp;
+            temp.push_back(accounts[i][0]);
+            sort(mergedMail[i].begin(),mergedMail[i].end());
+            temp.insert(temp.end(),mergedMail[i].begin(),mergedMail[i].end());
+            ans.push_back(temp);
+        }
+        return ans;
+    }
+};
