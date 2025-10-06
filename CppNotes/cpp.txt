@@ -3362,3 +3362,29 @@ destructor called with data : 40                  //this is for arr[2]
 
 ########################################################################################################################################
 
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class Demo {
+public:
+    vector<int> v;
+    Demo() { cout << "Default\n"; }
+    Demo(const Demo& d) { v = d.v; cout << "Copy Ctor\n"; }
+    Demo(Demo&& d) noexcept { v = move(d.v); cout << "Move Ctor\n"; }
+    Demo& operator=(const Demo& d) { v = d.v; cout << "Copy Assign\n"; return *this; }
+    Demo& operator=(Demo&& d) noexcept { v = move(d.v); cout << "Move Assign\n"; return *this; }
+};
+
+Demo getDemo() {
+    Demo d;
+    return d;
+}
+
+int main() {
+    Demo a;
+    Demo b = a;          // Copy constructor
+    Demo c = getDemo();  // Move constructor
+    b = a;               // Copy assignment
+    c = getDemo();       // Move assignment
+}
