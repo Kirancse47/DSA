@@ -1,4 +1,6 @@
                                                                  GDB Cheat Sheet
+Part - 1
+
 #Starting gdb
 gdb ./a.out                    # Start with executable
 gdb ./a.out core               # Debug with core dump
@@ -48,3 +50,177 @@ awatch x                       # Stop on read/write
 
 #Exiting
 quit / q                       # Exit gdb
+
+
+Part -2
+
+1️⃣ How do you debug a core dump using GDB?
+
+Question:
+You have a program that crashed and generated a core file. How do you analyze it?
+
+Answer:
+
+gdb <executable> core
+
+
+Inside GDB:
+
+(gdb) bt          # shows stack trace
+(gdb) info locals # inspect local variables
+(gdb) frame 2     # switch to frame 2
+(gdb) print var   # print variable values
+
+
+Concept: GDB reads the executable’s symbols + the core dump’s memory snapshot → full postmortem analysis.
+
+2️⃣ How to debug a running process without restarting it?
+
+Answer:
+Attach GDB to a live process:
+
+gdb attach <pid>
+
+
+Then:
+
+(gdb) bt        # get current stack trace
+(gdb) info thr  # check threads
+(gdb) detach    # resume execution safely
+
+
+Use when debugging long-running daemons or services.
+
+3️⃣ How do you set conditional breakpoints?
+
+Example:
+
+(gdb) break foo if x > 10 && y == 0
+
+
+Execution stops only when the condition is true.
+
+Use case: debugging logic only under specific input states — crucial in large systems.
+
+4️⃣ How do you inspect memory corruption or buffer overflow?
+
+Answer:
+
+(gdb) watch *ptr
+
+
+→ Triggers when the memory pointed by ptr changes.
+
+Or use:
+
+(gdb) x/20bx buffer
+
+
+→ Examine memory bytes around a buffer.
+
+5️⃣ How do you debug multithreaded programs?
+
+Common questions:
+
+How do you see all threads?
+
+(gdb) info threads
+
+
+How to switch and inspect a specific thread?
+
+(gdb) thread <id>
+(gdb) bt
+
+
+How to break on thread creation/death?
+
+(gdb) set scheduler-locking on
+(gdb) break pthread_create
+
+6️⃣ How do you debug deadlocks or hangs?
+
+Answer:
+When a process hangs:
+
+gdb -p <pid>
+
+
+Then:
+
+(gdb) thread apply all bt
+
+
+→ Prints backtrace of all threads — shows who’s holding locks and who’s waiting.
+
+7️⃣ How do you trace function calls (without adding printfs)?
+
+Answer:
+
+(gdb) break my_func
+(gdb) commands
+> silent
+> printf "Entering my_func(%d)\n", x
+> continue
+> end
+
+
+GDB executes this automatically each time my_func() is called — acts like dynamic logging.
+
+8️⃣ How to debug optimized (-O2) binaries?
+
+Question: What issues occur with optimized builds?
+
+Answer:
+
+Variables may be optimized out (use info locals may show <optimized out>).
+
+Function inlining hides call frames.
+
+Fix:
+
+Recompile with:
+
+gcc -g -O0 prog.c -o prog
+
+
+Or use:
+
+set print pretty on
+set var-disable off
+
+9️⃣ How to change variable values at runtime in GDB?
+(gdb) print var
+(gdb) set var = 42
+(gdb) continue
+
+
+→ Used for testing without recompiling.
+
+🔟 How to inspect heap allocations or leaks?
+
+Combine with glibc hooks:
+
+(gdb) break malloc
+(gdb) commands
+> silent
+> printf "malloc(%d)\n", $rdi
+> continue
+> end
+
+
+→ Traces every dynamic allocation.
+
+Or integrate with Valgrind + GDB:
+
+valgrind --vgdb=yes ./a.out
+
+Bonus: Useful GDB commands cheat
+Purpose	Command
+Run till function returns	finish
+Step into function	step
+Step over function	next
+Display variable continuously	display var
+Disassemble code	disas <function>
+Load symbols dynamically	symbol-file <file>
+Redirect output	set logging on
