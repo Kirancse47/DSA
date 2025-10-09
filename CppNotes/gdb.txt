@@ -51,6 +51,34 @@ awatch x                       # Stop on read/write
 #Exiting
 quit / q                       # Exit gdb
 
+#Using the print command with format specifier
+
+You can specify the output format directly in GDB:
+
+(gdb) print/x var
+
+
+👉 /x means print in hexadecimal.
+
+Examples:
+
+(gdb) print/x i
+$1 = 0xa
+(gdb) print/x ptr
+$2 = 0x7fffffffdb10
+
+
+Other format codes:
+
+Format	Meaning
+/x	Hexadecimal
+/d	Decimal
+/t	Binary
+/o	Octal
+/u	Unsigned decimal
+/c	Character
+/f	Floating-point
+
 
 Part -2
 
