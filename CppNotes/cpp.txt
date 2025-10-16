@@ -3480,3 +3480,39 @@ Move Assigned!
 Destroyed: C++
 Destroyed: World
 Destroyed: Hello
+
+
+# What is constexpr?
+
+constexpr tells the compiler that a value or function can be evaluated at compile-time.
+
+It’s stronger than const:
+
+const = read-only
+
+constexpr = compile-time constant (if possible)
+
+2️⃣ constexpr Variables
+constexpr int x = 10;  // must be initialized with constant expression
+const int y = 10;      // read-only, evaluated at runtime (may be optimized)
+
+
+✅ x is known at compile time, can be used in array sizes, template parameters, etc.
+
+3️⃣ constexpr Functions
+
+Functions can be evaluated at compile time if all inputs are known at compile time.
+
+Must have a single return statement in C++11, more flexible in C++14+.
+
+constexpr int square(int n) {
+    return n * n;
+}
+
+int main() {
+    constexpr int s = square(5);  // computed at compile-time
+    int arr[s];                    // OK, size known at compile-time
+}
+
+
+If you call square() with a runtime value, it executes at runtime, but same function can be used for compile-time constants.
