@@ -3388,3 +3388,95 @@ int main() {
     b = a;               // Copy assignment
     c = getDemo();       // Move assignment
 }
+
+
+#example 2
+
+#include <iostream>
+#include <cstring>
+
+class String {
+    char* data;
+
+public:
+    // 1️⃣ Constructor
+    String(const char* s = "") {
+        data = new char[strlen(s) + 1];
+        strcpy(data, s);
+        std::cout << "Constructed: " << data << "\n";
+    }
+
+    // 2️⃣ Copy Constructor
+    String(const String& other) {
+        data = new char[strlen(other.data) + 1];
+        strcpy(data, other.data);
+        std::cout << "Copied: " << data << "\n";
+    }
+
+    // 3️⃣ Move Constructor
+    String(String&& other) noexcept {
+        data = other.data;
+        other.data = nullptr;
+        std::cout << "Moved!\n";
+    }
+
+    // 4️⃣ Copy Assignment
+    String& operator=(const String& other) {
+        if (this != &other) {
+            delete[] data;
+            data = new char[strlen(other.data) + 1];
+            strcpy(data, other.data);
+        }
+        std::cout << "Copy Assigned: " << data << "\n";
+        return *this;
+    }
+
+    // 5️⃣ Move Assignment
+    String& operator=(String&& other) noexcept {
+        if (this != &other) {
+            delete[] data;
+            data = other.data;
+            other.data = nullptr;
+        }
+        std::cout << "Move Assigned!\n";
+        return *this;
+    }
+
+    // Destructor
+    ~String() {
+        if (data)
+            std::cout << "Destroyed: " << data << "\n";
+        delete[] data;
+    }
+};
+
+int main() {
+    String s1("Hello");                // Constructor
+    String s2 = s1;                    // Copy Constructor
+    String s3 = String("World");       // Move Constructor (temporary rvalue)
+    s2 = s3;                            // Copy Assignment
+    s3 = String("C++");                // Move Assignment (temporary rvalue)
+    return 0;                           // Destructors called for s1, s2, s3
+}
+Step-by-Step Explanation
+Line	Code	Function Called	Why
+1	String s1("Hello");	Constructor	Creating s1 from a C-string literal
+2	String s2 = s1;	Copy Constructor	s2 is new object, s1 is lvalue
+3	String s3 = String("World");	Move Constructor	Right-hand side is temporary rvalue (String("World"))
+4	s2 = s3;	Copy Assignment	s2 exists already, s3 is lvalue → deep copy
+5	s3 = String("C++");	Move Assignment	RHS is temporary rvalue → ownership transferred
+6	return 0;	Destructor	Objects destroyed in reverse order of creation: s3, s2, s1
+
+Expected Console Output
+yaml
+Copy code
+Constructed: Hello
+Copied: Hello
+Constructed: World
+Moved!
+Copy Assigned: World
+Constructed: C++
+Move Assigned!
+Destroyed: C++
+Destroyed: World
+Destroyed: Hello
