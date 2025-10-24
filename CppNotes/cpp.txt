@@ -3516,3 +3516,80 @@ int main() {
 
 
 If you call square() with a runtime value, it executes at runtime, but same function can be used for compile-time constants.
+
+
+### Static vs Dynamic Linking....
+
+Here’s a clear and complete comparison of static vs dynamic linking — one of the most asked systems-level questions 👇
+
+⚙️ 1️⃣ Static Linking
+
+Definition:
+All the required library code is copied directly into the executable at compile/link time.
+
+Process:
+
+Compiler compiles source → object files (.o or .obj).
+
+Linker takes object files + static libraries (.a or .lib) → merges everything into one big executable.
+
+No external dependency at runtime.
+
+Example:
+
+g++ main.cpp -static -o app
+
+
+This command statically links the C++ standard library into app.
+
+Pros:
+
+✅ No dependency on external libraries at runtime.
+✅ Faster execution (no runtime symbol resolution).
+✅ Easier to deploy — just one standalone binary.
+
+Cons:
+
+❌ Large executable size (library code duplicated).
+❌ Hard to update — must rebuild the entire program to patch the library.
+❌ More memory usage — each process has its own copy.
+
+⚙️ 2️⃣ Dynamic Linking
+
+Definition:
+Executable contains references to external libraries (e.g. .dll, .so).
+Actual library code is loaded into memory at runtime.
+
+Process:
+
+At link time → linker records which symbols come from which shared library.
+
+At runtime → OS loader finds and maps those libraries into the process.
+
+Function calls go through an Import Address Table (IAT) or PLT/GOT (on Linux).
+
+Example:
+
+g++ main.cpp -o app
+
+
+By default, this creates a dynamically linked executable (uses system .so or .dll files).
+
+Pros:
+
+✅ Smaller executable size.
+✅ Shared memory — same DLL loaded once for all processes.
+✅ Easier to patch/update libraries independently.
+✅ Enables modular and plugin-based architectures.
+
+Cons:
+
+❌ Requires the DLL/.so to be present at runtime.
+❌ Possible version conflicts (“DLL Hell”).
+❌ Slightly slower startup (symbol resolution by loader).
+
+
+💬 In short:
+
+Static linking = everything baked into one file → simpler, heavier, less flexible.
+Dynamic linking = code shared via DLLs → lighter, modular, flexible, but needs runtime support.
