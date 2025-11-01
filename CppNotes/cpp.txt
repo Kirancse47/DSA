@@ -3935,3 +3935,65 @@ int main() {
 
 Normal constructor
 Initializer list constructor
+
+
+🔹 What Are Concepts?
+
+A concept is a compile-time predicate that specifies what requirements a template argument must satisfy.
+
+In simple words —
+
+“Concepts define what kind of types can be used with a template.”
+
+They help catch template errors at compile time with human-readable messages.
+
+⚙️ Problem Before C++20
+
+Before C++20:
+
+template <typename T>
+T add(T a, T b) {
+    return a + b;
+}
+
+int main() {
+    cout << add(2, 3);     // ✅ Works
+    cout << add("a", "b"); // ❌ Horrible error message
+}
+
+
+The compiler would throw pages of unreadable template errors because "a" + "b" isn’t valid.
+
+✅ Solution — Concepts
+
+We can constrain the template with a concept that restricts valid types:
+
+#include <concepts>
+#include <iostream>
+using namespace std;
+
+template <std::integral T>   // constraint
+T add(T a, T b) {
+    return a + b;
+}
+
+int main() {
+    cout << add(2, 3);     // ✅ OK
+    // cout << add(2.5, 3.5); // ❌ compile error: not integral
+}
+
+
+Now the compiler gives a clean message like:
+
+error: 'add' requires integral type, but 'double' was provided.
+
+🔹 Built-in Concepts (C++20 <concepts> Header)
+Concept	Meaning
+std::integral<T>	Type is an integer (int, long, etc.)
+std::floating_point<T>	Type is float, double, long double
+std::same_as<T, U>	Both types are the same
+std::convertible_to<From, To>	Type can be converted
+std::derived_from<Base, Derived>	Derived inherits from Base
+std::invocable<F, Args...>	Callable with given arguments
+std::default_initializable<T>	Can be default-constructed
+std::copyable<T>	Type supports copy
