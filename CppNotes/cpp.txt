@@ -3876,3 +3876,62 @@ Only b and c call the constructor — a() does not.
 🧠 Term to Remember
 
 It arises because the C++ grammar allows function declarations that look too similar to object initializations.
+
+⚙️ Uniform Initialization {} and std::initializer_list in C++
+🧩 1️⃣ What is Uniform Initialization?
+
+Introduced in C++11, uniform initialization brings a consistent syntax {} for initializing variables, objects, arrays, and containers — avoiding old-style confusion between () and =.
+
+🧠 Example
+int a = 5;     // traditional
+int b(10);     // functional
+int c{15};     // ✅ uniform initialization (preferred)
+
+
+All three create integers, but {} is type-safe and uniform across all contexts.
+
+🔹 2️⃣ Why “Uniform”?
+
+Because you can use {} syntax everywhere:
+
+Type	Example
+Built-in types	int x{10};
+Structs/classes	Point p{1, 2};
+Arrays	int arr[]{1, 2, 3};
+Vectors	vector<int> v{1, 2, 3};
+Constructor init list	A obj{10, 20};
+Dynamic allocation	auto p = new A{5, 6};
+🔹 3️⃣ Safety Advantage: Narrowing Conversions Forbidden
+
+Uniform initialization prevents narrowing conversions (i.e., loss of data).
+
+int a = 3.14;   // OK — but truncates to 3
+int b{3.14};    // ❌ Error — narrowing not allowed
+
+
+✅ Helps catch bugs at compile time!
+
+🔹 4️⃣ Interaction with std::initializer_list
+
+If a class has a constructor taking std::initializer_list, it takes precedence when you use {} initialization.
+
+🧩 Example
+#include <iostream>
+#include <initializer_list>
+using namespace std;
+
+struct A {
+    A(int x, int y) { cout << "Normal constructor\n"; }
+    A(initializer_list<int> l) { cout << "Initializer list constructor\n"; }
+};
+
+int main() {
+    A a(1, 2);   // Normal constructor
+    A b{1, 2};   // ✅ Initializer list constructor (preferred)
+}
+
+
+✅ Output:
+
+Normal constructor
+Initializer list constructor
