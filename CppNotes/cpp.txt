@@ -4148,3 +4148,132 @@ int main() {
     int k=7;
     print(&k);
 }
+
+🧩 1. What is Template Specialization?
+
+Template specialization lets you customize the implementation of a class or function template for a specific data type.
+
+You can have:
+
+Full specialization → specialized for one exact type
+
+Partial specialization → specialized for a subset or pattern of types
+
+🧱 2. Full Specialization (Exact Type Match)
+
+In full specialization, you define a version of the template for a specific type.
+The compiler uses this instead of the general version whenever that type is used.
+
+🔹 Example:
+#include <iostream>
+using namespace std;
+
+template <typename T>
+class Printer {
+public:
+    void print(T value) {
+        cout << "Generic Printer: " << value << endl;
+    }
+};
+
+// ✅ Full specialization for `char*`
+template <>
+class Printer<char*> {
+public:
+    void print(char* value) {
+        cout << "String Printer: " << value << endl;
+    }
+};
+
+int main() {
+    Printer<int> p1;
+    p1.print(42);       // Generic version
+
+    Printer<char*> p2;
+    p2.print("Kiran");  // Specialized version
+}
+
+🧠 Key point:
+
+The specialized version completely overrides the general one for that type.
+
+The syntax uses template<> (no type parameter inside).
+
+⚙️ 3. Partial Specialization (Pattern Matching)
+
+Partial specialization applies when you want a special version for a pattern of types, not a single one.
+
+Works only for class templates, not function templates.
+
+🔹 Example 1: Specializing for pointer types
+#include <iostream>
+using namespace std;
+
+template <typename T>
+class MyContainer {
+public:
+    void show() { cout << "General type" << endl; }
+};
+
+// ✅ Partial specialization for pointers
+template <typename T>
+class MyContainer<T*> {
+public:
+    void show() { cout << "Pointer type" << endl; }
+};
+
+int main() {
+    MyContainer<int> obj1;
+    MyContainer<int*> obj2;
+
+    obj1.show();  // Output: General type
+    obj2.show();  // Output: Pointer type
+}
+
+
+Here, the specialization applies to any pointer type, e.g., int*, char*, etc.
+
+🔹 Example 2: Multiple Template Parameters
+template <typename T1, typename T2>
+class Pair {
+public:
+    void show() { cout << "General Pair" << endl; }
+};
+
+// ✅ Partial specialization when both types are same
+template <typename T>
+class Pair<T, T> {
+public:
+    void show() { cout << "Both types same" << endl; }
+};
+
+int main() {
+    Pair<int, double> p1;
+    Pair<int, int> p2;
+
+    p1.show(); // General Pair
+    p2.show(); // Both types same
+}
+
+⚡ 4. Why Partial Specialization Doesn't Work for Functions
+
+You can’t partially specialize function templates because the compiler can’t decide which version to prefer.
+Instead, you use function overloading with enable_if or concepts.
+
+Example workaround:
+
+#include <type_traits>
+template <typename T>
+typename enable_if<!is_pointer<T>::value>::type print(T val) {
+    cout << "Non-pointer: " << val << endl;
+}
+
+template <typename T>
+typename enable_if<is_pointer<T>::value>::type print(T val) {
+    cout << "Pointer: " << *val << endl;
+}
+
+🧭 Summary Table
+Type	Works for	When used	Example
+Full Specialization	Class & Function templates	Specific type	template<> class Printer<char*> {...}
+Partial Specialization	Only Class templates	Type patterns	template<typename T> class A<T*> {...}
