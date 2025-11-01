@@ -4095,6 +4095,7 @@ int main() {
 }
 
 Example 2: for int*
+class example : 
 
 #include <iostream>
 using namespace std;
@@ -4125,3 +4126,25 @@ int main() {
     p2.print(&k);
 }
 
+fun example : 
+
+#include <iostream>
+using namespace std;
+
+template <typename T>
+    void print(T data) {
+        cout << "Generic: " << data << endl;
+    }
+
+// Specialization for int*
+template <>
+    void print(int * data) {
+        cout << "int: " << *data << endl;
+    }
+
+
+int main() {
+    print(10);
+    int k=7;
+    print(&k);
+}
