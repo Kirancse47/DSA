@@ -3687,3 +3687,160 @@ Cons:
 
 Static linking = everything baked into one file → simpler, heavier, less flexible.
 Dynamic linking = code shared via DLLs → lighter, modular, flexible, but needs runtime support.
+
+🧩 Stack Unwinding (often miscalled Stack Unbinding)
+🔹 1️⃣ Definition
+
+➡️ Stack unwinding is the process of cleaning up the function call stack when an exception is thrown.
+
+When an exception occurs:
+
+C++ starts unwinding the stack — i.e., it pops function frames one by one,
+
+Calls destructors for all local objects (automatic variables) in those frames,
+
+Continues until it finds a matching catch block.
+
+If no handler is found, std::terminate() is called and the program aborts.
+
+🔹 2️⃣ Example
+#include <iostream>
+using namespace std;
+
+void func3() {
+    cout << "In func3\n";
+    throw runtime_error("Error occurred!");
+    cout << "End of func3\n"; // never executed
+}
+
+void func2() {
+    int x = 10;
+    cout << "In func2\n";
+    func3();
+    cout << "End of func2\n";
+}
+
+void func1() {
+    cout << "In func1\n";
+    try {
+        func2();
+    } catch (const exception& e) {
+        cout << "Caught exception: " << e.what() << endl;
+    }
+}
+
+int main() {
+    func1();
+}
+
+🧩 Output:
+In func1
+In func2
+In func3
+Caught exception: Error occurred!
+
+🔍 What happened internally:
+
+func3() threw an exception.
+
+C++ started stack unwinding:
+
+Destroyed all local objects in func3() and func2().
+
+Searched for a matching catch block.
+
+Found it in func1().
+
+Execution resumed after the catch.
+
+🔹 3️⃣ Destructor Calls During Stack Unwinding
+
+Destructors of local (stack) objects are automatically called as the stack unwinds.
+
+Example:
+
+#include <iostream>
+using namespace std;
+
+struct Demo {
+    string name;
+    Demo(string n) : name(n) { cout << "Construct " << name << endl; }
+    ~Demo() { cout << "Destruct " << name << endl; }
+};
+
+void foo() {
+    Demo a("A");
+    Demo b("B");
+    throw runtime_error("Exception!");
+}
+
+int main() {
+    try {
+        foo();
+    } catch (...) {
+        cout << "Exception caught in main\n";
+    }
+}
+
+Output:
+Construct A
+Construct B
+Destruct B
+Destruct A
+Exception caught in main
+
+
+✅ Notice:
+
+Stack unwinding destroyed objects in reverse order of construction (B then A).
+
+🔹 4️⃣ No Stack Unwinding Without Exceptions
+
+If you use exit(), abort(), or crash (segfault), destructors are not called.
+Stack unwinding only occurs for exceptions.
+
+🔹 5️⃣ During Stack Unwinding – Beware of double exceptions
+
+If another exception is thrown while stack unwinding is in progress,
+the program calls std::terminate() (fatal).
+
+Example:
+
+struct A {
+    ~A() noexcept(false) { throw 1; } // ❌ dangerous
+};
+
+int main() {
+    try {
+        A a;
+        throw 2;
+    } catch (...) {
+        cout << "Caught\n";
+    }
+}
+
+
+Output:
+
+terminate called after throwing an instance of 'int'
+
+
+So destructors should never throw — mark them noexcept (default).
+
+🔹 6️⃣ In System Terms
+
+Each function call pushes:
+
+Return address
+
+Local variables
+
+Saved registers
+
+When an exception occurs, stack unwinding:
+
+Pops these frames in reverse order,
+
+Calls destructors,
+
+Propagates the exception object up the call stack.
