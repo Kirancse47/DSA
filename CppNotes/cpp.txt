@@ -3997,3 +3997,131 @@ std::derived_from<Base, Derived>	Derived inherits from Base
 std::invocable<F, Args...>	Callable with given arguments
 std::default_initializable<T>	Can be default-constructed
 std::copyable<T>	Type supports copy
+
+
+##########GENERIC PROGRAMMING##########
+🧩 1. Function Templates
+
+A function template allows you to write a single function that works with any data type.
+
+🔹 Example:
+#include <iostream>
+using namespace std;
+
+// Function template
+template <typename T>
+T add(T a, T b) {
+    return a + b;
+}
+
+int main() {
+    cout << add(3, 5) << endl;       // int version -> T = int
+    cout << add(3.5, 2.1) << endl;   // double version -> T = double
+    cout << add(string("Hi "), string("Kiran")) << endl; // string version -> T = string
+}
+
+💡 Key points:
+
+template <typename T> declares a template parameter T.
+
+The compiler generates the actual function when it encounters a specific type (this is called template instantiation).
+
+You can also write multiple template parameters:
+template <typename T1, typename T2>.
+
+🧱 2. Class Templates
+
+A class template defines a blueprint for a class that can work with any type.
+
+🔹 Example:
+#include <iostream>
+using namespace std;
+
+template <typename T>
+class MyContainer {
+    T data;
+public:
+    MyContainer(T d) : data(d) {}
+    void show() { cout << "Data: " << data << endl; }
+};
+
+int main() {
+    MyContainer<int> obj1(42);
+    MyContainer<string> obj2("Kiran");
+
+    obj1.show();
+    obj2.show();
+}
+
+💡 Key points:
+
+You define the template with template <typename T>.
+
+When you create an object, you must specify the type:
+MyContainer<int> obj;
+
+Each instantiation of the template creates a new version of the class in memory.
+
+⚙️ 3. Template Specialization
+
+Sometimes, you need special behavior for a specific type.
+
+🔹 Example:
+#include <iostream>
+using namespace std;
+
+template <typename T>
+class Printer {
+public:
+    void print(T data) {
+        cout << "Generic: " << data << endl;
+    }
+};
+
+// Specialization for char*
+template <>
+class Printer<char*> {
+public:
+    void print(char* data) {
+        cout << "String: " << data << endl;
+    }
+};
+
+int main() {
+    Printer<int> p1;
+    Printer<char*> p2;
+    p1.print(10);
+    p2.print("Hello");
+}
+
+Example 2: for int*
+
+#include <iostream>
+using namespace std;
+
+template <typename T>
+class Printer {
+public:
+    void print(T data) {
+        cout << "Generic: " << data << endl;
+    }
+};
+
+// Specialization for int*
+template <>
+class Printer<int *> {
+public:
+    void print(int * data) {
+        cout << "int: " << *data << endl;
+    }
+};
+
+int main() {
+    Printer<int> p1;
+    Printer<int*> p2;
+    p1.print(10);
+    int k=7;
+    // int *p=&k;
+    p2.print(&k);
+}
+
