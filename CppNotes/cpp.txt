@@ -3844,3 +3844,35 @@ Pops these frames in reverse order,
 Calls destructors,
 
 Propagates the exception object up the call stack.
+
+
+
+###This issue is known as the “Most Vexing Parse” in C++.
+
+🧩 Example to Compare
+#include <iostream>
+using namespace std;
+
+class MyClass {
+public:
+    MyClass() { cout << "Constructed\n"; }
+};
+
+int main() {
+    MyClass a();  // ❌ Declares a function
+    MyClass b;    // ✅ Constructs object
+    MyClass c{};  // ✅ Constructs object
+}
+
+
+Output:
+
+Constructed
+Constructed
+
+
+Only b and c call the constructor — a() does not.
+
+🧠 Term to Remember
+
+It arises because the C++ grammar allows function declarations that look too similar to object initializations.
