@@ -4277,3 +4277,71 @@ typename enable_if<is_pointer<T>::value>::type print(T val) {
 Type	Works for	When used	Example
 Full Specialization	Class & Function templates	Specific type	template<> class Printer<char*> {...}
 Partial Specialization	Only Class templates	Type patterns	template<typename T> class A<T*> {...}
+
+🧩 Variadic Templates
+
+They enable functions and classes to accept a variable number of template parameters — used heavily in libraries like STL, Boost, fmt, and even std::tuple.
+
+⚙️ 1. What Are Variadic Templates?
+
+A variadic template can take zero or more template arguments.
+
+Syntax:
+
+template <typename... Args>
+void func(Args... args);
+
+
+Here:
+
+Args... → parameter pack (a pack of types)
+
+args... → function parameter pack (actual arguments)
+
+🧠 2. Function Variadic Template Example
+🔹 Simple printer function
+#include <iostream>
+using namespace std;
+
+template <typename... Args>
+void print(Args... args) {
+    (cout << ... << args) << endl;  // Fold expression (C++17)
+}
+
+int main() {
+    print(1, 2.5, "Kiran", 'A');
+}
+
+
+✅ Output:
+
+12.5KiranA
+
+
+Here (cout << ... << args) is a fold expression, which expands to:
+
+((cout << 1) << 2.5) << "Kiran" << 'A';
+
+🧱 3. Pre-C++17 Style (Recursive Expansion)
+
+Before fold expressions, variadic templates were handled recursively:
+
+#include <iostream>
+using namespace std;
+
+void print() { } // base case
+
+template <typename T, typename... Rest>
+void print(T first, Rest... rest) {
+    cout << first << " ";
+    print(rest...);  // recursive call
+}
+
+int main() {
+    print(10, 20.5, "C++", 'A');
+}
+
+
+Output:
+
+10 20.5 C++ A
