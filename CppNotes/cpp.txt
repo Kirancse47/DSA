@@ -1292,6 +1292,100 @@ TYPES OF SMART POINTERS:
 	a) weak_ptrs are same as shared_ptr, only difference is when you create one weak pointer to shared_ptr, reference count will not increase
 		and once shared_ptr goes out of scope, memory will be deleted.
 	b) weak ptr is used to trac a memory location if it is still pointed by some other pointer with the help of function ".lock()"
+
+🔹 1️⃣ Custom Deleters
+
+When you use std::unique_ptr or std::shared_ptr, you can customize how an object is destroyed — instead of simply calling delete.
+
+Useful when:
+
+You manage memory allocated in special ways (e.g., fopen, malloc, new[], GPU memory).
+
+You want logging, debugging, or custom cleanup on deletion.
+
+✅ Example: Using Custom Deleter with unique_ptr
+#include <iostream>
+#include <memory>
+using namespace std;
+
+void customDelete(int* p) {
+    cout << "Deleting pointer with value " << *p << endl;
+    delete p;
+}
+
+int main() {
+    unique_ptr<int, decltype(&customDelete)> ptr(new int(42), customDelete);
+    // Output: Deleting pointer with value 42 (when ptr goes out of scope)
+}
+
+
+📘 Key point:
+unique_ptr can take a second template parameter for a deleter type:
+
+template <class T, class Deleter = std::default_delete<T>> class unique_ptr;
+
+🔹 2️⃣ Circular References
+
+Problem:
+std::shared_ptr uses reference counting for ownership.
+If two objects hold shared_ptrs to each other, the reference count never becomes 0 — causing a memory leak.
+
+❌ Example of Circular Reference
+#include <iostream>
+#include <memory>
+using namespace std;
+
+struct B; // forward declaration
+
+struct A {
+    shared_ptr<B> bptr;
+    ~A() { cout << "A destroyed\n"; }
+};
+
+struct B {
+    shared_ptr<A> aptr;
+    ~B() { cout << "B destroyed\n"; }
+};
+
+int main() {
+    auto a = make_shared<A>();
+    auto b = make_shared<B>();
+    a->bptr = b;
+    b->aptr = a;
+} // Neither A nor B destroyed (leak!)
+
+
+Both objects hold each other via shared_ptr, so ref count = 1 each even at end of scope.
+
+🔹 3️⃣ Fixing Circular References with weak_ptr
+
+std::weak_ptr is a non-owning reference to a shared_ptr object.
+It does not increase the reference count.
+
+✅ Correct Version
+#include <iostream>
+#include <memory>
+using namespace std;
+
+struct B;
+
+struct A {
+    shared_ptr<B> bptr;
+    ~A() { cout << "A destroyed\n"; }
+};
+
+struct B {
+    weak_ptr<A> aptr;  // weak_ptr breaks the circular dependency
+    ~B() { cout << "B destroyed\n"; }
+};
+
+int main() {
+    auto a = make_shared<A>();
+    auto b = make_shared<B>();
+    a->bptr = b;
+    b->aptr = a;
+}
+
 ###################################################################################################################
 
 
