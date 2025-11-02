@@ -1,0 +1,292 @@
+🧠 1. Difference between Process and Thread
+
+Answer:
+A thread is a single sequence stream within a process. Threads are also called lightweight processes as they possess some of the properties of processes. Each thread belongs to exactly one process.
+
+In an operating system that supports multithreading, a process can consist of many threads. 
+All threads belonging to the same process share code section, data section, and OS resources (e.g. open files and signals), but each thread has its own (thread control block) - thread ID, program counter, register set, and a stack.
+
+  
+A process is an independent unit of execution with its own address space, code, data, and system resources.
+
+A thread is a lightweight unit of execution within a process — threads share the same address space and resources.
+
+Feature	Process	Thread
+Memory	Separate	Shared within process
+Context Switch	Expensive (MMU switch)	Cheaper (same address space)
+Communication	IPC (pipes, sockets, shared memory)	Shared memory (direct access)
+Crash impact	Isolated	Can crash entire process
+
+👉 In C++ terms: If you spawn std::thread inside a process, they share static/global variables. But if you fork(), you get a new process with a copy of address space.
+
+⚙️ 2. Difference between Paging and Segmentation
+
+Answer:
+
+Paging: Divides memory into fixed-size blocks (pages & frames).
+
+Segmentation: Divides memory into variable-size logical units (code, data, stack).
+
+Feature	Paging	Segmentation
+Size	Fixed	Variable
+Basis	Physical memory management	Logical program structure
+Fragmentation	Internal	External
+Example	Page size = 4KB	Segment size = Code=4KB, Stack=1KB
+
+👉 Modern OS (Linux) uses both: segmentation for logical separation and paging for physical allocation.
+
+💾 3. What is Virtual Memory and why is it used?
+
+Answer:
+Virtual memory allows each process to believe it has a large, contiguous memory space, even if physical memory is smaller.
+It uses page tables to map virtual pages to physical frames.
+
+Benefits:
+
+Process isolation & security.
+
+Efficient use of RAM via demand paging.
+
+Allows more processes via swapping.
+
+Key OS terms:
+
+Page table → mapping of virtual to physical.
+
+TLB → cache for page table lookups.
+
+Page fault → occurs when page not in RAM → OS loads it from disk.
+
+🧮 4. What is a Page Fault?
+
+Answer:
+A page fault occurs when a process accesses a page that is not present in physical memory.
+
+Steps:
+
+CPU triggers page-fault interrupt.
+
+OS pauses the process.
+
+OS finds the page on disk (swap area).
+
+If RAM is full, it chooses a victim page (via LRU, FIFO, etc.).
+
+Loads required page → updates page table → resumes process.
+
+Types:
+
+Minor fault: Page is in memory but not mapped.
+
+Major fault: Page is not in memory (needs disk I/O).
+
+🧵 5. What is a Deadlock? How to prevent it?
+
+Answer:
+Deadlock = set of processes waiting indefinitely for resources held by each other.
+
+Necessary conditions (Coffman’s conditions):
+
+Mutual exclusion
+
+Hold and wait
+
+No preemption
+
+Circular wait
+
+Prevention:
+
+Break any one condition:
+
+Use ordered resource allocation (avoid circular wait).
+
+Preempt resources.
+
+Require all resources upfront (avoid hold-and-wait).
+
+Use timeouts or deadlock detection + recovery.
+
+🔒 6. Semaphore vs Mutex
+Feature	Semaphore	Mutex
+Value	Integer (count)	Binary (locked/unlocked)
+Usage	Resource counting	Mutual exclusion
+Ownership	Any thread	Only the thread that locked it
+Example	sem_wait(), sem_post()	pthread_mutex_lock(), pthread_mutex_unlock()
+
+In C++ (POSIX):
+
+std::mutex mtx;
+void func() {
+    std::lock_guard<std::mutex> lock(mtx);
+    // critical section
+}
+
+🧰 7. What is Context Switching?
+
+Answer:
+It’s the process of saving the state (registers, PC, stack pointer, etc.) of a running process/thread and loading the state of another.
+
+Overhead comes from:
+
+Saving/restoring CPU registers.
+
+Updating memory maps (MMU).
+
+Cache invalidation.
+
+Optimization: Use threads over processes to reduce context switch cost since threads share memory space.
+
+🧠 8. What is a Race Condition? How to prevent it?
+
+Answer:
+Occurs when multiple threads access shared data concurrently and final outcome depends on the execution order.
+
+Example:
+
+int counter = 0;
+void increment() { counter++; }  // not atomic
+
+
+Prevention:
+
+Use synchronization primitives: mutex, atomic<int>, semaphores.
+
+Example:
+
+std::atomic<int> counter = 0;
+void increment() { counter.fetch_add(1); }
+
+💡 9. Demand Paging
+
+Answer:
+In demand paging, OS loads pages only when they’re needed — not in advance.
+This reduces memory usage but can cause page faults initially.
+
+Advantages:
+
+Less I/O.
+
+Faster load times.
+
+Efficient memory use.
+
+Disadvantage: Page faults cause latency.
+
+🧮 10. Thrashing
+
+Answer:
+Thrashing occurs when the CPU spends more time swapping pages in/out of memory than executing instructions.
+
+Cause: Too many active processes → not enough RAM → constant page faults.
+Solution:
+
+Increase RAM.
+
+Reduce degree of multiprogramming.
+
+Use working set model to limit process memory.
+
+⚡ 11. Preemptive vs Non-preemptive Scheduling
+Feature	Preemptive	Non-preemptive
+Interrupts	Can interrupt	Cannot interrupt
+Response time	Better	Poor
+Example	Round Robin	FCFS, SJF (non-preemptive)
+
+Preemptive is used in modern OS (like Linux) for better interactivity.
+
+📁 12. Explain System Calls
+
+Answer:
+System calls provide an interface between user space and kernel.
+
+Examples:
+
+read(), write(), fork(), exec(), wait()
+
+When you call printf() →
+
+printf() calls write() system call.
+
+Switches to kernel mode.
+
+Kernel writes to device buffer.
+
+Control returns to user mode.
+
+🔋 13. How does the OS handle I/O requests?
+
+Answer:
+
+Requests enter device queue.
+
+OS schedules via I/O schedulers (FCFS, SSTF, SCAN).
+
+Interrupt is raised after completion → OS notifies process.
+
+Modern approach: Asynchronous I/O (e.g., io_uring in Linux) to avoid blocking threads.
+
+🧠 14. Difference between User mode and Kernel mode
+Feature	User mode	Kernel mode
+Access	Limited (no hardware access)	Full system access
+System calls	Needed for privileged ops	Direct access
+Example	Application code	Device driver, scheduler
+
+Transition: Occurs via traps, interrupts, or syscalls.
+
+🧩 15. What is a Zombie Process?
+
+Answer:
+When a child process terminates, but the parent hasn’t yet called wait(), it becomes a zombie (defunct).
+
+State: “Z” in ps output.
+Fix: Parent must wait() to release entry from process table.
+
+🧠 16. Producer-Consumer Problem (Semaphore Solution)
+sem_t empty, full, mutex;
+
+void producer() {
+    while(true) {
+        produce_item();
+        sem_wait(&empty);
+        sem_wait(&mutex);
+        insert_item();
+        sem_post(&mutex);
+        sem_post(&full);
+    }
+}
+
+⚡ 17. Difference between Cache and Buffer
+
+Cache: Stores frequently accessed data for faster reads (CPU cache, page cache).
+
+Buffer: Temporary storage for data transfer between devices (disk I/O buffer).
+
+💻 18. How to minimize latency in a multi-threaded system (like Adobe’s real-time apps)?
+
+Use lock-free structures (std::atomic, compare_exchange).
+
+Pin threads to cores (NUMA awareness).
+
+Avoid page faults → lock memory (mlock()).
+
+Use huge pages → fewer TLB misses.
+
+Use real-time scheduling (SCHED_FIFO).
+
+🧱 19. Difference between Monolithic and Microkernel
+Feature	Monolithic	Microkernel
+Architecture	Everything in kernel (Linux)	Minimal kernel, rest in user space
+Performance	Fast	Slower (more context switches)
+Reliability	Less (crash affects all)	Better isolation
+🧠 20. Explain how a file read works in OS
+
+Application calls read(fd, buf, size).
+
+System call → switch to kernel mode.
+
+OS checks file descriptor table → finds inode.
+
+File system retrieves data → may read from disk (via I/O scheduler).
+
+Data copied to buffer → returned to user space.
