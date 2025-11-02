@@ -1,0 +1,260 @@
+🟢 BASIC LEVEL
+1️⃣ What are the layers of the OSI model?
+
+7 Layers:
+
+Physical – bits, cables, signals
+
+Data Link – frames, MAC addressing, error detection
+
+Network – IP routing, logical addressing
+
+Transport – TCP/UDP, reliability
+
+Session – manage connections (setup, teardown)
+
+Presentation – encryption, compression, translation
+
+Application – end-user protocols (HTTP, FTP, DNS)
+
+2️⃣ OSI vs TCP/IP
+OSI	TCP/IP
+7 layers	4 layers
+Reference model	Practical implementation
+Clear separation	Application layer merges (App+Presentation+Session)
+3️⃣ Layer of devices
+
+Hub → Physical
+
+Switch → Data Link (Layer 2)
+
+Router → Network (Layer 3)
+
+Firewall → Network/Transport/Application
+
+4️⃣ TCP vs UDP
+TCP	UDP
+Connection-oriented	Connectionless
+Reliable (ACKs, retransmissions)	Unreliable, no ACK
+Ordered delivery	May arrive out of order
+Slower (overhead)	Faster (used in DNS, streaming)
+5️⃣ ARP
+
+Address Resolution Protocol: Resolves IP → MAC address in a LAN.
+Host broadcasts “Who has IP x.x.x.x?” and the owner replies with its MAC.
+
+6️⃣ DNS
+
+Domain Name System: Resolves hostnames (e.g., www.google.com
+) → IP.
+Hierarchy: Root → TLD (.com) → Authoritative → Resolver.
+
+7️⃣ DHCP
+
+Dynamic Host Configuration Protocol: Automatically assigns IP, subnet, gateway, DNS to clients.
+Steps: DORA — Discover → Offer → Request → Acknowledge.
+
+8️⃣ NAT
+
+Network Address Translation: Converts private IPs to public IPs for internet access.
+Types: Static, Dynamic, PAT (Port Address Translation).
+
+9️⃣ HTTP vs HTTPS
+
+HTTP: Plain text
+
+HTTPS: Uses SSL/TLS encryption, protects from sniffing and MITM attacks.
+
+🟡 INTERMEDIATE LEVEL
+1️⃣ TCP 3-Way Handshake
+
+SYN — Client → Server
+
+SYN-ACK — Server → Client
+
+ACK — Client → Server → Connection established ✅
+
+2️⃣ TCP 4-Way Termination
+
+Client → FIN
+
+Server → ACK
+
+Server → FIN
+
+Client → ACK → Connection closed.
+
+3️⃣ TCP Flow Control
+
+Uses a sliding window.
+Receiver advertises window size → sender limits unacknowledged data to that window.
+
+4️⃣ TCP Congestion Control
+
+Algorithms:
+
+Slow Start
+
+Congestion Avoidance (AIMD)
+
+Fast Retransmit
+
+Fast Recovery
+
+Prevents network overload.
+
+5️⃣ Routing
+
+Static: Manually configured routes.
+Dynamic: Routers learn routes using protocols (RIP, OSPF, BGP).
+
+6️⃣ Distance Vector vs Link State
+Distance Vector	Link State
+Routers share distance to neighbors	Routers share full topology
+e.g., RIP	e.g., OSPF
+Slow convergence	Faster convergence
+7️⃣ VLAN
+
+Virtual LAN: Logically divides a switch into multiple broadcast domains → improves security and reduces collisions.
+
+8️⃣ Spanning Tree Protocol (STP)
+
+Prevents loops in Layer-2 networks by blocking redundant paths dynamically.
+
+9️⃣ SMTP / POP3 / IMAP
+
+SMTP – sends mail (port 25)
+
+POP3 – downloads mail (port 110)
+
+IMAP – syncs mail (port 143)
+
+🔟 FTP vs SFTP
+
+FTP – plain text (port 21)
+
+SFTP – encrypted via SSH (port 22)
+
+🔴 ADVANCED LEVEL
+1️⃣ Latency vs Throughput
+
+Latency: Time delay (ms) to send a packet.
+
+Throughput: Data per second (Mbps).
+Low latency ≠ high throughput always.
+
+2️⃣ MTU (Maximum Transmission Unit)
+
+Max size of a packet that can be sent without fragmentation (e.g., 1500 bytes in Ethernet).
+
+3️⃣ What happens if TCP ACK is lost?
+
+Sender retransmits data after timeout; receiver discards duplicate (sequence number check).
+
+4️⃣ Out-of-order packets
+
+TCP reorders them using sequence numbers before delivering to application.
+
+5️⃣ Bandwidth-Delay Product (BDP)
+
+BDP = Bandwidth × RTT → Maximum data that can be in transit.
+
+6️⃣ What is QoS?
+
+Quality of Service: Mechanisms that prioritize some traffic (like VoIP) over others.
+
+7️⃣ ARP Cache
+
+Stores IP-to-MAC mappings temporarily; avoids repeated broadcasts.
+
+8️⃣ What happens when you open www.google.com?
+
+Browser checks DNS cache → resolves domain to IP.
+
+TCP 3-way handshake with server.
+
+TLS handshake (if HTTPS).
+
+Browser sends HTTP request.
+
+Server responds with HTML data.
+
+Connection closes or kept alive.
+
+9️⃣ Software Defined Networking (SDN)
+
+Separates control plane (decision-making) from data plane (forwarding).
+Controller centrally manages switches.
+
+🔟 Load Balancing (L4 vs L7)
+
+L4: Based on IP/port (TCP/UDP level).
+
+L7: Based on application data (URL, headers).
+
+⚙️ SYSTEM-LEVEL QUESTIONS
+1️⃣ How does ping work?
+
+Uses ICMP Echo Request/Reply:
+
+Sends Echo Request (type 8)
+
+Receives Echo Reply (type 0)
+→ Measures round-trip time (RTT) and packet loss.
+
+2️⃣ What happens if ARP cache is full?
+
+Old entries are replaced (LRU policy) or aged out after timeout.
+
+3️⃣ How router forwards packets
+
+Router checks destination IP → routing table → next hop → decrements TTL → forwards to next interface.
+
+4️⃣ How TCP ensures reliability
+
+Sequence numbers
+
+Acknowledgements
+
+Retransmissions
+
+Checksum
+
+Sliding window (flow control)
+
+5️⃣ Connectionless but reliable?
+
+UDP itself is unreliable, but protocols built on top (e.g., QUIC, RTP) can add reliability.
+
+6️⃣ Half-open connection
+
+When one side closes but the other still thinks it’s open (e.g., crash without FIN).
+TCP uses keep-alive to detect and close such connections.
+
+7️⃣ DNS caching
+
+Each record has TTL; resolvers cache results for that duration to reduce query load.
+
+8️⃣ IPsec
+
+Encrypts and authenticates IP packets at network layer.
+Modes: Transport and Tunnel.
+
+⚡ BONUS – Mini Practical Q&A
+Q. Difference between Unicast, Broadcast, Multicast, Anycast
+Type	Description
+Unicast	One-to-one
+Broadcast	One-to-all in subnet
+Multicast	One-to-many (specific group)
+Anycast	One-to-nearest node
+Q. What is SYN flood?
+
+DoS attack — attacker sends multiple SYNs without completing 3-way handshake, exhausting server’s connection queue.
+
+Q. What’s inside an Ethernet frame?
+Field	Description
+Dest MAC	6 bytes
+Src MAC	6 bytes
+EtherType	2 bytes
+Payload	46–1500 bytes
+CRC	4 bytes
