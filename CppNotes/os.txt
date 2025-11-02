@@ -290,3 +290,57 @@ OS checks file descriptor table → finds inode.
 File system retrieves data → may read from disk (via I/O scheduler).
 
 Data copied to buffer → returned to user space.
+
+21 . The C++ compilation process typically involves four main stages:-
+
+1.Preprocessing: This is the first stage where the preprocessor handles directives in the source code.
+Macro expansion: Replaces macros (defined with #define) with their corresponding values.
+File inclusion: Includes the content of header files (specified with #include) into the source file.
+Conditional compilation: Processes code blocks based on conditions (e.g., #ifdef, #ifndef).
+The output of this stage is an expanded source file, typically with a .i extension.
+
+2.Compilation: In this stage, the compiler translates the preprocessed C++ code into assembly language.
+Lexical analysis (tokenization): Breaks down the source code into a stream of tokens (keywords, identifiers, operators, etc.).
+Syntax analysis (parsing): Checks if the token sequence conforms to the C++ grammar and builds an Abstract Syntax Tree (AST).
+Semantic analysis: Performs type checking, name resolution, and other semantic checks to ensure the code's meaning is consistent and valid.
+Intermediate Code Generation: Generates an intermediate representation of the code, which is platform-independent.
+Optimization: Applies various techniques to improve the performance and efficiency of the generated code.
+The output of this stage is an assembly language file, typically with a .s extension.
+
+3.Assembly: The assembler takes the assembly language file and converts it into machine code.
+It translates assembly instructions into their corresponding binary machine code instructions.
+This process also involves creating an object file, which contains the machine code along with other information like symbol tables and relocation information.
+The output of this stage is an object file, typically with a .o (Linux/macOS) or .obj (Windows) extension.
+
+4.Linking: This is the final stage where the linker combines one or more object files with necessary library files to create a single executable program.
+Symbol resolution: Resolves references to external functions and variables by finding their definitions in other object files or libraries.
+Relocation: Adjusts addresses within the object files to ensure all parts of the program are correctly linked together in memory.
+The output of this stage is an executable file, which can be run directly by the operating system.
+
+22. The C++ process memory layout : - 
+refers to how a program's memory is organized in a virtual address space during execution. This organization is typically divided into several distinct segments:
+
+1.Text Segment (Code Segment):
+Stores the compiled machine code of the program, including functions and instructions. 
+Usually read-only to prevent accidental modification during runtime.
+Its size depends on the complexity and size of the program's code.
+
+2.Data Segment:
+Stores global and static variables of the program.
+Retains values throughout program execution.
+Divided into two parts:
+Initialized Data Segment: Contains global and static variables that are explicitly initialized by the programmer. 
+Uninitialized Data Segment (BSS Segment): Holds global and static variables that are not explicitly initialized. These are typically set to zero by the system at runtime. 
+
+3.Stack:
+Used for static memory allocation and manages function calls, local variables, and function arguments.
+Operates as a Last-In, First-Out (LIFO) structure.
+Grows downwards in memory (towards lower addresses).
+Each function call creates a "stack frame" containing its local variables and return address.
+
+4.Heap:
+Used for dynamic memory allocation, allowing programs to request variable memory sizes at runtime. 
+Managed by functions like new, delete, malloc, free, etc.
+Grows upwards in memory (towards higher addresses), typically starting after the BSS segment.
+Memory allocated on the heap persists until explicitly deallocated or the program terminates.
+
