@@ -1,0 +1,14 @@
+    int maxSumDivThree(vector<int>& nums) {
+        vector<int> best(3,0);
+        vector<int> sum(3,0);
+        for(auto it : nums){
+            for(int i=0;i<3;i++){
+                sum[i]=best[i]+it;
+            }
+            for(int i=0;i<3;i++){
+                int idx=sum[i]%3;
+                best[idx]=max(best[idx],sum[i]);
+            }
+        }
+        return best[0];
+    }
