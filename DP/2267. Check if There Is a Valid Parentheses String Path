@@ -1,0 +1,36 @@
+    vector<vector<vector<int>>> dp;
+    bool solve(int i, int j, int n, int m,vector<vector<char>>& g, int c) {
+        
+        if (i >= n || j >= m) return false;
+
+        if (g[i][j] == '(')
+            c++;
+        else
+            c--;
+
+        if (c < 0) return false;
+
+        // Remaining cells including current path ahead
+        int rem = (n - 1 - i) + (m - 1 - j);
+        if (c > rem) return false;
+
+        if (i == n - 1 && j == m - 1)
+            return c == 0;
+
+        if (dp[i][j][c] != -1)
+            return dp[i][j][c];
+
+        return dp[i][j][c] =
+            solve(i + 1, j, n, m, g, c) ||
+            solve(i, j + 1, n, m, g, c);
+    }
+    bool hasValidPath(vector<vector<char>>& grid) {
+        int n = grid.size(), m = grid[0].size();
+
+        // Path length must be even for a valid parentheses string
+        if ((n + m - 1) % 2) return false;
+
+        dp.assign(n, vector<vector<int>>(m,vector<int>(n + m + 1, -1)));
+
+        return solve(0, 0, n, m, grid, 0);
+    }
